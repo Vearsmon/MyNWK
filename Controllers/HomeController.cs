@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MyNWK.Controllers;
 
 public class HomeController : Controller
 {
-    // GET
+    [Authorize]
     public IActionResult Index()
     {
-        return View();
+        return Content(User.Identity.Name);
     }
 }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MyNWK")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+40994136167deaa64fd263838d9a73ef1134d603")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d2b7b5fadc8a307f2793af81b7acc1438f5d24ae")]
 [assembly: System.Reflection.AssemblyProductAttribute("MyNWK")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MyNWK")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
