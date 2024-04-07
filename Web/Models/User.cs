@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace MyNWK.Models;
+namespace Web.Models;
 
 public class User
 {

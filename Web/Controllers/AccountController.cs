@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using MyNWK.Models.ViewComponents;
-using MyNWK.Models;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Web.Models;
+using Web.Models.ViewComponents;
 
-namespace MyNWK.Controllers;
+namespace Web.Controllers;
 
 public class AccountController : Controller
 {

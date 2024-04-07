@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyNWK.Models.ViewComponents;
+namespace Web.Models.ViewComponents;
 
 public class RegisterModel
 {
