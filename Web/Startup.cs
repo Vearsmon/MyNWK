@@ -11,7 +11,7 @@ public class Startup
     {
         string connection = Configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<UserContext>(options => options.UseNpgsql(connection));
-        
+
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {

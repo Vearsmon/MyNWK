@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Core.Repositories.User;
+namespace Core.Repositories.Users;
 
 public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
 {
@@ -42,5 +42,10 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
             .Property(t => t.PhoneNumber)
             .HasColumnName("phone_number")
             .HasColumnType("varchar(16)");
+
+        builder.HasIndex(t => new
+        {
+            t.Email
+        });
     }
 }

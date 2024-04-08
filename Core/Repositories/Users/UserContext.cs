@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Repositories.User;
+namespace Core.Repositories.Users;
 
 public class UserContext : DbContext
 {
@@ -10,10 +10,7 @@ public class UserContext : DbContext
 
     public UserContext(DbContextOptions<UserContext> options)
         : base(options)
-    { }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        base.OnConfiguring(optionsBuilder);
+        Database.EnsureCreated();
     }
 }

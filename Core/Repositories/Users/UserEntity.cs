@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace Core.Repositories.User;
+namespace Core.Repositories.Users;
 
 [EntityTypeConfiguration(typeof(UserEntityConfiguration))]
 public class UserEntity
@@ -14,7 +13,7 @@ public class UserEntity
     
     public string TelegramUsername { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
     
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
 }
