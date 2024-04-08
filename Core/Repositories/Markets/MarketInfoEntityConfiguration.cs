@@ -7,6 +7,11 @@ public class MarketInfoEntityConfiguration : IEntityTypeConfiguration<MarketInfo
 {
     public void Configure(EntityTypeBuilder<MarketInfoEntity> builder)
     {
-        throw new NotImplementedException();
+        builder.ToTable("market_infos");
+        builder.HasKey(t => t.MarketId);
+
+        builder
+            .Property(t => t.Description)
+            .HasColumnType("text");
     }
 }

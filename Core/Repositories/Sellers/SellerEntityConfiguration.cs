@@ -29,6 +29,11 @@ public class SellerEntityConfiguration : IEntityTypeConfiguration<SellerEntity>
             .IsRequired();
 
         builder
+            .Property(t => t.ShowRoom)
+            .HasDefaultValue(false)
+            .IsRequired();
+
+        builder
             .HasOne<UserEntity>(t => t.User)
             .WithOne(t => t.Seller)
             .HasForeignKey<SellerEntity>(t => t.SellerId);

@@ -13,5 +13,7 @@ public class MarketEntity
     
     public string Name { get; set; }
     
-    public bool Closed { get; set; }    
+    public bool Closed { get; set; }
+
+    public MarketInfoEntity MarketInfo { get; set; }
 }

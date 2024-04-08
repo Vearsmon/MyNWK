@@ -15,6 +15,8 @@ public sealed class SellerEntity
     
     public int RoomId { get; set; }
     public RoomEntity Room { get; set; }
+    
+    public bool ShowRoom { get; set; }
 
     public List<MarketEntity> Markets { get; set; }
 }

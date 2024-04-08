@@ -28,5 +28,10 @@ public class MarketEntityConfiguration : IEntityTypeConfiguration<MarketEntity>
             .HasOne<SellerEntity>(t => t.Seller)
             .WithMany(t => t.Markets)
             .HasForeignKey(t => t.OwnerId);
+
+        builder
+            .HasOne<MarketInfoEntity>(t => t.MarketInfo)
+            .WithOne()
+            .HasForeignKey<MarketInfoEntity>(t => t.MarketId);
     }
 }
