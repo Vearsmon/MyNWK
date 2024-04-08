@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Repositories.Users;
 
-public class UserContext : DbContext
+public class UserContext : MyNwkDbContextBase<UserContext>
 {
     [UsedImplicitly] 
     public DbSet<UserEntity> Users { get; } = null!;
@@ -11,6 +11,5 @@ public class UserContext : DbContext
     public UserContext(DbContextOptions<UserContext> options)
         : base(options)
     {
-        Database.EnsureCreated();
     }
 }

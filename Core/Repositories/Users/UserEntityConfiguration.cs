@@ -12,35 +12,29 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
         
         builder
             .Property(t => t.Id)
-            .HasColumnName("id")
-            .ValueGeneratedOnAddOrUpdate();
+            .ValueGeneratedOnAdd();
 
         builder
             .Property(t => t.Email)
-            .HasColumnName("email")
             .HasColumnType("varchar(64)")
             .IsRequired();
 
         builder
             .Property(t => t.Password)
-            .HasColumnName("password")
             .HasColumnType("varchar(64)")
             .IsRequired();
 
         builder
             .Property(t => t.TelegramUsername)
-            .HasColumnName("telegram_username")
             .HasColumnType("varchar(64)")
             .IsRequired();
 
         builder
             .Property(t => t.Name)
-            .HasColumnName("name")
             .HasColumnType("varchar(64)");
 
         builder
             .Property(t => t.PhoneNumber)
-            .HasColumnName("phone_number")
             .HasColumnType("varchar(16)");
 
         builder.HasIndex(t => new
