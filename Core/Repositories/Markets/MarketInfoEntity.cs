@@ -9,4 +9,6 @@ public class MarketInfoEntity
     public TimeOnly? WorksFrom { get; set; }
     
     public TimeOnly? WorksTo { get; set; }
+    
+    public bool AutoHide { get; set; }
 }

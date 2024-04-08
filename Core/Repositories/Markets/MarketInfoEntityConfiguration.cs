@@ -13,5 +13,10 @@ public class MarketInfoEntityConfiguration : IEntityTypeConfiguration<MarketInfo
         builder
             .Property(t => t.Description)
             .HasColumnType("text");
+
+        builder
+            .Property(t => t.AutoHide)
+            .HasDefaultValue(true)
+            .IsRequired();
     }
 }
