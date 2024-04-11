@@ -11,6 +11,10 @@ public class CategoryEntityConfiguration : IEntityTypeConfiguration<CategoryEnti
             .HasKey(t => t.Id);
 
         builder
+            .Property(t => t.Id)
+            .ValueGeneratedOnAdd();
+        
+        builder
             .Property(t => t.Title)
             .HasColumnType("varchar(64)")
             .IsRequired();

@@ -1,8 +1,10 @@
 ﻿using Core.Repositories.Categories;
 using Core.Repositories.Markets;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Repositories.Products;
 
+[EntityTypeConfiguration(typeof(ProductEntityConfiguration))]
 public class ProductEntity
 {
     public int MarketId { get; set; }
