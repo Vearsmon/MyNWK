@@ -1,4 +1,5 @@
-﻿using Core.Repositories.Markets;
+﻿using Core.Repositories.Categories;
+using Core.Repositories.Markets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -33,5 +34,10 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<ProductEntity
             .HasOne<MarketEntity>(t => t.Market)
             .WithMany(t => t.Products)
             .HasForeignKey(t => t.MarketId);
+
+        builder
+            .HasOne<CategoryEntity>(t => t.Category)
+            .WithOne()
+            .HasForeignKey<ProductEntity>(t => t.CategoryId);
     }
 }

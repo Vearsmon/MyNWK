@@ -1,4 +1,5 @@
-﻿using Core.Repositories.Markets;
+﻿using Core.Repositories.Categories;
+using Core.Repositories.Markets;
 
 namespace Core.Repositories.Products;
 
@@ -10,7 +11,7 @@ public class ProductEntity
     public int ProductId { get; set; }
     
     public int? CategoryId { get; set; }
-    // public CategoryEntity Category { get; set; }
+    public CategoryEntity? Category { get; set; }
     
     public string Title { get; set; }
     
