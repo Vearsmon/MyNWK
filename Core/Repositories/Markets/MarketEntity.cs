@@ -1,4 +1,5 @@
-﻿using Core.Repositories.Sellers;
+﻿using Core.Repositories.Products;
+using Core.Repositories.Sellers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Repositories.Markets;
@@ -16,4 +17,6 @@ public class MarketEntity
     public bool Closed { get; set; }
 
     public MarketInfoEntity MarketInfo { get; set; }
+    
+    public List<ProductEntity> Products { get; set; }
 }
