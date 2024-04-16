@@ -15,18 +15,8 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
             .ValueGeneratedOnAdd();
 
         builder
-            .Property(t => t.Email)
-            .HasColumnType("varchar(64)")
+            .Property(t => t.TelegramId)
             .IsRequired();
-
-        builder
-            .Property(t => t.Password)
-            .HasColumnType("varchar(64)")
-            .IsRequired();
-
-        builder
-            .Property(t => t.TelegramUsername)
-            .HasColumnType("varchar(64)");
 
         builder
             .Property(t => t.Name)
@@ -38,7 +28,7 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
 
         builder.HasIndex(t => new
         {
-            t.Email
+            t.TelegramId
         });
     }
 }

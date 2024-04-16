@@ -4,11 +4,9 @@ public class User
 {
     public int Id { get; }
     
-    public string Email { get; }
+    public long TelegramId { get; }
     
-    public string Password { get; }
-    
-    public string? TelegramUsername { get; }
+    public string TelegramUsername { get; }
     
     public string? Name { get; }
     
@@ -16,15 +14,13 @@ public class User
 
     public User(
         int id,
-        string email,
-        string password,
-        string? telegramUsername = null, 
+        long telegramId,
+        string telegramUsername, 
         string? name = null,
         string? phoneNumber = null)
     {
         Id = id;
-        Email = email;
-        Password = password;
+        TelegramId = telegramId;
         TelegramUsername = telegramUsername;
         Name = name;
         PhoneNumber = phoneNumber;

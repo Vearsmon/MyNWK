@@ -25,17 +25,17 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginModel model)
     {
-        if (ModelState.IsValid)
-        {
-            var user = await usersRepository.FindAsync(model.Email).ConfigureAwait(false);
-            if (user != null)
-            {
-                await Authenticate(model.Email);
-
-                return RedirectToAction("Index", "Home");
-            }
-            ModelState.AddModelError("", "Некорректные логин и(или) пароль");
-        }
+        // if (ModelState.IsValid)
+        // {
+        //     var user = await usersRepository.FindAsync(model.Email).ConfigureAwait(false);
+        //     if (user != null)
+        //     {
+        //         await Authenticate(model.Email);
+        //
+        //         return RedirectToAction("Index", "Home");
+        //     }
+        //     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+        // }
         return View(model);
     }
     [HttpGet]
@@ -47,19 +47,19 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterModel model)
     {
-        if (ModelState.IsValid)
-        {
-            var user = await usersRepository.FindAsync(model.Email).ConfigureAwait(false);
-            if (user == null)
-            {
-                await usersRepository.CreateAsync(model.Email, model.Password);
-
-                await Authenticate(model.Email);
-
-                return RedirectToAction("Index", "Home");
-            }
-            ModelState.AddModelError("", "Некорректные логин и(или) пароль");
-        }
+        // if (ModelState.IsValid)
+        // {
+        //     var user = await usersRepository.FindAsync(model.Email).ConfigureAwait(false);
+        //     if (user == null)
+        //     {
+        //         await usersRepository.CreateAsync(model.Email, model.Password);
+        //
+        //         await Authenticate(model.Email);
+        //
+        //         return RedirectToAction("Index", "Home");
+        //     }
+        //     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+        // }
         return View(model);
     }
 

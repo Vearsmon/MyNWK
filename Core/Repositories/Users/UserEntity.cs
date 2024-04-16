@@ -8,11 +8,9 @@ public class UserEntity
 {
     public int Id { get; set; }
     
-    public string Email { get; set; }
+    public long TelegramId { get; set; }
     
-    public string Password { get; set; }
-    
-    public string? TelegramUsername { get; set; }
+    public string TelegramUsername { get; set; }
 
     public string? Name { get; set; }
     

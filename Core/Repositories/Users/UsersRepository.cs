@@ -14,10 +14,10 @@ public class UsersRepository : IUsersRepository
 
     private DbSet<UserEntity> Users => userContext.Users;
 
-    public async Task<User> GetAsync(string email)
+    public async Task<User> GetAsync(long telegramId)
     {
         var user = await Users
-            .Where(t => t.Email == email)
+            .Where(t => t.TelegramId == telegramId)
             .FirstOrDefaultAsync()
             .ConfigureAwait(false);
         
@@ -31,11 +31,10 @@ public class UsersRepository : IUsersRepository
         return Convert(user);
     }
 
-    public async Task<User?> FindAsync(string email)
+    public async Task<User?> FindAsync(long telegramId)
     {
-        Console.WriteLine(userContext.Users is null);
         var user = await userContext.Users
-            .Where(t => t.Email == email)
+            .Where(t => t.TelegramId == telegramId)
             .FirstOrDefaultAsync()
             .ConfigureAwait(false);
 
@@ -44,13 +43,18 @@ public class UsersRepository : IUsersRepository
             : Convert(user);
     }
 
-    public async Task CreateAsync(string email, string password)
+    public async Task CreateAsync(
+        long telegramId,
+        string telegramUsername,
+        string? name = null,
+        string? phoneNumber = null)
     {
-        Console.WriteLine(userContext is not null);
         await Users.AddAsync(new UserEntity
         {
-            Email = email,
-            Password = password,
+            TelegramId = telegramId,
+            TelegramUsername = telegramUsername,
+            Name = name,
+            PhoneNumber = phoneNumber
         }).ConfigureAwait(false);
         await userContext.SaveChangesAsync().ConfigureAwait(false);
     }
@@ -58,8 +62,7 @@ public class UsersRepository : IUsersRepository
     private static User Convert(UserEntity userEntity) =>
         new(
             userEntity.Id,
-            userEntity.Email,
-            userEntity.Password,
+            userEntity.TelegramId,
             userEntity.TelegramUsername,
             userEntity.Name,
             userEntity.PhoneNumber);
