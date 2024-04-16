@@ -1,5 +1,7 @@
 using System.Security.Cryptography;
 using Core.Crypto;
+using Core.Repositories.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace TestsCore;
 
@@ -18,5 +20,14 @@ public class Tools
     {
         var hash = new HashPasswordService().EvaluateHash("112312312313");
         Console.WriteLine(hash);
+    }
+
+    [Test]
+    public void TestConnection()
+    {
+        var connectionString = "INSERT YOUR CONNECTION STRING HERE";
+        var opB = new DbContextOptionsBuilder<UserContext>();
+        opB.UseNpgsql(connectionString);
+        using var c = new UserContext(opB.Options);
     }
 }

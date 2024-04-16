@@ -1,5 +1,8 @@
-﻿namespace Core.Repositories.Markets;
+﻿using Microsoft.EntityFrameworkCore;
 
+namespace Core.Repositories.Markets;
+
+[EntityTypeConfiguration(typeof(MarketInfoEntityConfiguration))]
 public class MarketInfoEntity
 {
     public int MarketId { get; set; }

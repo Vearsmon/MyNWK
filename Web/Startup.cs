@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Web.Models;
 
@@ -6,10 +7,12 @@ namespace Web;
 
 public class Startup
 {
-    public IConfiguration Configuration { get; }
+    [UsedImplicitly]
+    public IConfiguration Configuration { get; } = null!;
+ 
     public void ConfigureServices(IServiceCollection services)
     {
-        string connection = Configuration.GetConnectionString("DefaultConnection");
+        var connection = Configuration.GetConnectionString("DefaultConnection")!;
         services.AddDbContext<UserContext>(options => options.UseNpgsql(connection));
 
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

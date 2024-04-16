@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Core.Repositories.Users;
 
 [EntityTypeConfiguration(typeof(UserEntityConfiguration))]
-public sealed class UserEntity
+public class UserEntity
 {
     public int Id { get; set; }
     
@@ -18,5 +18,5 @@ public sealed class UserEntity
     
     public string? PhoneNumber { get; set; }
     
-    public SellerEntity? Seller { get; set; }
+    public virtual SellerEntity? Seller { get; set; }
 }

@@ -9,6 +9,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<ProductEntity
 {
     public void Configure(EntityTypeBuilder<ProductEntity> builder)
     {
+        builder.ToTable("products");
         builder.HasKey(t => new
         {
             t.MarketId,

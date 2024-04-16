@@ -8,12 +8,12 @@ namespace Core.Repositories.Products;
 public class ProductEntity
 {
     public int MarketId { get; set; }
-    public MarketEntity Market { get; set; }
+    public virtual MarketEntity Market { get; set; }
     
     public int ProductId { get; set; }
     
     public int? CategoryId { get; set; }
-    public CategoryEntity? Category { get; set; }
+    public virtual CategoryEntity? Category { get; set; }
     
     public string Title { get; set; }
     

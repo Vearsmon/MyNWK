@@ -10,13 +10,13 @@ public class MarketEntity
     public int Id { get; set; }
     
     public int OwnerId { get; set; }
-    public SellerEntity Seller { get; set; }
+    public virtual SellerEntity Seller { get; set; }
     
     public string Name { get; set; }
     
     public bool Closed { get; set; }
 
-    public MarketInfoEntity MarketInfo { get; set; }
+    public virtual MarketInfoEntity MarketInfo { get; set; }
     
-    public List<ProductEntity> Products { get; set; }
+    public virtual List<ProductEntity> Products { get; set; }
 }

@@ -6,17 +6,17 @@ using Microsoft.EntityFrameworkCore;
 namespace Core.Repositories.Sellers;
 
 [EntityTypeConfiguration(typeof(SellerEntityConfiguration))]
-public sealed class SellerEntity
+public class SellerEntity
 {
     public int SellerId { get; set; }
     
     public int UserId { get; set; }
-    public UserEntity User { get; set; }
+    public virtual UserEntity User { get; set; }
     
     public int RoomId { get; set; }
-    public RoomEntity Room { get; set; }
+    public virtual RoomEntity Room { get; set; }
     
     public bool ShowRoom { get; set; }
 
-    public List<MarketEntity> Markets { get; set; }
+    public virtual List<MarketEntity> Markets { get; set; }
 }
