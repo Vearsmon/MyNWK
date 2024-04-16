@@ -1,19 +1,20 @@
 ﻿using System.Security.Claims;
+using Core.Repositories.Users;
+using Domain.Objects;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Web.Models;
 using Web.Models.ViewComponents;
 
 namespace Web.Controllers;
 
 public class AccountController : Controller
 {
-    private UserContext db;
-    public AccountController(UserContext context)
+    private readonly IUsersRepository usersRepository;
+    
+    public AccountController(IUsersRepository usersRepository)
     {
-        db = context;
+        this.usersRepository = usersRepository;
     }
     [HttpGet]
     public IActionResult Login()
@@ -26,7 +27,7 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            var user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+            var user = await usersRepository.FindAsync(model.Email).ConfigureAwait(false);
             if (user != null)
             {
                 await Authenticate(model.Email);
@@ -48,11 +49,10 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            User user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+            var user = await usersRepository.FindAsync(model.Email).ConfigureAwait(false);
             if (user == null)
             {
-                db.Users.Add(new User { Email = model.Email, Password = model.Password });
-                await db.SaveChangesAsync();
+                await usersRepository.CreateAsync(model.Email, model.Password);
 
                 await Authenticate(model.Email);
 

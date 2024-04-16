@@ -8,7 +8,7 @@ public class User
     
     public string Password { get; }
     
-    public string TelegramUsername { get; }
+    public string? TelegramUsername { get; }
     
     public string? Name { get; }
     
@@ -18,7 +18,7 @@ public class User
         int id,
         string email,
         string password,
-        string telegramUsername, 
+        string? telegramUsername, 
         string? name,
         string? phoneNumber)
     {

@@ -12,7 +12,7 @@ public class UserEntity
     
     public string Password { get; set; }
     
-    public string TelegramUsername { get; set; }
+    public string? TelegramUsername { get; set; }
 
     public string? Name { get; set; }
     

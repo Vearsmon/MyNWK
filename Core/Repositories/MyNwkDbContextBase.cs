@@ -10,12 +10,4 @@ public abstract class MyNwkDbContextBase<TContext> : DbContext
     {
         Database.EnsureCreated();
     }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder
-            .UseLazyLoadingProxies()
-            .UseSnakeCaseNamingConvention();
-        base.OnConfiguring(optionsBuilder);
-    }
 }

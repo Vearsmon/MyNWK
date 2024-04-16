@@ -6,7 +6,7 @@ namespace Core.Repositories.Categories;
 public class CategoryContext : MyNwkDbContextBase<CategoryContext>
 {
     [UsedImplicitly]
-    public DbSet<CategoryEntity> Categories { get; } = null!;
+    public DbSet<CategoryEntity> Categories { get; set; } = null!;
 
     public CategoryContext(DbContextOptions<CategoryContext> options) 
         : base(options)

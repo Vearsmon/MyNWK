@@ -14,7 +14,7 @@ public class UsersRepository : IUsersRepository
 
     private DbSet<UserEntity> Users => userContext.Users;
 
-    public async Task<User> Get(string email)
+    public async Task<User> GetAsync(string email)
     {
         var user = await Users
             .Where(t => t.Email == email)
@@ -31,9 +31,10 @@ public class UsersRepository : IUsersRepository
         return Convert(user);
     }
 
-    public async Task<User?> Find(string email)
+    public async Task<User?> FindAsync(string email)
     {
-        var user = await Users
+        Console.WriteLine(userContext.Users is null);
+        var user = await userContext.Users
             .Where(t => t.Email == email)
             .FirstOrDefaultAsync()
             .ConfigureAwait(false);
@@ -41,6 +42,17 @@ public class UsersRepository : IUsersRepository
         return user is null 
             ? null 
             : Convert(user);
+    }
+
+    public async Task CreateAsync(string email, string password)
+    {
+        Console.WriteLine(userContext is not null);
+        await Users.AddAsync(new UserEntity
+        {
+            Email = email,
+            Password = password,
+        }).ConfigureAwait(false);
+        await userContext.SaveChangesAsync().ConfigureAwait(false);
     }
 
     private static User Convert(UserEntity userEntity) =>
