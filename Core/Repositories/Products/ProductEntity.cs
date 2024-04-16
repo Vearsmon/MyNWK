@@ -22,5 +22,4 @@ public class ProductEntity
     public double Price { get; set; }
     
     public int Remained { get; set; }
-    
 }

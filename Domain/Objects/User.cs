@@ -18,9 +18,9 @@ public class User
         int id,
         string email,
         string password,
-        string? telegramUsername, 
-        string? name,
-        string? phoneNumber)
+        string? telegramUsername = null, 
+        string? name = null,
+        string? phoneNumber = null)
     {
         Id = id;
         Email = email;
