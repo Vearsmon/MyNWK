@@ -5,9 +5,8 @@ namespace Web.Controllers;
 
 public class HomeController : Controller
 {
-    [Authorize]
     public IActionResult Index()
     {
-        return Content(User.Identity.Name);
+        return View();
     }
 }

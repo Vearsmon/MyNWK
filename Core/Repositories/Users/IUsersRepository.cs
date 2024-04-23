@@ -9,4 +9,6 @@ public interface IUsersRepository
     public Task<User?> FindAsync(long telegramId);
 
     public Task CreateAsync(long telegramId, string telegramUsername, string? name, string? phoneNumber);
+
+    public Task<int> GetUsersCount();
 }

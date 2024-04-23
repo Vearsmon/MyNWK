@@ -59,6 +59,11 @@ public class UsersRepository : IUsersRepository
         await userContext.SaveChangesAsync().ConfigureAwait(false);
     }
 
+    public async Task<int> GetUsersCount()
+    {
+        return userContext.Users.Count();
+    }
+
     private static User Convert(UserEntity userEntity) =>
         new(
             userEntity.Id,

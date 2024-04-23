@@ -1,3 +1,23 @@
-﻿@{
+﻿@model IQueryable<Core.Repositories.Products.ProductEntity>
+
+@{
     Layout = "_Layout";
 }
+
+<h1>Ваш аккаунт</h1>
+
+<div>
+    @if (Model != null)
+    {
+        @foreach (var product in Model)
+        {
+            <p>Название: @product.Title</p><br>
+            <p>Цена: @product.Price</p><br>
+            <p>Осталось на складе: @product.Remained шт.</p><br><br>
+        }
+    }
+    else
+    {
+        <p>На сайте пока нет товаров</p>
+    }
+</div>

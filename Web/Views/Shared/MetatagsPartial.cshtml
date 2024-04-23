@@ -1,4 +1,5 @@
-﻿<meta charset="utf-8">
+﻿@using Web.Service
+<meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
 @if (ViewBag.Title != null)
@@ -7,7 +8,7 @@
 }
 else
 {
-    <title>Мой НВК</title>
+    <title>@Config.AppName</title>
 }
 @if (ViewBag.Description != null)
 {

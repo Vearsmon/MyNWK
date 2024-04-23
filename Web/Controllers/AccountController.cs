@@ -3,71 +3,60 @@ using Core.Repositories.Users;
 using Domain.Objects;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models.ViewComponents;
 
 namespace Web.Controllers;
 
+[Authorize]
 public class AccountController : Controller
 {
     private readonly IUsersRepository usersRepository;
+    private readonly UserManager<IdentityUser> userManager;
+    private readonly SignInManager<IdentityUser> signInManager;
     
-    public AccountController(IUsersRepository usersRepository)
+    public AccountController(
+        IUsersRepository usersRepository,
+        UserManager<IdentityUser> userManager,
+        SignInManager<IdentityUser> signInManager)
     {
         this.usersRepository = usersRepository;
+        this.userManager = userManager;
+        this.signInManager = signInManager;
     }
+    
     [HttpGet]
-    public IActionResult Login()
+    [AllowAnonymous]
+    public IActionResult Login(string returnUrl)
     {
-        return View();
+        ViewBag.returnUrl = "/";
+        return View(new LoginModel());
     }
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginModel model)
+    [AllowAnonymous]
+    public async Task<IActionResult> Login(LoginModel model, string returnUrl)
     {
-        // if (ModelState.IsValid)
-        // {
-        //     var user = await usersRepository.FindAsync(model.Email).ConfigureAwait(false);
-        //     if (user != null)
-        //     {
-        //         await Authenticate(model.Email);
-        //
-        //         return RedirectToAction("Index", "Home");
-        //     }
-        //     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
-        // }
-        return View(model);
-    }
-    [HttpGet]
-    public IActionResult Register()
-    {
-        return View();
-    }
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(RegisterModel model)
-    {
-        // if (ModelState.IsValid)
-        // {
-        //     var user = await usersRepository.FindAsync(model.Email).ConfigureAwait(false);
-        //     if (user == null)
-        //     {
-        //         await usersRepository.CreateAsync(model.Email, model.Password);
-        //
-        //         await Authenticate(model.Email);
-        //
-        //         return RedirectToAction("Index", "Home");
-        //     }
-        //     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
-        // }
+        if (ModelState.IsValid)
+        {
+            var user = await usersRepository.FindAsync(model.TelegramId);
+
+            if (user == null)
+            {
+                await usersRepository.CreateAsync(model.TelegramId,
+                    model.TelegramUsername, model.Name, model.PhoneNumber);
+            }
+            return RedirectToAction("Index", "Home");
+        }
         return View(model);
     }
 
-    private async Task Authenticate(string userName)
+    private async Task Authenticate(long telegramId)
     {
         var claims = new List<Claim>
         {
-            new (ClaimsIdentity.DefaultNameClaimType, userName)
+            new (ClaimsIdentity.DefaultNameClaimType, telegramId.ToString())
         };
         var id = new ClaimsIdentity(claims, 
             "ApplicationCookie", 
