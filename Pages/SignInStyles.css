@@ -1,0 +1,130 @@
+/* Окно регистрации */
+
+.sign-in-container {
+    position: relative;
+    width: 463px;
+    height: 310px;
+    margin: 150px auto;
+    
+    /* При индексе -2 козырек правильно перекрывает окно входа, но при -2 так же перекрывается кнопка контейнером и перейти по ссылке нельзя
+    РАЗОБРАТЬСЯ!!!!! 
+    РАЗОБРАЛАСЬ!!!!!!*/
+    z-index: 2;
+}
+
+
+
+/* Окно регистрации */
+
+.sign-in-back {
+    box-sizing: border-box;
+
+    min-width: 463px;
+    min-height: 247px;
+    position: relative;
+    
+    background: #FFFAF3;
+    border: 3px solid #FFA25E;
+    border-radius: 15px;
+}
+
+
+/* Продолжить */
+
+.continue-container {
+    position: relative;
+}
+
+
+
+/* Задник */
+
+.continue-back {
+    box-sizing: border-box;
+
+    position: relative;
+    margin: 0 auto;
+    top: 100px;
+    
+    width: 187px;
+    
+    background: #FFECD2;
+    border: 2px solid #FFA25E;
+    border-radius: 7px;
+}
+
+
+/* Продолжить */
+
+.continue {
+    position: relative;
+    
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 18px;
+    text-decoration-line:none;
+    
+    display: flex;
+    justify-content: center;
+
+    color: #FF8B38;
+}
+
+
+
+/* Регистрация */
+
+.header {
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 500;
+    font-size: 35px;
+    line-height: 42px;
+
+    z-index: 100000;
+
+    color: #FFA25E;
+}
+
+
+
+/* Регистрация через тг */
+
+.telegram-sign-in{
+    position: relative;
+    margin: 0 auto;
+    top: 60px;
+    
+    width: 213px;
+    height: 30px;
+
+    background: lightblue;
+    color: aliceblue;
+    border-radius: 15px;
+}
+
+
+/* Войдите для досутпа к сайту */
+
+.content {
+    position: relative;
+    
+    font-family: 'Inter';
+    font-style: italic;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    text-decoration-line: underline;
+    
+    top: 36px;
+    color: #FF7B1B;
+}
+
