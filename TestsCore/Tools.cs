@@ -1,6 +1,5 @@
 using System.Security.Cryptography;
 using Core.Crypto;
-using Core.Repositories.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace TestsCore;
@@ -26,8 +25,8 @@ public class Tools
     public void TestConnection()
     {
         var connectionString = "INSERT YOUR CONNECTION STRING HERE";
-        var opB = new DbContextOptionsBuilder<UserContext>();
+        var opB = new DbContextOptionsBuilder<DbContext>();
         opB.UseNpgsql(connectionString);
-        using var c = new UserContext(opB.Options);
+        using var c = new DbContext(opB.Options);
     }
 }

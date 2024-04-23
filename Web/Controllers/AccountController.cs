@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
-using Core.Repositories.Users;
-using Domain.Objects;
+using Core.Objects;
+using Core.Objects.MyNwkUnitOfWork;
+using Core.Objects.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -13,16 +14,16 @@ namespace Web.Controllers;
 [Authorize]
 public class AccountController : Controller
 {
-    private readonly IUsersRepository usersRepository;
+    private readonly IUnitOfWorkProvider unitOfWorkProvider;
     private readonly UserManager<IdentityUser> userManager;
     private readonly SignInManager<IdentityUser> signInManager;
     
     public AccountController(
-        IUsersRepository usersRepository,
+        IUnitOfWorkProvider unitOfWorkProvider,
         UserManager<IdentityUser> userManager,
         SignInManager<IdentityUser> signInManager)
     {
-        this.usersRepository = usersRepository;
+        this.unitOfWorkProvider = unitOfWorkProvider;
         this.userManager = userManager;
         this.signInManager = signInManager;
     }
@@ -34,18 +35,29 @@ public class AccountController : Controller
         ViewBag.returnUrl = "/";
         return View(new LoginModel());
     }
+    
     [HttpPost]
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginModel model, string returnUrl)
     {
         if (ModelState.IsValid)
         {
-            var user = await usersRepository.FindAsync(model.TelegramId);
+            await using var unitOfWork = unitOfWorkProvider.Get();
 
+            var users = await unitOfWork.UsersRepository.GetAsync(
+                r => r.Where(t => t.TelegramId == model.TelegramId), 
+                CancellationToken.None);
+            var user = users.FirstOrDefault();
             if (user == null)
             {
-                await usersRepository.CreateAsync(model.TelegramId,
-                    model.TelegramUsername, model.Name, model.PhoneNumber);
+                unitOfWork.UsersRepository.Create(
+                    new User
+                    {
+                        TelegramId = model.TelegramId,
+                        TelegramUsername = model.TelegramUsername,
+                        Name = model.Name,
+                        PhoneNumber = model.PhoneNumber
+                    });
             }
             return RedirectToAction("Index", "Home");
         }

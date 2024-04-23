@@ -1,5 +1,5 @@
-﻿using Core.Repositories.Products;
-using Domain.Objects;
+﻿using Core.Objects;
+using Core.Objects.MyNwkUnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Areas.User.Controllers;
@@ -7,14 +7,21 @@ namespace Web.Areas.User.Controllers;
 [Area("User")]
 public class HomeController : Controller
 {
-    private readonly ProductsRepository Products;
+    private readonly IUnitOfWorkProvider unitOfWorkProvider;
     
-    public HomeController(ProductsRepository products)
+    public HomeController(IUnitOfWorkProvider unitOfWorkProvider)
     {
-        Products = products;
+        this.unitOfWorkProvider = unitOfWorkProvider;
     }
-    public IActionResult Index()
+    
+    public async Task<IActionResult> Index()
     {
-        return View(Products.GetProductEntities());
+        await using var unitOfWork = unitOfWorkProvider.Get();
+        var products = await unitOfWork.ProductRepository
+            .GetAsync(
+                _ => _,
+                CancellationToken.None)
+            .ConfigureAwait(false);
+        return View(products);
     }
 }

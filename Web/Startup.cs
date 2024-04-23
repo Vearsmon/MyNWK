@@ -1,12 +1,5 @@
-﻿using System.Security.Principal;
-using Core.Repositories;
-using Core.Repositories.Categories;
-using Core.Repositories.Markets;
-using Core.Repositories.Products;
-using Core.Repositories.Rooms;
-using Core.Repositories.Sellers;
-using Core.Repositories.Users;
-using Domain;
+﻿using Core.Objects;
+using Core.Objects.MyNwkUnitOfWork;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -115,40 +108,15 @@ public class Startup
 
     private void AddServices(IServiceCollection services, string connection)
     {
-        services.AddDbContextFactory<UserContext>(t => t
+        services.AddDbContextFactory<MyNwkDbContext>(t => t
             .UseNpgsql(connection)
             .UseLazyLoadingProxies()
             .UseSnakeCaseNamingConvention());
-        services.AddScoped<IUsersRepository, UsersRepository>();
-        
-        services.AddDbContextFactory<CategoryContext>(t => t
+        services.AddDbContext<MyNwkDbContext>(t => t
             .UseNpgsql(connection)
             .UseLazyLoadingProxies()
             .UseSnakeCaseNamingConvention());
-        services.AddScoped<ICategoriesRepository, CategoriesRepository>();
-        
-        services.AddDbContextFactory<MarketContext>(t => t
-            .UseNpgsql(connection)
-            .UseLazyLoadingProxies()
-            .UseSnakeCaseNamingConvention());
-        services.AddScoped<IMarketsRepository, MarketsRepository>();
-        
-        services.AddDbContextFactory<ProductContext>(t => t
-            .UseNpgsql(connection)
-            .UseLazyLoadingProxies()
-            .UseSnakeCaseNamingConvention());
-        services.AddScoped<IProductsRepository, ProductsRepository>();
-        
-        services.AddDbContextFactory<RoomContext>(t => t
-            .UseNpgsql(connection)
-            .UseLazyLoadingProxies()
-            .UseSnakeCaseNamingConvention());
-        services.AddScoped<IRoomsRepository, RoomsRepository>();
-        
-        services.AddDbContextFactory<SellerContext>(t => t
-            .UseNpgsql(connection)
-            .UseLazyLoadingProxies()
-            .UseSnakeCaseNamingConvention());
-        services.AddScoped<ISellersRepository, SellersRepository>();
+
+        services.AddScoped<IUnitOfWorkProvider, UnitOfWorkProvider>();
     }
 }
