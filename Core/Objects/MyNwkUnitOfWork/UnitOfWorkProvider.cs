@@ -2,12 +2,12 @@
 
 public class UnitOfWorkProvider : IUnitOfWorkProvider
 {
-    private readonly MyNwkDbContext myNwkDbContext;
+    private readonly CoreDbContext coreDbContext;
 
-    public UnitOfWorkProvider(MyNwkDbContext myNwkDbContext)
+    public UnitOfWorkProvider(CoreDbContext coreDbContext)
     {
-        this.myNwkDbContext = myNwkDbContext;
+        this.coreDbContext = coreDbContext;
     }
 
-    public IUnitOfWork Get() => new UnitOfWork(myNwkDbContext);
+    public IUnitOfWork Get() => new UnitOfWork(coreDbContext);
 }

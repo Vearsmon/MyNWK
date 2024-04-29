@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Objects;
 
-public class MyNwkDbContext : DbContext
+public class CoreDbContext : DbContext
 {
     [UsedImplicitly]
     public DbSet<Category> Categories { get; set; } = null!;
@@ -32,7 +32,7 @@ public class MyNwkDbContext : DbContext
     [UsedImplicitly] 
     public DbSet<User> Users { get; set; } = null!;
     
-    public MyNwkDbContext(DbContextOptions options)
+    public CoreDbContext(DbContextOptions options)
         : base(options)
     {
         Database.EnsureCreated();

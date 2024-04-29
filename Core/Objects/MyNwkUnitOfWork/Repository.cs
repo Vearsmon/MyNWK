@@ -6,12 +6,12 @@ namespace Core.Objects.MyNwkUnitOfWork;
 public class Repository<TEntity> : IRepository<TEntity>
     where TEntity: class
 {
-    private readonly MyNwkDbContext dbContext;
+    private readonly CoreDbContext dbContext;
 
     [UsedImplicitly]
     public DbSet<TEntity> Entities { get; set; }
 
-    public Repository(MyNwkDbContext dbContext)
+    public Repository(CoreDbContext dbContext)
     {
         this.dbContext = dbContext;
         Entities = dbContext.Set<TEntity>();

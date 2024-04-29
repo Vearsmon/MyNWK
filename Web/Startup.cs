@@ -108,11 +108,11 @@ public class Startup
 
     private void AddServices(IServiceCollection services, string connection)
     {
-        services.AddDbContextFactory<MyNwkDbContext>(t => t
+        services.AddDbContextFactory<CoreDbContext>(t => t
             .UseNpgsql(connection)
             .UseLazyLoadingProxies()
             .UseSnakeCaseNamingConvention());
-        services.AddDbContext<MyNwkDbContext>(t => t
+        services.AddDbContext<CoreDbContext>(t => t
             .UseNpgsql(connection)
             .UseLazyLoadingProxies()
             .UseSnakeCaseNamingConvention());

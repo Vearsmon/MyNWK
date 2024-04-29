@@ -9,7 +9,7 @@ namespace Core.Objects.MyNwkUnitOfWork;
 
 public sealed class UnitOfWork : IUnitOfWork
 {
-    private readonly MyNwkDbContext myNwkDbContext;
+    private readonly CoreDbContext coreDbContext;
     
     private readonly Lazy<IRepository<User>> usersRepository;
     private readonly Lazy<IRepository<Seller>> sellersRepository;
@@ -27,23 +27,23 @@ public sealed class UnitOfWork : IUnitOfWork
     public IRepository<MarketInfo> MarketInfosRepository => marketInfosRepository.Value;
     public IRepository<Category> CategoriesInfosRepository => categoriesInfosRepository.Value;
 
-    public UnitOfWork(MyNwkDbContext myNwkDbContext)
+    public UnitOfWork(CoreDbContext coreDbContext)
     {
-        this.myNwkDbContext = myNwkDbContext;
-        usersRepository = new Lazy<IRepository<User>>(() => new Repository<User>(myNwkDbContext));
-        sellersRepository = new Lazy<IRepository<Seller>>(() => new Repository<Seller>(myNwkDbContext));
-        roomsRepository = new Lazy<IRepository<Room>>(() => new Repository<Room>(myNwkDbContext));
-        productRepository = new Lazy<IRepository<Product>>(() => new Repository<Product>(myNwkDbContext));
-        marketsRepository = new Lazy<IRepository<Market>>(() => new Repository<Market>(myNwkDbContext));
-        marketInfosRepository = new Lazy<IRepository<MarketInfo>>(() => new Repository<MarketInfo>(myNwkDbContext));
-        categoriesInfosRepository = new Lazy<IRepository<Category>>(() => new Repository<Category>(myNwkDbContext));
+        this.coreDbContext = coreDbContext;
+        usersRepository = new Lazy<IRepository<User>>(() => new Repository<User>(coreDbContext));
+        sellersRepository = new Lazy<IRepository<Seller>>(() => new Repository<Seller>(coreDbContext));
+        roomsRepository = new Lazy<IRepository<Room>>(() => new Repository<Room>(coreDbContext));
+        productRepository = new Lazy<IRepository<Product>>(() => new Repository<Product>(coreDbContext));
+        marketsRepository = new Lazy<IRepository<Market>>(() => new Repository<Market>(coreDbContext));
+        marketInfosRepository = new Lazy<IRepository<MarketInfo>>(() => new Repository<MarketInfo>(coreDbContext));
+        categoriesInfosRepository = new Lazy<IRepository<Category>>(() => new Repository<Category>(coreDbContext));
     }
 
-    public Task CommitAsync(CancellationToken cancellationToken) => myNwkDbContext.SaveChangesAsync(cancellationToken); 
+    public Task CommitAsync(CancellationToken cancellationToken) => coreDbContext.SaveChangesAsync(cancellationToken); 
 
     public async ValueTask DisposeAsync()
     {
-        await myNwkDbContext.SaveChangesAsync().ConfigureAwait(false);
-        await myNwkDbContext.DisposeAsync().ConfigureAwait(false);
+        await coreDbContext.SaveChangesAsync().ConfigureAwait(false);
+        await coreDbContext.DisposeAsync().ConfigureAwait(false);
     }
 }
