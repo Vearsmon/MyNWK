@@ -11,21 +11,22 @@
     <div class="siteHeader">
         <div class="nav-top">
 
-            <div class="peak"></div>
-
-            <a class="logo" href="http://127.0.0.1:5500/mainPage.html">
-                <img src="/images/logo.png" alt="logo" width="121px" height="79px">
-            </a>
-
-            <ul class="ul">
-                <li class="li">
-                    <a class="link" href="#">Вход</a>
-                </li>
-            </ul>
-            
-            <button class="button">
-                <a class="link" href="http://127.0.0.1:5500/SignUpPage.html">Регистрация</a>
-            </button>
+            <div class="peak">
+                <a class="logo" href="http://127.0.0.1:5500/mainPage.html">
+                    <img src="/images/logo.png" alt="logo" width="121px" height="79px">
+                </a>
+    
+                <ul class="ul">
+                    <li class="li">
+                        <a class="link" href="#">Барахолка</a>
+                        <a class="link" href="http://127.0.0.1:5500/SignInPage.html">Вход</a>
+                    </li>
+                </ul>
+                
+                <button class="button">
+                    <a class="link" href="http://127.0.0.1:5500/SignUpPage.html">Профиль</a>
+                </button>
+            </div>
 
         </div>
     </div>
@@ -48,25 +49,107 @@
 
                 <div class="baraholka-filters-window">
                     <div class="baraholka-filters">
+                        <div class="category-headers">Категории</div>
+
                         <select class="baraholka-filters category">
-                            <option value="value1">Value1</option>
-                            <option value="value2">Value2</option>
-                            <option value="value3">Value3</option>
-                            <option value="value4">Value4</option>
-                            <option value="value5">Value5</option>
-                            <option value="value6">Value6</option>
+                            <option selected value="defaultCategory" class="default-content">Выберите категорию</option>
+                            <option value="value1">Продукты питания</option>
+                            <option value="value2">Одежда</option>
+                            <option value="value3">Прочее</option>
                         </select>
-                        
+
+                        <div class="seller-headers">Продавец</div>
                         <select class="baraholka-filters seller">
-                            <option value="seller1">Seller1</option>
-                            <option value="seller2">Seller2</option>
-                            <option value="seller3">Seller3</option>
-                            <option value="seller4">Seller4</option>
-                            <option value="seller5">Seller5</option>
-                            <option value="seller6">Seller6</option>
+                            <option selected value="defaultSeller" class="default-content">Выберите продавца</option>
+                            <option value="seller1">Литовкин</option>
+                            <option value="seller2">Лунтик</option>
+                            <option value="seller3">Батурджон</option>
+                            <option value="seller4">Константин</option>
                         </select>
                     </div>
+
+                    <div class="baraholka-filters-buttons">
+                        <button class="baraholka-filters-confirm-button" id="baraholka-filters-confirm">Применить</button>
+
+                        <button class="baraholka-filters-reset-button" id="baraholka-filters-reset">Сбросить</button>
+                    </div>
                 </div>
+            </div>
+
+            <div class="baraholka-slots-container">
+
+                <div class="baraholka-slot">
+                    <div class="baraholka-slot-photo"></div>
+                    
+                    <div class="baraholka-slot-info">
+                        Чипсы Lay's краб
+                        <p>150 руб</p>
+                    </div>
+                </div>
+
+                <div class="baraholka-slot">
+                    <div class="baraholka-slot-photo"></div>
+                    
+                    <div class="baraholka-slot-info">
+                        Чай зелёный в пакетиках
+                        <p>100 руб</p>
+                    </div>
+                </div>
+
+                <div class="baraholka-slot">
+                    <div class="baraholka-slot-photo"></div>
+                    
+                    <div class="baraholka-slot-info">
+                        Батончик "Picnic"
+                        <p>79 руб</p>
+                    </div>
+                </div>
+
+                <div class="baraholka-slot">
+                    <div class="baraholka-slot-photo"></div>
+                    
+                    <div class="baraholka-slot-info">
+                        Кофта черная
+                        <p>750 руб</p>
+                    </div>
+                </div>
+
+                <div class="baraholka-slot">
+                    <div class="baraholka-slot-photo"></div>
+                    
+                    <div class="baraholka-slot-info">
+                        AlpenGold
+                        <p>65 руб</p>
+                    </div>
+                </div>
+
+                <div class="baraholka-slot">
+                    <div class="baraholka-slot-photo"></div>
+                    
+                    <div class="baraholka-slot-info">
+                        POD-система
+                        <p>1000 руб</p>
+                    </div>
+                </div>
+
+                <div class="baraholka-slot">
+                    <div class="baraholka-slot-photo"></div>
+                    
+                    <div class="baraholka-slot-info">
+                        Сок "Сады придонья"
+                        <p>120 руб</p>
+                    </div>
+                </div>
+
+                <div class="baraholka-slot">
+                    <div class="baraholka-slot-photo"></div>
+                    
+                    <div class="baraholka-slot-info">
+                        Жопу Андрея
+                        <p>20 000 руб</p>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
