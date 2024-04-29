@@ -16,4 +16,5 @@ public class Product
     public string? ImageLocation { get; set; }
     public double Price { get; set; }
     public int Remained { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
