@@ -1,5 +1,4 @@
 body {
-    /* Жоский фонк.. ой фонт стайлинг*/
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;
@@ -9,45 +8,37 @@ body {
     background-color: #FFFAF3;
 }
 
-
-/* Тещу прокрутку */
-
 .wii {
     height: 10000px;
 }
 
 
-/* Козырёк */
+/* Header */
 
-.peak {
-    /* Да хрен его знает шо это, с фигмы спёрла */
+.header {
     box-sizing: border-box;
 
-    /* Позиционирование */
     position: fixed;
     top: 0;
     left: 0;
+    min-width: 1100px;
     width:100%;
     height: 84px;
 
-    /* Шоб не высовывался */
     z-index: 3;
 
-    /* Дизайн козырька */
     background: #FFE1BD;
     border-bottom: 1px solid #FFA25E;
 
-    /* Управляет кнопками внутри козырька */
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 
-/* Логотип, ну оно и понятно */
+/* Логотип */
 
 .logo {
-    /* Позиционирование */
     position: fixed;
     top: 0;
     left: 192px;
@@ -57,16 +48,14 @@ body {
 
 
 
-/* Кнопочка входа. Мб добавим и барахолку, если только её сделаем */
+/* Кнопочки входа и барахолки */
 
 .ul {
-    /* Зафиксировала вправо, шоб влево не совался */
     float: right;
     right: 420px;
     top: 14px;
     position: fixed;
 
-    /* Поправили вид и положение между списком */
     list-style: none;
     display: flex;
     gap: 27px;
@@ -79,24 +68,19 @@ body {
 /* Кнопка регистрации */
 
 .button {
-    /* Зафиксировали */
     position: fixed;
 
-    /* Прикрепили к правому краю */
     float: right;
     right: 200px;
     top: 28px;
 
-    /* Размер кнопки */
     width: 180px;
     height: 32px;
 
-    /* Стилизация кнопки */
     background-color: #FFE1BD;
     border: 2px solid #FFA25E;
     border-radius: 7px;
 
-    /* Стилизация текста */
     font-size: 20px;
     color: #FFA25E;
 
