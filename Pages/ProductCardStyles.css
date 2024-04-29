@@ -1,0 +1,149 @@
+.product-card-background-shadow {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100vh;;
+    background-color: black;
+    opacity: 0.25;
+}
+
+
+.product-card-container {
+    position: relative;
+    
+    margin: 200px auto;
+
+    width: 1000px;
+    height: 500px;
+
+    background-color: #FFE1BD;
+
+    border-radius: 15px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #FFA25E;
+}
+
+
+.product-card-photo {
+    position: absolute;
+
+    left: 80px;
+    top: 50px;
+
+    width: 200px;
+    height: 260px;
+
+    background-color: #D9D9D9;
+
+}
+
+
+.product-card-header-name {
+    position: absolute;
+
+    top: 75px;
+    left: 350px;
+
+    font-family: 'Inter';
+    font-size: 20px;
+    font-weight: 550;
+    font-style: italic;
+    color: #FFA25E;
+}
+
+
+.product-card-header-bottom {
+    position: absolute;
+
+    top: 100px;
+    left: 350px;
+
+    width: 500px;
+    height: 2px;
+
+    background-color: #FFA25E;
+
+    border-radius: 2px;
+}
+
+
+.product-card-info-container {
+    position: absolute;
+
+    top: 120px;
+    left: 350px;
+
+    background-color: black;
+
+    min-width: 500px;
+    height: 150px;
+}
+
+
+.product-card-count-controller-container {
+    position: absolute;
+
+    left: 350px;
+    top: 300px;
+
+    min-width: 100px;
+    height: 20px;
+}
+
+
+.product-card-count-decrease {
+    position: absolute;
+
+    left: 0px;
+    top: 50%;
+    
+    width: 20px;
+}
+
+
+.product-card-count-increase {
+    position: absolute;
+
+    right: 0px;
+
+    width: 20px;
+}
+
+
+.product-card-count {
+    position: absolute;
+
+    left: 45%;
+ 
+    font-size: 20px;
+    font-family: 'Inter';
+    color: #FFA25E;
+    font-weight: 550;
+}
+
+
+.product-card-condirm-button {
+    position: absolute;
+
+    right: 150px;
+    top: 290px;
+
+    width: 200px;
+    height: 30px;
+
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #FFA25E;
+
+    font-family: 'Inter';
+    font-size: 20px;
+    font-weight: 550;
+    font-style: italic;
+    color: #FFA25E;
+    line-height: 30px;
+
+    text-align: center;
+}
