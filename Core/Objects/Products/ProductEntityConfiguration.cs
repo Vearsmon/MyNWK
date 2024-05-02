@@ -30,6 +30,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
         
         builder.Property(t => t.Remained).IsRequired();
         builder.Property(t => t.Price).IsRequired();
+        builder.Property(t => t.CreatedAt).HasColumnType("timestamptz").IsRequired();
 
         builder
             .HasOne<Market>(t => t.Market)
