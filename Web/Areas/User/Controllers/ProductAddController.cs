@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Core.Helpers;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
 using Microsoft.AspNetCore.Authorization;
@@ -41,7 +42,8 @@ public class ProductAddController : Controller
             ProductId = products.Count + 1,
             Price = model.Price,
             Remained = model.Remained,
-            MarketId = 1
+            MarketId = 1,
+            CreatedAt = PreciseTimestampGenerator.Generate()
         };
         
         unitOfWork.ProductRepository.Create(product);

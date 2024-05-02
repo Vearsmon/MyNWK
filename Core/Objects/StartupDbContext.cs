@@ -1,4 +1,5 @@
-﻿using Core.Objects.Categories;
+﻿using Core.Helpers;
+using Core.Objects.Categories;
 using Core.Objects.Markets;
 using Core.Objects.Products;
 using Core.Objects.Rooms;
@@ -109,7 +110,8 @@ public class StartupDbContext : IdentityDbContext<IdentityUser>
                 ProductId = 1,
                 Price = 100,
                 Remained = 10,
-                MarketId = 1
+                MarketId = 1,
+                CreatedAt = PreciseTimestampGenerator.Generate()
             }
         );
         
