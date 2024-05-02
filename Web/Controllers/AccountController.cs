@@ -40,28 +40,53 @@ public class AccountController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginModel model, string returnUrl)
     {
-        if (ModelState.IsValid)
-        {
-            await using var unitOfWork = unitOfWorkProvider.Get();
+        if (!ModelState.IsValid) return View(model);
+        await using var unitOfWork = unitOfWorkProvider.Get();
 
-            var users = await unitOfWork.UsersRepository.GetAsync(
-                r => r.Where(t => t.TelegramId == model.TelegramId), 
-                CancellationToken.None);
-            var user = users.FirstOrDefault();
-            if (user == null)
+        var users = await unitOfWork.UsersRepository.GetAsync(
+            r => r.Where(t => t.TelegramId == model.TelegramId), 
+            CancellationToken.None);
+        var user = users.FirstOrDefault();
+        
+        var identityUser = new IdentityUser
+        {
+            UserName = model.TelegramUsername,
+            Id = model.TelegramId.ToString()
+        };
+        
+        if (user == null)
+        {
+            var createdUser = new User
             {
-                unitOfWork.UsersRepository.Create(
-                    new User
-                    {
-                        TelegramId = model.TelegramId,
-                        TelegramUsername = model.TelegramUsername,
-                        Name = model.Name,
-                        PhoneNumber = model.PhoneNumber
-                    });
+                TelegramId = model.TelegramId,
+                TelegramUsername = model.TelegramUsername,
+                Name = model.Name,
+                PhoneNumber = model.PhoneNumber
+            };
+            
+            unitOfWork.UsersRepository.Create(createdUser);
+            
+            var result = await userManager.CreateAsync(identityUser, "MasterPassword#0");
+            if (result.Succeeded)
+            {
+                await signInManager.SignInAsync(identityUser, false);
+                return RedirectToAction("Index", "Profile");
             }
-            return RedirectToAction("Index", "Home");
         }
-        return View(model);
+        else
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await signInManager.SignOutAsync();
+            HttpContext.Response.Cookies.Delete(".AspNetCore.Cookies");
+            var result = await signInManager.PasswordSignInAsync(identityUser.UserName, "MasterPassword#0", false, false);
+            
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Profile");
+            }
+        }
+        
+        return RedirectToAction("Index", "Profile");
     }
 
     private async Task Authenticate(long telegramId)

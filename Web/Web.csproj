@@ -27,4 +27,12 @@
       <ProjectReference Include="..\Core\Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="Areas\User\Views\Profile\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Areas\User\Views\ProductAdd\ProductAdd.cshtml" />
+    </ItemGroup>
+
 </Project>

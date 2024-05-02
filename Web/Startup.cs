@@ -88,20 +88,12 @@ public class Startup
 
         app.UseEndpoints(endpoints =>
         {
-            // var token = Config.TelegramBotToken;
-            // endpoints.MapControllerRoute(
-            //     "tgwebhook",
-            //     $"bot/{token}",
-            //     new { controller = "Account", Action = "Login" });
-            //
-            // /*
-            // // forward all other requests to here
-            // endpoints.MapGet("/", async context =>
-            // {
-            //     await context.Response.WriteAsync("Hello World!");
-            // });
-            // */
-            endpoints.MapControllerRoute("user", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapAreaControllerRoute(
+                name: "user",
+                areaName: "User",
+                pattern: "User/{controller=Profile}/{action=Index}/{id?}");
+            endpoints.MapControllerRoute("user", "{controller=Account}/{action=Index}/{id?}");
+            endpoints.MapControllerRoute("productAdd", "ProductAdd/{action=Index}/{id?}");
             endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
         });
     }

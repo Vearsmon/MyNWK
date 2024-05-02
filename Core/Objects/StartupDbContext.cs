@@ -21,6 +21,31 @@ public class StartupDbContext : IdentityDbContext<IdentityUser>
     {
         base.OnModelCreating(modelBuilder);
         
+        modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+        {
+            Id = "1",
+            Name = "user",
+            NormalizedName = "USER"
+        });
+
+        modelBuilder.Entity<IdentityUser>().HasData(new IdentityUser
+        {
+            Id = "111",
+            UserName = "user",
+            NormalizedUserName = "USER",
+            Email = "my@email.com",
+            NormalizedEmail = "MY@EMAIL.COM",
+            EmailConfirmed = true,
+            PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "qwerty"),
+            SecurityStamp = string.Empty
+        });
+
+        modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+        {
+            RoleId = "1",
+            UserId = "111"
+        });
+        
         modelBuilder.Entity<User>().HasData(new User()
         {
             Id = 1,
@@ -64,7 +89,7 @@ public class StartupDbContext : IdentityDbContext<IdentityUser>
             UserId = 1
         });
         
-        modelBuilder.Entity<Seller>().HasKey("SellerId");
+        modelBuilder.Entity<Seller>().HasKey("UserId");
 
         modelBuilder.Entity<Market>(b =>
         {
