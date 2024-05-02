@@ -88,10 +88,7 @@ public class Startup
 
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapAreaControllerRoute(
-                name: "user",
-                areaName: "User",
-                pattern: "User/{controller=Profile}/{action=Index}/{id?}");
+            endpoints.MapControllerRoute("baraholka", "Baraholka/{action=Index}/{id?}");
             endpoints.MapControllerRoute("user", "{controller=Account}/{action=Index}/{id?}");
             endpoints.MapControllerRoute("productAdd", "ProductAdd/{action=Index}/{id?}");
             endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");

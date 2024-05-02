@@ -47,6 +47,6 @@ public class ProductAddController : Controller
         };
         
         unitOfWork.ProductRepository.Create(product);
-        return RedirectToAction("Index", "Profile");
+        return RedirectToAction("Index", "Baraholka");
     }
 }

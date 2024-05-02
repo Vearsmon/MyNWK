@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Areas.User.Controllers;
 
-public class ProfileController : Controller
+public class BaraholkaController : Controller
 {
     private readonly IUnitOfWorkProvider unitOfWorkProvider;
     
-    public ProfileController(IUnitOfWorkProvider unitOfWorkProvider)
+    public BaraholkaController(IUnitOfWorkProvider unitOfWorkProvider)
     {
         this.unitOfWorkProvider = unitOfWorkProvider;
     }
@@ -21,6 +21,6 @@ public class ProfileController : Controller
                 _ => _,
                 CancellationToken.None)
             .ConfigureAwait(false);
-        return View("~/Areas/User/Views/Profile/Index.cshtml", products.AsQueryable());
+        return View("~/Views/Baraholka/Index.cshtml", products.AsQueryable());
     }
 }
