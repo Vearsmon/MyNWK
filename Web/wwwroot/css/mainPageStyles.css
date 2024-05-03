@@ -96,3 +96,16 @@ body {
     color:#FFA25E;
     font-weight: 500;
 }
+
+
+.modeButton {
+    position: absolute;
+
+    right: 50px;
+    top: 14px;
+
+    background-color: #FFE1BD;
+    border: none;
+
+    cursor: pointer;
+}
