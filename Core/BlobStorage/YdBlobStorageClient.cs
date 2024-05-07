@@ -75,7 +75,7 @@ public class YdBlobStorageClient : IBlobStorageClient
             .ConfigureAwait(false);
     }
 
-    public async Task<string> GetDownloadingURLAsync(
+    public async Task<string> GetDownloadingUrlAsync(
         string container,
         Guid key,
         CancellationToken cancellationToken = default)

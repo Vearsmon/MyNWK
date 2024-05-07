@@ -61,8 +61,8 @@ public class BlobStorage_Test
         var blob = GenerateBlob(128);
         var key = await PutBlobAsync(blob, false);
         
-        Assert.DoesNotThrowAsync(() => blobStorageClient.GetDownloadingURLAsync(blobContainer, key));
-        Console.WriteLine(await blobStorageClient.GetDownloadingURLAsync(blobContainer, key));
+        Assert.DoesNotThrowAsync(() => blobStorageClient.GetDownloadingUrlAsync(blobContainer, key));
+        Console.WriteLine(await blobStorageClient.GetDownloadingUrlAsync(blobContainer, key));
     }
     
     private async Task<Guid> PutBlobAsync(byte[] blob, bool pushDeletionTask = true)
