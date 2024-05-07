@@ -33,7 +33,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(t => t.CreatedAt).HasColumnType("timestamptz").IsRequired();
 
         builder
-            .HasOne<Market>(t => t.Market)
+            .HasOne<Market>()
             .WithMany(t => t.Products)
             .HasForeignKey(t => t.MarketId);
 
