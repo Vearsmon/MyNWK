@@ -30,7 +30,7 @@ public class AccountController : Controller
     
     [HttpGet]
     [AllowAnonymous]
-    public IActionResult Login(string returnUrl)
+    public IActionResult Login()
     {
         ViewBag.returnUrl = "/";
         return View(new LoginModel());
@@ -38,30 +38,29 @@ public class AccountController : Controller
     
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> Login(LoginModel model, string returnUrl)
+    public async Task<IActionResult> Login(string returnUrl)
     {
-        if (!ModelState.IsValid) return View(model);
+        var form = await HttpContext.Request.ReadFormAsync();
         await using var unitOfWork = unitOfWorkProvider.Get();
 
         var users = await unitOfWork.UsersRepository.GetAsync(
-            r => r.Where(t => t.TelegramId == model.TelegramId), 
+            r => r.Where(t => t.TelegramId == long.Parse(form["id"].ToString())), 
             CancellationToken.None);
         var user = users.FirstOrDefault();
         
         var identityUser = new IdentityUser
         {
-            UserName = model.TelegramUsername,
-            Id = model.TelegramId.ToString()
+            UserName = form["username"].ToString(),
+            Id = form["id"].ToString()
         };
         
         if (user == null)
         {
             var createdUser = new User
             {
-                TelegramId = model.TelegramId,
-                TelegramUsername = model.TelegramUsername,
-                Name = model.Name,
-                PhoneNumber = model.PhoneNumber
+                TelegramId = long.Parse(form["id"].ToString()),
+                TelegramUsername = form["username"].ToString(),
+                Name = form["name"].ToString()
             };
             
             unitOfWork.UsersRepository.Create(createdUser);
@@ -69,24 +68,33 @@ public class AccountController : Controller
             var result = await userManager.CreateAsync(identityUser, "MasterPassword#0");
             if (result.Succeeded)
             {
+                var res = await userManager.AddToRoleAsync(identityUser, "USER");
+                var usrs = await userManager.GetUsersInRoleAsync("USER");
+                var a = 1;
                 await signInManager.SignInAsync(identityUser, false);
-                return RedirectToAction("Index", "Profile");
+                return Redirect($"http://127.0.0.1:80/user/Profile");
             }
         }
         else
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            await signInManager.SignOutAsync();
-            HttpContext.Response.Cookies.Delete(".AspNetCore.Cookies");
-            var result = await signInManager.PasswordSignInAsync(identityUser.UserName, "MasterPassword#0", false, false);
-            
-            if (result.Succeeded)
+            var usr = await userManager.GetUserAsync(HttpContext.User);
+            if (usr == null)
             {
-                return RedirectToAction("Index", "Profile");
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                await signInManager.SignOutAsync();
+                HttpContext.Response.Cookies.Delete(".AspNetCore.Cookies");
+                var result = await signInManager.PasswordSignInAsync(identityUser.UserName, "MasterPassword#0", false, false);
+            
+                if (result.Succeeded)
+                {
+                    return Redirect($"http://127.0.0.1:80/user/Profile");
+                }
             }
+            else
+                return Redirect($"http://127.0.0.1:80/Baraholka");
         }
         
-        return RedirectToAction("Index", "Profile");
+        return Redirect($"http://127.0.0.1:80/user/Profile");
     }
 
     private async Task Authenticate(long telegramId)
@@ -105,6 +113,6 @@ public class AccountController : Controller
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return RedirectToAction("Login", "Account");
+        return RedirectToAction("Index", "Baraholka");
     }
 }

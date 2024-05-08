@@ -7,6 +7,6 @@ public class HomeController : Controller
 {
     public IActionResult Index()
     {
-        return RedirectToAction("Index", "Baraholka");
+        return Redirect($"http://127.0.0.1:80/Baraholka");
     }
 }

@@ -6,159 +6,154 @@
     <title>Document</title>
     <link rel="stylesheet" href="~/css/mainPageStyles.css">
     <link rel="stylesheet" href="~/css/Baraholka.css">
+    
+    <script src="~/js/headerLoginChecker.js" defer></script>
 </head>
 <body>
-    <div class="header">
-        <a class="logo">
-            <img src="~/assets/logo.png" alt="logo" width="121px" height="79px">
-        </a>
+<div class="header">
+    <a class="logo">
+        <img src="~/assets/logo.png" alt="logo" width="121px" height="79px">
+    </a>
 
-        <ul class="ul">
-            <li class="li">
-                <a class="link" href="#">Барахолка</a>
-                <script async src="https://telegram.org/js/telegram-widget.js?22" 
-                        data-telegram-login="My_NVK_bot" 
-                        data-size="small" 
-                        data-onauth="onTelegramAuth(user)" 
-                        data-request-access="write">
-                </script>
-
-                <script type="text/javascript">
-                    function onTelegramAuth(user) {
-                    document.getElementById("telegramId").value = user.id;
-                    document.getElementById("telegramUsername").value = user.username;
-                    document.getElementsByClassName("loginForm")[0].submit()
-                    }
-                </script>
-            </li>
-        </ul>
+    <ul class="ul" id="ul">
+        <li class="li" id="li">
+            <a class="link" href="#">Барахолка</a>
+        </li>
         
-        <button class="button">
-            <a class="link" href="http://127.0.0.1:80/Pages/SignUpPage.html">Профиль</a>
-        </button>
-    </div>
+        <li class="tgli" id="li">
+            <script async src="https://telegram.org/js/telegram-widget.js?22" 
+                  data-telegram-login="My_NVK_bot" 
+                  data-size="small" 
+                  data-onauth="onTelegramAuth(user)"
+                  data-request-access="write"></script>
+        </li>
+    </ul>
+</div>
 
-    <div class="baraholka-container">
+<div class="baraholka-container">
 
-        <div class="baraholka-design-container">
-            <div class="baraholka-header">Барахолка</div>
+    <div class="baraholka-design-container">
+        <div class="baraholka-header">Барахолка</div>
 
+        <div class="baraholka-design-lines">
+            <div class="baraholka-design-lines up-line"></div>
+        </div>
+
+        <div class="baraholka-filters-container">
             <div class="baraholka-design-lines">
-                <div class="baraholka-design-lines up-line"></div>
+                <div class="baraholka-design-lines vertical-line"></div>
             </div>
 
-            <div class="baraholka-filters-container">
-                <div class="baraholka-design-lines">
-                    <div class="baraholka-design-lines vertical-line"></div>
+            <div class="baraholka-filters-content">Фильтры</div>
+
+            <div class="baraholka-filters-window">
+                <div class="baraholka-filters">
+                    <div class="category-headers">Категории</div>
+
+                    <select class="baraholka-filters category">
+                        <option selected value="defaultCategory" class="default-content">Выберите категорию</option>
+                        <option value="value1">Продукты питания</option>
+                        <option value="value2">Одежда</option>
+                        <option value="value3">Прочее</option>
+                    </select>
+
+                    <div class="seller-headers">Продавец</div>
+                    <select class="baraholka-filters seller">
+                        <option selected value="defaultSeller" class="default-content">Выберите продавца</option>
+                        <option value="seller1">Литовкин</option>
+                        <option value="seller2">Лунтик</option>
+                        <option value="seller3">Батурджон</option>
+                        <option value="seller4">Константин</option>
+                    </select>
                 </div>
 
-                <div class="baraholka-filters-content">Фильтры</div>
+                <div class="baraholka-filters-buttons">
+                    <button class="baraholka-filters-confirm-button" id="baraholka-filters-confirm">Применить</button>
 
-                <div class="baraholka-filters-window">
-                    <div class="baraholka-filters">
-                        <div class="category-headers">Категории</div>
-
-                        <select class="baraholka-filters category">
-                            <option selected value="defaultCategory" class="default-content">Выберите категорию</option>
-                            <option value="value1">Продукты питания</option>
-                            <option value="value2">Одежда</option>
-                            <option value="value3">Прочее</option>
-                        </select>
-
-                        <div class="seller-headers">Продавец</div>
-                        <select class="baraholka-filters seller">
-                            <option selected value="defaultSeller" class="default-content">Выберите продавца</option>
-                            <option value="seller1">Литовкин</option>
-                            <option value="seller2">Лунтик</option>
-                            <option value="seller3">Батурджон</option>
-                            <option value="seller4">Константин</option>
-                        </select>
-                    </div>
-
-                    <div class="baraholka-filters-buttons">
-                        <button class="baraholka-filters-confirm-button" id="baraholka-filters-confirm">Применить</button>
-
-                        <button class="baraholka-filters-reset-button" id="baraholka-filters-reset">Сбросить</button>
-                    </div>
+                    <button class="baraholka-filters-reset-button" id="baraholka-filters-reset">Сбросить</button>
                 </div>
-            </div>
-
-            <div class="baraholka-slots-container">
-
-                <div class="baraholka-slot">
-                    <div class="baraholka-slot-photo"></div>
-                    
-                    <div class="baraholka-slot-info">
-                        Чипсы Lay's краб
-                        <p>150 руб</p>
-                    </div>
-                </div>
-
-                <div class="baraholka-slot">
-                    <div class="baraholka-slot-photo"></div>
-                    
-                    <div class="baraholka-slot-info">
-                        Чай зелёный в пакетиках
-                        <p>100 руб</p>
-                    </div>
-                </div>
-
-                <div class="baraholka-slot">
-                    <div class="baraholka-slot-photo"></div>
-                    
-                    <div class="baraholka-slot-info">
-                        Батончик "Picnic"
-                        <p>79 руб</p>
-                    </div>
-                </div>
-
-                <div class="baraholka-slot">
-                    <div class="baraholka-slot-photo"></div>
-                    
-                    <div class="baraholka-slot-info">
-                        Кофта черная
-                        <p>750 руб</p>
-                    </div>
-                </div>
-
-                <div class="baraholka-slot">
-                    <div class="baraholka-slot-photo"></div>
-                    
-                    <div class="baraholka-slot-info">
-                        AlpenGold
-                        <p>65 руб</p>
-                    </div>
-                </div>
-
-                <div class="baraholka-slot">
-                    <div class="baraholka-slot-photo"></div>
-                    
-                    <div class="baraholka-slot-info">
-                        POD-система
-                        <p>1000 руб</p>
-                    </div>
-                </div>
-
-                <div class="baraholka-slot">
-                    <div class="baraholka-slot-photo"></div>
-                    
-                    <div class="baraholka-slot-info">
-                        Сок "Сады придонья"
-                        <p>120 руб</p>
-                    </div>
-                </div>
-
-                <div class="baraholka-slot">
-                    <div class="baraholka-slot-photo"></div>
-                    
-                    <div class="baraholka-slot-info">
-                        Жопу Андрея
-                        <p>20 000 руб</p>
-                    </div>
-                </div>
-
             </div>
         </div>
+
+        <div class="baraholka-slots-container">
+
+            <div class="baraholka-slot">
+                <div class="baraholka-slot-photo"></div>
+                    
+                <div class="baraholka-slot-info">
+                    Чипсы Lay's краб
+                    <p>150 руб</p>
+                </div>
+            </div>
+
+            <div class="baraholka-slot">
+                <div class="baraholka-slot-photo"></div>
+                    
+                <div class="baraholka-slot-info">
+                    Чай зелёный в пакетиках
+                    <p>100 руб</p>
+                </div>
+            </div>
+
+            <div class="baraholka-slot">
+                <div class="baraholka-slot-photo"></div>
+                    
+                <div class="baraholka-slot-info">
+                    Батончик "Picnic"
+                    <p>79 руб</p>
+                </div>
+            </div>
+
+            <div class="baraholka-slot">
+                <div class="baraholka-slot-photo"></div>
+                    
+                <div class="baraholka-slot-info">
+                    Кофта черная
+                    <p>750 руб</p>
+                </div>
+            </div>
+
+            <div class="baraholka-slot">
+                <div class="baraholka-slot-photo"></div>
+                    
+                <div class="baraholka-slot-info">
+                    AlpenGold
+                    <p>65 руб</p>
+                </div>
+            </div>
+
+            <div class="baraholka-slot">
+                <div class="baraholka-slot-photo"></div>
+                    
+                <div class="baraholka-slot-info">
+                    POD-система
+                    <p>1000 руб</p>
+                </div>
+            </div>
+
+            <div class="baraholka-slot">
+                <div class="baraholka-slot-photo"></div>
+                    
+                <div class="baraholka-slot-info">
+                    Сок "Сады придонья"
+                    <p>120 руб</p>
+                </div>
+            </div>
+
+            <div class="baraholka-slot">
+                <div class="baraholka-slot-photo"></div>
+                    
+                <div class="baraholka-slot-info">
+                    Жопу Андрея
+                    <p>20 000 руб</p>
+                </div>
+            </div>
+
+        </div>
     </div>
+</div>
 </body>
+
+
+
 </html>

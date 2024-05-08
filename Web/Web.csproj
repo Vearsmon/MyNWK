@@ -28,11 +28,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Areas\User\Views\Profile\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\User\Views\ProductAdd\ProductAdd.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="Areas\User\Views\ProductAdd\ProductAdd.cshtml" />
+      <Folder Include="Views\Profile\" />
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link 
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" 
+        rel="stylesheet" 
+    >
+    <link rel="stylesheet" href="~/css/mainPageStyles.css">
+    <link rel="stylesheet" href="~/css/SignUpStyles.css">
+</head>
+<body>
+
+<div class="header">
+    <a class="logo" href="http://127.0.0.1:80/Baraholka">
+        <img src="~/assets/logo.png" alt="logo" width="121px" height="79px">
+    </a>
+    
+    <script>
+        window.onload = async function() {
+            const postData = async (url, data) => {
+              return await fetch(url, {
+                method: 'post',
+                body: data,
+                credentials: 'include'
+              });
+            }
+
+            let formData = new FormData();
+            formData.append('check', 'true');
+            const a = await postData("http://127.0.0.1:80/Api/GetUser", formData)
+            alert(a.text);
+
+            const profile = document.getElementsByClassName("profileButton")
+        };
+    </script>
+
+    <ul class="ul">
+        <li class="li">
+            <a class="link" href="http://127.0.0.1:80/Baraholka">Барахолка</a>
+            <a class="link" href="http://127.0.0.1:80/Pages/SignInPage.html">Вход</a>
+        </li>
+    </ul>
+
+    <button class="button">
+        <a class="link" href="http://127.0.0.1:80/Profile">Профиль</a>
+    </button>
+</div>
+
+<div class="profile-container">
+    <img src="~/assets/profilePhoto.png" alt="profilePhoto" width="217px" height="255px">
+
+    <div class="profile-name">Имя пользователя</div>
+
+    <div class="profile-tabs-container">
+        <li class="profile-li">
+            <div class="profile-tabs">Мои покупки</div>
+            <div class="profile-tabs">Мой магазин</div>
+            <div class="profile-tabs">Настройки</div>
+        </li>
+    </div>
+</div>
+</body>
+</html>

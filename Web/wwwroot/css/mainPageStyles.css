@@ -87,6 +87,26 @@ body {
     z-index: 4;
 }
 
+.profileButton {
+    position: fixed;
+
+    float: right;
+    right: 200px;
+    top: 28px;
+
+    width: 180px;
+    height: 32px;
+
+    background-color: #FFE1BD;
+    border: 2px solid #FFA25E;
+    border-radius: 7px;
+
+    font-size: 20px;
+    color: #FFA25E;
+
+    z-index: 4;
+}
+
 
 /* Ссылки */
 

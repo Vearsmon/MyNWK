@@ -1,39 +1,60 @@
 ﻿@using Web.Controllers
 @model Web.Models.ViewComponents.LoginModel
- 
-<h2>Вход на сайт</h2>
 
-<script async src="https://telegram.org/js/telegram-widget.js?22" 
-        data-telegram-login="My_NVK_bot" 
-        data-size="small" 
-        data-onauth="onTelegramAuth(user)" 
-        data-request-access="write">
+
+<div>
+    <script async src="https://telegram.org/js/telegram-widget.js?22"
+            data-telegram-login="My_NVK_bot"
+            data-size="small"
+            data-onauth="onTelegramAuth(user)"
+            data-request-access="write">
 </script>
-
-<script type="text/javascript">
+    <script>
     function onTelegramAuth(user) {
-      document.getElementById("telegramId").value = user.id;
-      document.getElementById("telegramUsername").value = user.username;
-      document.getElementsByClassName("loginForm")[0].submit()
-      }
-</script>
+                  var form = document.createElement("form");
+                  var element1 = document.createElement("input");
+                  var element2 = document.createElement("input");
+                  var element3 = document.createElement("input");
+    
+                  form.method = "POST";
+    
+                  element1.value=user.id;
+                  element1.name="id";
+                  form.appendChild(element1);
+    
+                  element2.value=user.username;
+                  element2.name="username";
+                  form.appendChild(element2);
+    
+                  element3.value=user.name;
+                  element3.name="name";
+                  form.appendChild(element3);
+    
+                  document.body.appendChild(form);
+    
+                  form.submit();
+            }
+    </script>
+        
+</div>
 
-<form class="loginForm" asp-area="" asp-controller="Account" asp-action="Login" method="post" asp-route-returnUrl="@ViewBag.returnUrl">
-    <div asp-validation-summary="All"></div>
-    <div>
-        <input type="hidden" id="telegramId" asp-for="TelegramId" />
-        <span asp-validation-for="TelegramId"></span>
-    </div>
-    <div>
-        <input type="hidden" id="telegramUsername" asp-for="TelegramUsername" />
-        <span asp-validation-for="TelegramUsername"></span>
-    </div>
-    <div>
-        <input type="hidden" id="name" asp-for="Name" />
-        <span asp-validation-for="Name"></span>
-    </div>
-    <div>
-        <input type="hidden" id="phoneNumber" asp-for="PhoneNumber" />
-        <span asp-validation-for="PhoneNumber"></span>
-    </div>
-</form>
+
+@* *@
+@* <script> *@
+@*         // document.addEventListener('DOMContentLoaded', function() { *@
+@*         //     // const button = document.createElement('script') *@
+@*         //     // button.async = true *@
+@*         //     // button.src = 'https://telegram.org/js/telegram-widget.js?22' *@
+@*         //     // button.setAttribute('data-telegram-login', 'My_NVK_bot') *@
+@*         //     // button.setAttribute('data-size', 'small') *@
+@*         //     // button.setAttribute('data-onauth', 'onTelegramAuth(user)') *@
+@*         //     // button.setAttribute('id', 'auth') *@
+@*         // *@
+@*         //     // document.body.appendChild(button); *@
+@*         //     var a = document.getElementById("auth"); *@
+@*         //     *@
+@*         //     document.getElementById('auth').onload = ; *@
+@*         // *@
+@*         // *@
+@*         // }); *@
+@* </script> *@

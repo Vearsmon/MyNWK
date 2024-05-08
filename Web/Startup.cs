@@ -50,8 +50,10 @@ public class Startup
         services.ConfigureApplicationCookie(options =>
         {
             options.Cookie.Name = "myNwkAuth";
-            options.LoginPath = "/account/login";
+            options.Cookie.HttpOnly = true;
+            options.LoginPath = "/baraholka";
             options.AccessDeniedPath = "/account/accessdenied";
+            options.SlidingExpiration = true;
         });
 
         services.AddAuthorization(x =>
@@ -67,7 +69,7 @@ public class Startup
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.LoginPath = new PathString("/Account/Login");
+                options.LoginPath = new PathString("/baraholka");
             });
     }
 
@@ -92,6 +94,7 @@ public class Startup
             endpoints.MapControllerRoute("user", "{controller=Account}/{action=Index}/{id?}");
             endpoints.MapControllerRoute("productAdd", "ProductAdd/{action=Index}/{id?}");
             endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapControllerRoute("profile", "{area:exists}/{controller=Profile}/{action=Index}/{id?}");
         });
     }
 
