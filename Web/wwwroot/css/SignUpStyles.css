@@ -62,3 +62,35 @@
     border-color:#FFA25E;
     border-style: solid;
 }
+
+
+.profile-user-info-container {
+    position: absolute;
+
+    left: 5px;
+    top: 270px;
+
+    width: 217px;
+    height: max-content;
+
+    font-family: 'Inter';
+    font-size: 25px;
+    color: #FFA25E;
+    font-style: italic;
+}
+
+
+.profile-user-room-container {
+    position: relative;
+
+    width: 217px;
+    height: 70px;
+}
+
+
+.editorButton {
+    background-color: #FFFAF3;
+    border: none;
+
+    cursor: pointer;
+}
