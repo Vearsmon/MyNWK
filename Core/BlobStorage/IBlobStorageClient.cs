@@ -6,7 +6,7 @@ public interface IBlobStorageClient : IDisposable
 
     public Task<byte[]> GetAsync(string container, Guid key, CancellationToken cancellationToken = default);
 
-    public Task<string> GetDownloadingUrlAsync(string container, Guid key, CancellationToken cancellationToken = default);
+    public Task<string> GetDownloadingUrlAsync(string container, Guid key);
     
     public Task RemoveAsync(string container, Guid key, CancellationToken cancellationToken = default);
 }

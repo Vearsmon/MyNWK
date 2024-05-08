@@ -77,8 +77,7 @@ public class YdBlobStorageClient : IBlobStorageClient
 
     public async Task<string> GetDownloadingUrlAsync(
         string container,
-        Guid key,
-        CancellationToken cancellationToken = default)
+        Guid key)
     {
         var request = new GetPreSignedUrlRequest()
         {
