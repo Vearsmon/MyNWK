@@ -42,8 +42,7 @@ public class AccountController : Controller
 
         if (!tgAuthService.IsUserMetaValid(hash, userMeta))
         {
-            Console.WriteLine("Invalid hash");
-            return Redirect($"/Baraholka");
+            return Ok();
         }
         
         await using var unitOfWork = unitOfWorkProvider.Get();
@@ -62,10 +61,11 @@ public class AccountController : Controller
                     TelegramUsername = form["username"].ToString(),
                     Name = form["first_name"] + form["last_name"]
                 });
+            await unitOfWork.CommitAsync(CancellationToken.None);
         }
         
         await AuthenticateAsync(id);
-        return Redirect($"/Baraholka");
+        return Ok();
     }
 
     private async Task AuthenticateAsync(long telegramId)

@@ -16,8 +16,8 @@
 async function onTelegramAuth(user) {
     const postData = async (url, data) => {
         return fetch(url, {
-            method: 'post',
-            redirect: 'follow',
+            method: 'POST',
+            redirect: 'manual',
             body: data,
             credentials: 'include'
         });
@@ -31,5 +31,6 @@ async function onTelegramAuth(user) {
     formData.append('photo_url', user.photo_url);
     formData.append('auth_date', user.auth_date);
     formData.append('hash', user.hash);
-    await postData("/Account/Login", formData);
+    postData("/Account/Login", formData)
+        .then(response => {location.reload();});
 }
