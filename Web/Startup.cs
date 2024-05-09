@@ -1,8 +1,8 @@
-﻿using Core.Objects;
+﻿using Core.Crypto;
+using Core.Objects;
 using Core.Objects.MyNwkUnitOfWork;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Web.Service;
 
@@ -25,52 +25,33 @@ public class Startup
         var connection = Configuration.GetConnectionString("DefaultConnection")!;
         
         services.AddLogging(loggingBuilder => {
-            loggingBuilder.AddConsole()
-                .AddFilter(DbLoggerCategory.Database.Command.Name, LogLevel.Information);
+            loggingBuilder.AddConsole().AddFilter(DbLoggerCategory.Database.Command.Name, LogLevel.Information);
             loggingBuilder.AddDebug();
         });
-        
-        services.AddDbContext<StartupDbContext>(x =>
-        {
-            x.UseSnakeCaseNamingConvention();
-            x.EnableSensitiveDataLogging();
-            x.UseNpgsql(connection);
-        });
-        
-        // services.AddDbContext<UserContext>(options => options.UseNpgsql(connection));
-        // services.AddDbContext<MyNwkDbContextBase<UserContext>>();
-        
         AddServices(services, connection);
         
-        services.AddIdentity<IdentityUser, IdentityRole>(options =>
-        {
-            
-        }).AddEntityFrameworkStores<StartupDbContext>().AddDefaultTokenProviders();
+        // services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<StartupDbContext>().AddDefaultTokenProviders();
 
-        services.ConfigureApplicationCookie(options =>
-        {
-            options.Cookie.Name = "myNwkAuth";
-            options.Cookie.HttpOnly = true;
-            options.LoginPath = "/baraholka";
-            options.AccessDeniedPath = "/account/accessdenied";
-            options.SlidingExpiration = true;
-        });
-
+        // services.ConfigureApplicationCookie(options =>
+        // {
+        //     options.Cookie.Name = "myNwkAuth";
+        //     options.Cookie.HttpOnly = true;
+        //     options.LoginPath = "/baraholka";
+        //     options.AccessDeniedPath = "/account/accessdenied";
+        //     options.SlidingExpiration = true;
+        // });
+        //
         services.AddAuthorization(x =>
         {
             x.AddPolicy("UserArea", policy => { policy.RequireRole("user"); });
         });
-
+        
         services.AddControllersWithViews(x =>
         {
             x.Conventions.Add(new UserAreaAuthorization("User", "UserArea"));
         }).AddSessionStateTempDataProvider();
-
-        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options =>
-            {
-                options.LoginPath = new PathString("/baraholka");
-            });
+        
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -79,15 +60,11 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
         }
-
         app.UseRouting();
-
         app.UseStaticFiles();
-
         app.UseCookiePolicy();
         app.UseAuthentication();
         app.UseAuthorization();
-
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute("baraholka", "Baraholka/{action=Index}/{id?}");
@@ -110,5 +87,6 @@ public class Startup
             .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUnitOfWorkProvider, UnitOfWorkProvider>();
+        services.AddScoped<ITgAuthService, TgAuthService>();
     }
 }

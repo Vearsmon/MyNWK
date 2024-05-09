@@ -31,7 +31,7 @@ public class CoreDbContext : DbContext
     
     [UsedImplicitly] 
     public DbSet<User> Users { get; set; } = null!;
-    
+
     public CoreDbContext(DbContextOptions options)
         : base(options)
     {

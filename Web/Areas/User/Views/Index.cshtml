@@ -32,7 +32,7 @@
 
             let formData = new FormData();
             formData.append('check', 'true');
-            const a = await postData("http://127.0.0.1:80/Api/GetUser", formData)
+            const a = await postData("http://127.0.0.1:80/Api/IsAuthenticated", formData)
             alert(a.text);
 
             const profile = document.getElementsByClassName("profileButton")

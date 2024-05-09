@@ -17,8 +17,8 @@ public class Tools
     [Test]
     public void EvaluateHash()
     {
-        var hash = new HashPasswordService().EvaluateHash("112312312313");
-        Console.WriteLine(hash);
+        var hash = SHA256.Create().ComputeHash("7010493041:AAHm5A2XG0nNY9GAv4lKGa9Oc9aQQ3-FbqA"u8.ToArray());
+        Console.WriteLine(Convert.ToHexString(hash).ToLower());
     }
 
     [Test]
