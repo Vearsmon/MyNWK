@@ -1,13 +1,10 @@
 ﻿using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using Core.Crypto;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models.ViewComponents;
 
@@ -76,7 +73,8 @@ public class AccountController : Controller
         var claims = new List<Claim>
         {
             new (ClaimsIdentity.DefaultNameClaimType, telegramId.ToString()),
-            new (ClaimTypes.Expiration, (DateTime.UtcNow + TimeSpan.FromDays(1)).Ticks.ToString())
+            new (ClaimTypes.Expiration, (DateTime.UtcNow + TimeSpan.FromDays(1)).Ticks.ToString()),
+            new ("AllowUserActions", "AllowUserActions")
         };
         
         var id = new ClaimsIdentity(

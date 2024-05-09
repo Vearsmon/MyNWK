@@ -40,10 +40,10 @@ public class Startup
         //     options.AccessDeniedPath = "/account/accessdenied";
         //     options.SlidingExpiration = true;
         // });
-        //
+        
         services.AddAuthorization(x =>
         {
-            x.AddPolicy("UserArea", policy => { policy.RequireRole("user"); });
+            x.AddPolicy("UserPolicy", policy => { policy.RequireClaim("AllowUserActions"); });
         });
         
         services.AddControllersWithViews(x =>
