@@ -1,6 +1,7 @@
 ﻿using Core.Crypto;
 using Core.Objects;
 using Core.Objects.MyNwkUnitOfWork;
+using Core.Services.Products;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -88,5 +89,6 @@ public class Startup
 
         services.AddScoped<IUnitOfWorkProvider, UnitOfWorkProvider>();
         services.AddScoped<ITgAuthService, TgAuthService>();
+        services.AddScoped<IProductService, ProductService>();
     }
 }

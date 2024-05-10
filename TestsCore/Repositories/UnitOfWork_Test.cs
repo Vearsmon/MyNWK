@@ -1,5 +1,8 @@
-﻿using Core.Objects;
+﻿using Core.Helpers;
+using Core.Objects;
+using Core.Objects.Markets;
 using Core.Objects.MyNwkUnitOfWork;
+using Core.Objects.Products;
 using Core.Objects.Sellers;
 using Core.Objects.Users;
 using Microsoft.EntityFrameworkCore;
@@ -49,12 +52,23 @@ public class UnitOfWork_Test
         };
         unitOfWork.SellersRepository.Create(seller);
         await unitOfWork.CommitAsync(CancellationToken.None);
-        seller = (await unitOfWork.SellersRepository.GetAsync(
-                t => t
-                    .Where(e => e.UserId == user.Id)
-                    .Include(e => e.Room),
-                CancellationToken.None)
-            ).FirstOrDefault();
+        var market = new Market()
+        {
+            OwnerId = user.Id,
+            MarketInfo = new MarketInfo(),
+            Name = "123",
+            Products = new List<Product>()
+            {
+                new Product()
+                {
+                    // CreatedAt = PreciseTimestampGenerator
+                }
+            }
+        };
+        unitOfWork.MarketsRepository.Create(market);
+        await unitOfWork.CommitAsync(CancellationToken.None);
+        
+        Console.WriteLine(market.Id);
         Console.WriteLine(user.Id);
         Console.WriteLine(user.Seller?.Room?.RoomNumber);
     }

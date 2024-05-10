@@ -64,15 +64,15 @@ public class AccountController : Controller
             await unitOfWork.CommitAsync(CancellationToken.None);
         }
         
-        await AuthenticateAsync(id);
+        await AuthenticateAsync(user!.Id);
         return Ok();
     }
 
-    private async Task AuthenticateAsync(long telegramId)
+    private async Task AuthenticateAsync(long userId)
     {
         var claims = new List<Claim>
         {
-            new (ClaimsIdentity.DefaultNameClaimType, telegramId.ToString()),
+            new (ClaimsIdentity.DefaultNameClaimType, userId.ToString()),
             new (ClaimTypes.Expiration, (DateTime.UtcNow + TimeSpan.FromDays(1)).Ticks.ToString()),
             new ("AllowUserActions", "AllowUserActions")
         };
