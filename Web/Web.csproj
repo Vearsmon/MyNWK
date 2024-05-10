@@ -31,8 +31,4 @@
       <_ContentIncludedByDefault Remove="Areas\User\Views\ProductAdd\ProductAdd.cshtml" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Views\Profile\" />
-    </ItemGroup>
-
 </Project>

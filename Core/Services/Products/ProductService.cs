@@ -35,15 +35,19 @@ public class ProductService : IProductService
     }
 
     public async Task<List<ProductDto>> GetAllProductsAsync(
-        RequestContext requestContext, 
+        RequestContext requestContext,
         int batchNum = 0,
-        int batchSize = 20)
+        int batchSize = 20,
+        int? categoryId = null,
+        int? marketId = null)
     {
         await using var unitOfWork = unitOfWorkProvider.Get();
 
         var products = await unitOfWork.ProductRepository.GetPageAsync(
                 r => r.ProductOrderer(),
-                p => p,
+                p => p
+                    .Where(t => marketId == null || t.MarketId == marketId)
+                    .Where(t => categoryId == null || t.CategoryId == categoryId),
                 batchNum,
                 batchSize,
                 requestContext.CancellationToken)

@@ -1,29 +1,19 @@
-﻿@model Web.Models.ViewComponents.ProductAddModel
+﻿<h1>Добавление товара</h1>
 
-@{
-    Layout = "_Layout";
-}
-
-<h1>Добавление товара</h1>
-
-<form class="productAddForm" asp-area="" asp-controller="ProductAdd" asp-action="Index" method="post" asp-route-returnUrl="@ViewBag.returnUrl">
-    <div asp-validation-summary="All"></div>
+<form class="productAddForm" method="post" action="/products/create">
     <div>
         Название товара
-        <input id="title" asp-for="Title"/>
-        <span asp-validation-for="Title"></span>
+        <input type="text" name="title"/>
     </div>
     <div>
         Цена товара
-        <input id="price" asp-for="Price"/>
-        <span asp-validation-for="Price"></span>
+        <input type="number" name="price"/>
     </div>
     <div>
         Количество
-        <input id="remained" asp-for="Remained"/>
-        <span asp-validation-for="Remained"></span>
+        <input type="number" name="count"/>
     </div>
     <div>
-        <input type="submit" value="Добавить">
+        <input type="submit" value="Добавить"/>
     </div>
 </form>
