@@ -1,9 +1,7 @@
-﻿using Core.Helpers;
-using Core.Objects;
+﻿using Core.Objects;
 using Core.Objects.Markets;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
-using Core.Objects.Sellers;
 using Core.Objects.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,12 +43,6 @@ public class UnitOfWork_Test
         user.Name = "хуй";
         await unitOfWork.CommitAsync(CancellationToken.None);
         Console.WriteLine(user.Id);
-        var seller = new Seller
-        {
-            UserId = user.Id,
-            RoomId = 1
-        };
-        unitOfWork.SellersRepository.Create(seller);
         await unitOfWork.CommitAsync(CancellationToken.None);
         var market = new Market()
         {
@@ -59,8 +51,12 @@ public class UnitOfWork_Test
             Name = "123",
             Products = new List<Product>()
             {
-                new Product()
+                new()
                 {
+                    Title = "хуй",
+                    CreatedAt = DateTime.UtcNow,
+                    Price = 1,
+                    Remained = 2
                     // CreatedAt = PreciseTimestampGenerator
                 }
             }
@@ -70,6 +66,5 @@ public class UnitOfWork_Test
         
         Console.WriteLine(market.Id);
         Console.WriteLine(user.Id);
-        Console.WriteLine(user.Seller?.Room?.RoomNumber);
     }
 }

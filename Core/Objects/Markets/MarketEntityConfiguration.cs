@@ -1,4 +1,4 @@
-﻿using Core.Objects.Sellers;
+﻿using Core.Objects.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -25,10 +25,9 @@ public class MarketEntityConfiguration : IEntityTypeConfiguration<Market>
             .IsRequired();
 
         builder
-            .HasOne<Seller>(t => t.Seller)
-            .WithMany(t => t.Markets)
-            .HasForeignKey(t => t.OwnerId)
-            .HasPrincipalKey(t => t.UserId);
+            .HasOne<User>(t => t.User)
+            .WithOne(t => t.Market)
+            .HasForeignKey<Market>(t => t.OwnerId);
 
         builder
             .HasOne<MarketInfo>(t => t.MarketInfo)

@@ -2,8 +2,6 @@
 using Core.Objects.Categories;
 using Core.Objects.Markets;
 using Core.Objects.Products;
-using Core.Objects.Rooms;
-using Core.Objects.Sellers;
 using Core.Objects.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -56,15 +54,6 @@ public class StartupDbContext : IdentityDbContext<IdentityUser>
         
         modelBuilder.Entity<User>().HasKey("Id");
 
-        modelBuilder.Entity<Room>().HasData(new Room()
-        {
-            Id = 1,
-            FrameNumber = 500,
-            RoomNumber = 4,
-            Section = 'A'
-        });
-        
-        modelBuilder.Entity<Room>().HasKey("Id");
 
         modelBuilder.Entity<Category>().HasData(new Category()
         {
@@ -82,16 +71,6 @@ public class StartupDbContext : IdentityDbContext<IdentityUser>
         
         modelBuilder.Entity<MarketInfo>().HasKey("MarketId");
         
-        modelBuilder.Entity<Seller>().HasData(new Seller()
-        {
-            Markets = new List<Market>(),
-            RoomId = 1,
-            ShowRoom = true,
-            UserId = 1
-        });
-        
-        modelBuilder.Entity<Seller>().HasKey("UserId");
-
         modelBuilder.Entity<Market>(b =>
         {
             b.HasData(new Market(){

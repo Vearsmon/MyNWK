@@ -1,7 +1,7 @@
 ﻿using Core.Helpers;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
-using Core.Objects.Sellers;
+using Core.Objects.Users;
 using Core.Services.Products;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +13,7 @@ public class Market
     public int Id { get; set; }
     
     public int OwnerId { get; set; }
-    public virtual Seller Seller { get; set; }
+    public virtual User User { get; set; }
     
     public string Name { get; set; }
     

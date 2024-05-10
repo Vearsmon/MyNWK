@@ -1,4 +1,4 @@
-﻿using Core.Objects.Sellers;
+﻿using Core.Objects.Markets;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Objects.Users;
@@ -16,5 +16,5 @@ public class User
     
     public string? PhoneNumber { get; set; }
     
-    public virtual Seller? Seller { get; set; }
+    public virtual Market Market { get; set; }
 }

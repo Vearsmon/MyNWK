@@ -1,8 +1,6 @@
 ﻿using Core.Objects.Categories;
 using Core.Objects.Markets;
 using Core.Objects.Products;
-using Core.Objects.Rooms;
-using Core.Objects.Sellers;
 using Core.Objects.Users;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +20,6 @@ public class CoreDbContext : DbContext
     
     [UsedImplicitly]
     public DbSet<Product> Products { get; set; } = null!;
-    
-    [UsedImplicitly]
-    public DbSet<Room> Rooms { get; set; } = null!;
-    
-    [UsedImplicitly]
-    public DbSet<Seller> Sellers { get; set; } = null!;
     
     [UsedImplicitly] 
     public DbSet<User> Users { get; set; } = null!;
