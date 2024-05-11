@@ -6,4 +6,4 @@ public record OrderToCreateDto
     public List<OrderItemToCrateDto> Items = null!;
 }
 
-public record OrderItemToCrateDto(int MarketId, int ProductId);
+public record OrderItemToCrateDto(int SellerId, int MarketId, int ProductId);

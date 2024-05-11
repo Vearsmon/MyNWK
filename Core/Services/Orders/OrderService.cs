@@ -24,19 +24,16 @@ public class OrderService : IOrdersService
 
         await using var unitOfWork = unitOfWorkProvider.Get();
         var orderId = Guid.NewGuid();
-        var buyerId = orderToCreate.BuyerId;
-        orderToCreate.Items
-            .Select(item => 
-                new Order 
-                {
-                    OrderId = orderId,
-                    BuyerId = buyerId,
-                    MarketId = item.MarketId,
-                    ProductId = item.ProductId,
-                    ReceivedByBuyer = false,
-                    CanceledBySeller = false
-                })
-            .ForEach(unitOfWork.OrdersRepository.Create);
+        await orderToCreate.Items
+            .Select(item => Order.Create(
+                unitOfWork,
+                orderId,
+                orderToCreate.BuyerId,
+                item.SellerId,
+                item.MarketId,
+                item.ProductId,
+                requestContext.CancellationToken))
+            .ForEachAsync(unitOfWork.OrdersRepository.Create);
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
         return orderId;
     }

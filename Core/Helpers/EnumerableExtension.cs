@@ -2,14 +2,15 @@
 
 public static class EnumerableExtension
 {
-    public static void ForEach<TEntity>(
-        this IEnumerable<TEntity> enumerable,
+    public static Task ForEachAsync<TEntity>(
+        this IEnumerable<Task<TEntity>> enumerable,
         Action<TEntity> action)
     {
-        foreach (var item in enumerable)
-        {
-            action(item);
-        }
+        var tasks = enumerable
+            .Select(item => item.ContinueWith(t => action(t.Result)))
+            .ToList();
+
+        return Task.WhenAll(tasks);
     }
     
     public static bool IsNullOrEmpty<T>(this IEnumerable<T>? enumerable)

@@ -30,4 +30,15 @@ public static class RepositoryExtensions
             .OrderBy(t => t.CreatedAt)
             .ThenBy(t => t.MarketId)
             .ThenBy(t => t.ProductId);
+    
+    public static Task<Product?> GetProduct(
+        this IRepository<Product> repository,
+        int marketId,
+        int productId,
+        CancellationToken cancellationToken) =>
+        repository.GetAsync(
+                r => r
+                    .Where(p => p.MarketId == marketId && p.ProductId == productId),
+                cancellationToken)
+            .FirstOrDefaultAsync();
 }
