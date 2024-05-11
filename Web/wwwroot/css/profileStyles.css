@@ -61,6 +61,10 @@
     border-width: 0px 2px 0px 0px;
     border-color:#FFA25E;
     border-style: solid;
+        
+    cursor: pointer;
+
+    background-color: #FFFAF3;
 }
 
 
