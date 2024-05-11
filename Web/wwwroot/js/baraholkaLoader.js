@@ -57,6 +57,10 @@
     
     const resetButton = document.getElementsByClassName("baraholka-filters-reset-button")[0];
     resetButton.addEventListener('click', () => alert('2'));
+    
+
+    const closeButton = document.getElementsByClassName("product-info-background-shadow");
+    closeButton[0].addEventListener('click', () => closeProductAddWindow());
 });
 
 async function onTelegramAuth(user) {
@@ -96,10 +100,15 @@ async function fetchProducts(categoryId, marketId) {
     fetch(getAllProductsUrl, {method: 'get'})
         .then((response) => response.json())
         .then((products) => {
+            let i = 0;
             for (product of products) {
                 const productImage = document.createElement('img');
                 productImage.setAttribute('src', product.imageRef);
                 productImage.setAttribute('class', 'baraholka-slot-photo');
+                productImage.setAttribute('id', `baraholka-slot-photo-id-${i}`);
+                productImage.addEventListener("click", function () {
+                    alert('clicked on image')
+                });
 
                 const productPrice = document.createElement('p');
                 productPrice.innerText = `${product['price']} р.`;
@@ -114,7 +123,24 @@ async function fetchProducts(categoryId, marketId) {
                 productSlot.appendChild(productImage);
                 productSlot.appendChild(productInfo);
 
-               slots.appendChild(productSlot);
+                slots.appendChild(productSlot);
+                document.getElementById(`baraholka-slot-photo-id-${i}`)
+                    .addEventListener('click', () => openProductInfoWindow());
+               i += 1;
             }
         });
 }
+
+const productAddWindow = document.getElementsByClassName("profile-product-info-window");
+
+function openProductInfoWindow() {
+    productAddWindow[0].hidden = false;
+    alert('OPENED');
+}
+
+function closeProductInfoWindow() {
+    productAddWindow[0].hidden = true;
+    alert('CLOSED');
+}
+
+
