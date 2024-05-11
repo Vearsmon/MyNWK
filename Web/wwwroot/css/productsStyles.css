@@ -23,6 +23,10 @@
 
     color: #FFA25E;
     font-size: 15px;
+    
+    z-index: 2;
+
+    cursor: pointer;
 }
 
 
