@@ -24,24 +24,4 @@ public class ProductAddController : Controller
         ViewBag.returnUrl = "/";
         return View("~/Views/ProductAdd/ProductAdd.cshtml");
     }
-
-    [HttpPost]
-    public async Task<IActionResult> Index(ProductAddModel model, string returnUrl)
-    {
-        if (!ModelState.IsValid) 
-            return View("~/Views/ProductAdd/ProductAdd.cshtml", model);
-        await using var unitOfWork = unitOfWorkProvider.Get();
-
-        var product = new Product
-        {
-            Title = model.Title,
-            Price = model.Price,
-            Remained = model.Remained,
-            MarketId = 1,
-            CreatedAt = PreciseTimestampGenerator.Generate()
-        };
-        
-        unitOfWork.ProductRepository.Create(product);
-        return RedirectToAction("Index", "Baraholka");
-    }
 }

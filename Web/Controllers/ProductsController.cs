@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Helpers;
 using Core.Services.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,11 +54,19 @@ public class ProductsController : Controller
         CancellationToken cancellationToken)
     {
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        await using var productImageStream = HttpContext.Request.Form.Files.FirstOrDefault()?.OpenReadStream();
+        string? imageLocation = null;
+        if (productImageStream is not null)
+        {
+            var productImage = await productImageStream.ReadToEndAsync(32768, requestContext.CancellationToken);
+            imageLocation =  await productService.SaveImageAsync(requestContext, productImage);
+        }
         var productToCreate = new ProductToCreateDto
         {
             Title = title,
             Count = count,
-            Price = price
+            Price = price,
+            ImageLocation = imageLocation
         };
         return Json(await productService.CreateAsync(requestContext, productToCreate));
     }

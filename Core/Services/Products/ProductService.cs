@@ -33,10 +33,18 @@ public class ProductService : IProductService
         {
             throw new InvalidOperationException($"Could not find market with ownerId: {requestContext.UserId}");
         }
-
+        
         return await market
             .AddProduct(unitOfWork, productToCreate, requestContext.CancellationToken)
             .ConfigureAwait(false);
+    }
+
+    public async Task<string?> SaveImageAsync(RequestContext requestContext, byte[] image)
+    {
+        var key = await blobStorageClient
+            .PutAsync(BlobContainers.ProductImages, image, requestContext.CancellationToken)
+            .ConfigureAwait(false);
+        return key.ToString();
     }
 
     public async Task<List<ProductDto>> GetAllProductsAsync(

@@ -6,6 +6,10 @@ public interface IProductService
         RequestContext requestContext,
         ProductToCreateDto productToCreate);
 
+    public Task<string?> SaveImageAsync(
+        RequestContext requestContext,
+        byte[] image);
+    
     public Task<List<ProductDto>> GetAllProductsAsync(
         RequestContext requestContext,
         int batchNum = 0,

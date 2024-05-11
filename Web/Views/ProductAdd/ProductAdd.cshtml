@@ -1,6 +1,6 @@
 ﻿<h1>Добавление товара</h1>
 
-<form class="productAddForm" method="post" action="/products/create">
+<form class="productAddForm" method="post" action="/products/create" enctype="multipart/form-data">
     <div>
         Название товара
         <input type="text" name="title"/>
@@ -12,6 +12,10 @@
     <div>
         Количество
         <input type="number" name="count"/>
+    </div>
+    <div>
+        Изображение
+        <input type="file" name="image"/>
     </div>
     <div>
         <input type="submit" value="Добавить"/>
