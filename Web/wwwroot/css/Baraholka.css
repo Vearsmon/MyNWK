@@ -162,6 +162,8 @@
     font-style: italic;
     font-weight: 500;
     letter-spacing: 6%;
+    
+    cursor: pointer;
 }
 
 .baraholka-filters-buttons .baraholka-filters-reset-button {
@@ -184,6 +186,8 @@
     font-style: italic;
     font-weight: 500;
     letter-spacing: 6%;
+    
+    cursor: pointer;
 }
 
 
