@@ -21,5 +21,9 @@ public interface IProductService
         RequestContext requestContext, 
         ProductFullId productFullId);
 
-    public Task<List<ProductDto>> GetUserProductsAsync(RequestContext requestContext);
+    public Task<List<ProductDto>> GetUserProductsAsync(
+        RequestContext requestContext);
+
+    public Task<List<ProductDto>> GetOrderProductsAsync(
+        RequestContext requestContext, Guid OrderId);
 }
