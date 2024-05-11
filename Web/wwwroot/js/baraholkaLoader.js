@@ -1,4 +1,20 @@
-﻿document.addEventListener('DOMContentLoaded', async function() {
+﻿const productAddWindow = document.getElementsByClassName("profile-product-info-window");
+
+function openProductInfoWindow() {
+    productAddWindow[0].hidden = false;
+    alert('OPENED');
+}
+
+function closeProductInfoWindow() {
+    productAddWindow[0].hidden = true;
+    alert('CLOSED');
+}
+
+const closeButton = document.getElementsByClassName("product-info-background-shadow");
+closeButton[0].addEventListener('click', () => closeProductInfoWindow());
+
+
+document.addEventListener('DOMContentLoaded', async function() {
     fetch('api/isAuthenticated', {method: 'get'})
         .then((response) => response.text())
         .then((userId) => {
@@ -57,10 +73,9 @@
     
     const resetButton = document.getElementsByClassName("baraholka-filters-reset-button")[0];
     resetButton.addEventListener('click', () => alert('2'));
-    
 
-    const closeButton = document.getElementsByClassName("product-info-background-shadow");
-    closeButton[0].addEventListener('click', () => closeProductAddWindow());
+    
+    
 });
 
 async function onTelegramAuth(user) {
@@ -131,16 +146,6 @@ async function fetchProducts(categoryId, marketId) {
         });
 }
 
-const productAddWindow = document.getElementsByClassName("profile-product-info-window");
 
-function openProductInfoWindow() {
-    productAddWindow[0].hidden = false;
-    alert('OPENED');
-}
-
-function closeProductInfoWindow() {
-    productAddWindow[0].hidden = true;
-    alert('CLOSED');
-}
 
 
