@@ -24,35 +24,95 @@
 .profile-purchases-inner-container {
     position: relative;
 
-    width: 700px;
-    height: 200px;
+    width: 900px;
+    min-height: 200px;
+    max-height: fit-content;
 
     margin: 15px 20px;
-}
-
-
-.profile-purchases {
-    position: relative;
-
-    width: 400px;
-    height: 200px;
-
-    background-color: #FFEFD8;
 
     border-color: #FFA25E;
     border-width: 2px;
     border-style: solid;
     border-radius: 5px;
 
-    margin: 0px 20px;
+    background-color:#FFEFD8
+}
+
+
+.profile-purchases-header {
+    position: relative;
+
+    left: 10px;
+
+    color:#FFA25E;
+    font-size: 18px;
+    line-height: 40px;
+}
+
+
+.profile-purchases {
+    position: relative;
+
+    width: 800px;
+    min-height: 200px;
+    max-height: fit-content;
+    
+    display: flex;
+    flex-flow: row wrap;
+    align-items: space-between;
+    justify-items: space-between;
+}
+
+
+.profile-purchase {
+    position: relative;
+
+    top: 0px;
+
+    width: 95.5px;
+    height: 175px;
+
+    white-space: 6px;
+
+    margin: 10px 30px;
+
+    cursor: pointer;
+}
+
+.profile-purchase-photo {
+    position: absolute;
+
+    top: 0px;
+    left: 0px;
+
+    width: 95.5px;
+    height: 121.5px;
+
+    background-color: #D9D9D9;
+}
+
+.profile-purchase-info {
+    position: absolute;
+
+    left: 1px;
+    top: 125px;
+
+    font-style: italic;
+    font-weight: 500;
+    font-size: 15px;
+    color:#FFA25E;
+}
+
+p {
+    margin: 0px;
 }
 
 
 .profile-purchases-accept {
     position: absolute;
 
-    top: 10px;
-    right: 0px;
+    top: 7px;
+    right: 10px;
 
     width: 200px;
     height: 30px;
