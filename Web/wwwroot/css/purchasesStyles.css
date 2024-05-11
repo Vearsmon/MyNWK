@@ -1,0 +1,113 @@
+.profile-purchases-inner-container {
+    position: absolute;
+    top: 115px;
+    left: 250px;
+    width: 846px;
+    min-height: 400px;
+    max-height: max-content;
+
+    border-color: #FFA25E;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+
+    display: flex;
+    flex-flow: row wrap;
+    align-items: space-between;
+    justify-items: space-between;
+
+    opacity: 0;
+}
+
+
+
+.profile-purchases-container {
+    position: relative;
+
+    width: 700px;
+    height: 200px;
+
+    margin: 15px 20px;
+}
+
+
+.profile-purchases {
+    position: relative;
+
+    width: 400px;
+    height: 200px;
+
+    background-color: #FFEFD8;
+
+    border-color: #FFA25E;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+
+    margin: 0px 20px;
+}
+
+
+.profile-purchases-accept {
+    position: absolute;
+
+    top: 10px;
+    right: 0px;
+
+    width: 200px;
+    height: 30px;
+
+    background-color: #FFEFD8;
+
+    border-color: #FFA25E;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 5px;
+
+    color: #FFA25E;
+    font-size: 15px;
+
+    cursor: pointer;
+
+    z-index: 2;
+}
+
+
+.profile-purchases-name {
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+
+    font-family: 'Inter';
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 600;
+    color: #FFA25E;
+
+    text-decoration: underline;
+}
+
+
+.profile-purchases-content-header {
+    margin-top: 10px;
+    margin-left: 20px;
+
+    font-family: 'Inter';
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 500;
+    color: #FFA25E;
+
+    text-decoration: underline;
+}
+
+
+.profile-purchases-content {
+    margin-left: 40px;
+
+    font-family: 'Inter';
+    font-size: 15px;
+    font-style: italic;
+    font-weight: 500;
+    color: #FFA25E;
+}

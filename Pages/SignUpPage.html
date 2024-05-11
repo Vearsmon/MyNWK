@@ -12,6 +12,9 @@
     >
     <link rel="stylesheet" href="/Pages/mainPageStyles.css">
     <link rel="stylesheet" href="/Pages/SignUpStyles.css">
+    <!-- <link rel="stylesheet" href="/purchasesStyles.css">
+    <link rel="stylesheet" href="/ordersStyle.css">
+    <link rel="stylesheet" href="/productsStyles.css"> -->
 </head>
 <body>
     <div class="header">
@@ -43,10 +46,165 @@
 
         <div class="profile-tabs-container">
             <li class="profile-li">
-                <div class="profile-tabs">Мои покупки</div>
-                <div class="profile-tabs">Мой магазин</div>
-                <div class="profile-tabs">Настройки</div>
+                <button class="profile-tabs" id="profile-tabs-purchases">Мои покупки</button>
+                <button class="profile-tabs" id="profile-tabs-products">Мои товары</button>
+                <button class="profile-tabs" id="profile-tabs-orders">Заказы</button>
             </li>
+        </div>
+
+        <div hidden="true" class="profile-purchases-inner-container">
+            <div hidden="true" class="profile-purchases-container">
+                <div class="profile-purchases">
+                    <div class="profile-purchases-name">${name}</div>
+
+                    <div class="profile-purchases-content-header">Продавец</div>
+                    <div class="profile-purchases-content">${seller}</div>
+
+                    <div class="profile-purchases-content-header">Цена</div>
+                    <div class="profile-purchases-content">${price} руб</div>
+
+                    <div class="profile-purchases-content-header">Реквизиты оплаты</div>
+                    <div class="profile-purchases-content">${number}, ${bank}</div>
+                </div>
+
+                <button class="profile-purchases-accept">Подтвердить получение</button>
+            </div>
+
+            <div hidden="true" class="profile-purchases-container">
+                <div class="profile-purchases">
+                    <div class="profile-purchases-name">${name}</div>
+
+                    <div class="profile-purchases-content-header">Продавец</div>
+                    <div class="profile-purchases-content">${seller}</div>
+
+                    <div class="profile-purchases-content-header">Цена</div>
+                    <div class="profile-purchases-content">${price} руб</div>
+
+                    <div class="profile-purchases-content-header">Реквизиты оплаты</div>
+                    <div class="profile-purchases-content">${number}, ${bank}</div>
+                </div>
+
+                <button class="profile-purchases-accept">Подтвердить получение</button>
+            </div>
+        </div>
+
+        <div hidden="true" class="profile-products-inner-container">
+            <div class="profile-products-buttons">
+                <button class="profile-products-buttons add" id="profile-product-add">Добавить товар</button>
+
+                <button class="profile-products-buttons settings" id="profile-product-settings">Настройки магазина</button>
+            </div>
+
+            <div class="profile-products">
+                <div class="profile-product">
+                    <div class="profile-product-photo"></div>
+                    
+                    <div class="profile-product-info">
+                        Чипсы Lay's краб
+                        <p>150 руб</p>
+                    </div>
+                </div>
+
+                <div class="profile-product">
+                    <div class="profile-product-photo"></div>
+                    
+                    <div class="profile-product-info">
+                        Чипсы Lay's краб
+                        <p>150 руб</p>
+                    </div>
+                </div>
+
+                <div class="profile-product">
+                    <div class="profile-product-photo"></div>
+                    
+                    <div class="profile-product-info">
+                        Чипсы Lay's краб
+                        <p>150 руб</p>
+                    </div>
+                </div>
+
+                <div class="profile-product">
+                    <div class="profile-product-photo"></div>
+                    
+                    <div class="profile-product-info">
+                        Чипсы Lay's краб
+                        <p>150 руб</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div hidden="true" class="profile-orders-inner-container">
+            <div hidden="true" class="profile-orders-container">
+                <div class="profile-orders">
+                    <div class="profile-orders-name">${name}</div>
+
+                    <div class="profile-orders-content-header">Заказчик</div>
+                    <div class="profile-orders-content">${buyer}</div>
+
+                    <div class="profile-orders-content-header">Комната</div>
+                    <div class="profile-orders-content">${room}</div>
+                </div>
+
+                <button class="profile-orders-accept">Отменить заказ</button>
+            </div>
+
+            <div hidden="true" class="profile-orders-container">
+                <div class="profile-orders">
+                    <div class="profile-orders-name">${name}</div>
+
+                    <div class="profile-orders-content-header">Заказчик</div>
+                    <div class="profile-orders-content">${buyer}</div>
+
+                    <div class="profile-orders-content-header">Комната</div>
+                    <div class="profile-orders-content">${room}</div>
+                </div>
+
+                <button class="profile-orders-accept">Отменить заказ</button>
+            </div>
+
+            <div hidden="true" class="profile-orders-container">
+                <div class="profile-orders">
+                    <div class="profile-orders-name">${name}</div>
+
+                    <div class="profile-orders-content-header">Заказчик</div>
+                    <div class="profile-orders-content">${buyer}</div>
+
+                    <div class="profile-orders-content-header">Комната</div>
+                    <div class="profile-orders-content">${room}</div>
+                </div>
+
+                <button class="profile-orders-accept">Отменить заказ</button>
+            </div>
+
+            <div hidden="true" class="profile-orders-container">
+                <div class="profile-orders">
+                    <div class="profile-orders-name">${name}</div>
+
+                    <div class="profile-orders-content-header">Заказчик</div>
+                    <div class="profile-orders-content">${buyer}</div>
+
+                    <div class="profile-orders-content-header">Комната</div>
+                    <div class="profile-orders-content">${room}</div>
+                </div>
+
+                <button class="profile-orders-accept">Отменить заказ</button>
+            </div>
+
+            <div hidden="true" class="profile-orders-container">
+                <div class="profile-orders">
+                    <div class="profile-orders-name">${name}</div>
+
+                    <div class="profile-orders-content-header">Заказчик</div>
+                    <div class="profile-orders-content">${seller}</div>
+
+                    <div class="profile-orders-content-header">Комната</div>
+                    <div class="profile-orders-content">${room}</div>
+                </div>
+
+                <button class="profile-orders-accept">Отменить заказ</button>
+            </div>
         </div>
 
         <div class="profile-user-info-container">
@@ -73,5 +231,7 @@
             </div>
         </div>
     </div>
+
+    <script src="/JavaScripts/OrderController.js"></script>
 </body>
 </html>
