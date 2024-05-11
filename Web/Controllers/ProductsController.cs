@@ -1,9 +1,11 @@
-﻿using Core;
+﻿using System.ComponentModel.DataAnnotations;
+using Core;
 using Core.Helpers;
 using Core.Services.Orders;
 using Core.Services.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.Models.ViewComponents;
 
 namespace Web.Controllers;
 
@@ -73,7 +75,7 @@ public class ProductsController : Controller
         foreach (var o in orderIds)
         {
             var products = await productService.GetOrderProductsAsync(requestContext, o);
-            result.Add(new FullOrder() { OrderId = o, Products = products });
+            result.Add(new FullOrder { OrderId = o, Products = products });
         }
         return Json(result);
     }
@@ -81,13 +83,15 @@ public class ProductsController : Controller
     [HttpPost]
     [Route("create")]
     public async Task<IActionResult> CreateAsync(
-        string title,
-        int count,
-        double price,
+        ProductAddModel productAddModel,
         CancellationToken cancellationToken)
     {
-        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         await using var productImageStream = HttpContext.Request.Form.Files.FirstOrDefault()?.OpenReadStream();
         string? imageLocation = null;
         if (productImageStream is not null)
@@ -97,9 +101,9 @@ public class ProductsController : Controller
         }
         var productToCreate = new ProductToCreateDto
         {
-            Title = title,
-            Count = count,
-            Price = price,
+            Title = productAddModel.Title,
+            Count = productAddModel.Count,
+            Price = productAddModel.Price,
             ImageLocation = imageLocation
         };
         await productService.CreateAsync(requestContext, productToCreate);
