@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Core;
 using Core.Objects.MyNwkUnitOfWork;
+using Core.Objects.Users;
 using Core.Services.Categories;
 using Core.Services.Markets;
 using Microsoft.AspNetCore.Mvc;
@@ -12,13 +13,16 @@ public class ApiController : Controller
 {
     private readonly ICategoriesService categoriesService;
     private readonly IMarketsService marketsService;
+    private readonly IUnitOfWorkProvider unitOfWorkProvider;
 
     public ApiController(
         ICategoriesService categoriesService,
-        IMarketsService marketsService)
+        IMarketsService marketsService,
+        IUnitOfWorkProvider unitOfWorkProvider)
     {
         this.categoriesService = categoriesService;
         this.marketsService = marketsService;
+        this.unitOfWorkProvider = unitOfWorkProvider;
     }
     
     [HttpGet]
@@ -55,5 +59,24 @@ public class ApiController : Controller
     {
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         return Json(await marketsService.GetAllMarkets(requestContext));
+    }
+
+    [HttpGet]
+    [Route("get/user/info")]
+    public async Task<JsonResult> GetUserInfoAsync(CancellationToken cancellationToken)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var unitOfWork = unitOfWorkProvider.Get();
+        
+        var user = await unitOfWork.UsersRepository
+            .GetAsync<User>(u => u.Where(t => t.Name == HttpContext.User.Identity.Name),
+                requestContext.CancellationToken)
+            .FirstOrDefaultAsync();
+        if (user == null)
+            
+            // по идее юзер должен уже находится, раз уж мы на странице пользователя
+            
+            throw new NotImplementedException();
+        return Json(new { address = user.Address, username = user.TelegramUsername });
     }
 }

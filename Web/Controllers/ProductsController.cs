@@ -47,7 +47,7 @@ public class ProductsController : Controller
     
     [HttpPost]
     [Route("create")]
-    public async Task<JsonResult> CreateAsync(
+    public async Task<IActionResult> CreateAsync(
         string title,
         int count,
         double price,
@@ -69,7 +69,8 @@ public class ProductsController : Controller
             Price = price,
             ImageLocation = imageLocation
         };
-        
-        return Json(await productService.CreateAsync(requestContext, productToCreate));
+        await productService.CreateAsync(requestContext, productToCreate);
+
+        return Redirect("/Profile");
     }
 }
