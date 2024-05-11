@@ -23,8 +23,12 @@ public class TgAuthService : ITgAuthService
     {
         return string.Join(
             '\n',
-            ITgAuthService.KeysToUseInHash.Select(Format).ToArray());
+            ITgAuthService.KeysToUseInHash
+                .Select(key => (key, value: meta[key]))
+                .Where(t => t.value != "undefined")
+                .Select(t => Format(t.key, t.value))
+                .ToArray());
         
-        string Format(string key) => $"{key}={meta[key]}";
+        string Format(string key, string value) => $"{key}={value}";
     }
 }
