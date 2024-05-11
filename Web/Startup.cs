@@ -95,6 +95,6 @@ public class Startup
         services.AddScoped<ITgAuthService, TgAuthService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoriesService, CategoriesService>();
-        services.AddScoped<IMarketsService, MarketsesService>();
+        services.AddScoped<IMarketsService, MarketsService>();
     }
 }
