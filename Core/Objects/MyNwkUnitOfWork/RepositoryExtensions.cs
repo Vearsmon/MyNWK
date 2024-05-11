@@ -1,4 +1,5 @@
-﻿using Core.Objects.Products;
+﻿using Core.Objects.Orders;
+using Core.Objects.Products;
 
 namespace Core.Objects.MyNwkUnitOfWork;
 
@@ -41,4 +42,12 @@ public static class RepositoryExtensions
                     .Where(p => p.MarketId == marketId && p.ProductId == productId),
                 cancellationToken)
             .FirstOrDefaultAsync();
+
+    public static Task<List<Order>> GetOrder(
+        this IRepository<Order> repository,
+        Guid orderId,
+        CancellationToken cancellationToken) =>
+        repository.GetAsync(
+            r => r.Where(t => t.OrderId == orderId),
+            cancellationToken);
 }

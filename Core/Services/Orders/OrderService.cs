@@ -29,7 +29,7 @@ public class OrderService : IOrdersService
             .ToList();
         await ordersWithId
             .SelectMany(orderWithId => orderWithId.Group
-                .Select(item => 
+                .Select(item =>
                     Order.Create(
                         unitOfWork,
                         orderWithId.OrderId,
@@ -42,5 +42,35 @@ public class OrderService : IOrdersService
             .ConfigureAwait(false);
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
         return ordersWithId.Select(t => t.OrderId).ToList();
+    }
+
+    public async Task ConfirmAsync(
+        RequestContext requestContext, 
+        Guid orderId)
+    {
+        await using var unitOfWork = unitOfWorkProvider.Get();
+        var orders = await unitOfWork.OrdersRepository
+            .GetOrder(orderId, requestContext.CancellationToken)
+            .ConfigureAwait(false);
+        
+        await orders
+            .ForEachAsync(t => t.ConfirmAsync(requestContext, unitOfWork))
+            .ConfigureAwait(false);
+        await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
+    }
+    
+    public async Task CancelAsync(
+        RequestContext requestContext, 
+        Guid orderId)
+    {
+        await using var unitOfWork = unitOfWorkProvider.Get();
+        var orders = await unitOfWork.OrdersRepository
+            .GetOrder(orderId, requestContext.CancellationToken)
+            .ConfigureAwait(false);
+
+        await orders
+            .ForEachAsync(t => t.CancelAsync(requestContext, unitOfWork))
+            .ConfigureAwait(false);
+        await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
     }
 }
