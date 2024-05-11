@@ -9,6 +9,7 @@ using Core.Services.Products;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Web.Filters;
 using Web.Service;
 
 namespace Web;
@@ -26,37 +27,23 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         Configuration.Bind("ConnectionStrings", new Config());
-        
         var connection = Configuration.GetConnectionString("DefaultConnection")!;
-        
-        services.AddLogging(loggingBuilder => {
-            loggingBuilder.AddConsole().AddFilter(DbLoggerCategory.Database.Command.Name, LogLevel.Information);
-            loggingBuilder.AddDebug();
-        });
         AddServices(services, connection);
-        
-        // services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<StartupDbContext>().AddDefaultTokenProviders();
 
-        // services.ConfigureApplicationCookie(options =>
-        // {
-        //     options.Cookie.Name = "myNwkAuth";
-        //     options.Cookie.HttpOnly = true;
-        //     options.LoginPath = "/baraholka";
-        //     options.AccessDeniedPath = "/account/accessdenied";
-        //     options.SlidingExpiration = true;
-        // });
+        services
+            .AddMvc(options =>
+            {
+                options.Filters.Add(typeof(InputValidationActionFilter));
+            });
         
-        services.AddAuthorization(x =>
-        {
-            x.AddPolicy("UserPolicy", policy => { policy.RequireClaim("AllowUserActions"); });
-        });
-        
-        services.AddControllersWithViews(x =>
-        {
-            x.Conventions.Add(new UserAreaAuthorization("User", "UserArea"));
-        }).AddSessionStateTempDataProvider();
-        
-        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+        services
+            .AddLogging(ConfigureLogging)
+            .AddAuthorization(x => 
+            { 
+                x.AddPolicy("UserPolicy", policy => { policy.RequireClaim("AllowUserActions"); });
+            })
+            .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -65,6 +52,7 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
         }
+        
         app.UseRouting();
         app.UseStaticFiles();
         app.UseCookiePolicy();
@@ -99,4 +87,10 @@ public class Startup
         services.AddScoped<ICategoriesService, CategoriesService>();
         services.AddScoped<IMarketsService, MarketsService>();
     }
+    
+    private void ConfigureLogging(ILoggingBuilder loggingBuilder) =>
+        loggingBuilder
+            .AddConsole()
+            .AddFilter(DbLoggerCategory.Database.Command.Name, LogLevel.Information)
+            .AddDebug();
 }

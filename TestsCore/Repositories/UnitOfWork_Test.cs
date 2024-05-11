@@ -30,7 +30,7 @@ public class UnitOfWork_Test
                        "Trust Server Certificate=true;")
             .UseLazyLoadingProxies()
             .UseSnakeCaseNamingConvention()
-            .LogTo(s => Console.WriteLine(s));
+            .LogTo(Console.WriteLine);
         var dbContext = new CoreDbContext(optionsBuilder.Options);
         unitOfWork = new UnitOfWork(dbContext);
         unitOfWorkProvider = new UnitOfWorkProvider(dbContext);

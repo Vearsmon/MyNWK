@@ -4,12 +4,14 @@ using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
 using Core.Services.Orders;
 using Core.Services.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Web.Controllers;
 
 [Route("cart")]
+[Authorize(Policy = "UserPolicy")]
 public class CartController : Controller
 {
     private readonly IProductService productService;

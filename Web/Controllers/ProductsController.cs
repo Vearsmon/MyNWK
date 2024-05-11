@@ -86,11 +86,6 @@ public class ProductsController : Controller
         ProductAddModel productAddModel,
         CancellationToken cancellationToken)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         await using var productImageStream = HttpContext.Request.Form.Files.FirstOrDefault()?.OpenReadStream();
         string? imageLocation = null;

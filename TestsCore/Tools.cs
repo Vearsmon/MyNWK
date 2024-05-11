@@ -1,5 +1,8 @@
 using System.Security.Cryptography;
 using Core.Crypto;
+using Core.Objects;
+using Core.Objects.Categories;
+using Core.Objects.MyNwkUnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace TestsCore;
@@ -28,5 +31,28 @@ public class Tools
         var opB = new DbContextOptionsBuilder<DbContext>();
         opB.UseNpgsql(connectionString);
         using var c = new DbContext(opB.Options);
+    }
+
+    [Test]
+    public async Task ConfigureCategories()
+    {
+        var optionsBuilder = new DbContextOptionsBuilder();
+        optionsBuilder
+            .UseNpgsql("Host=rc1d-fzm7z4p51iz3qylc.mdb.yandexcloud.net;" +
+                       "Port=6432;" +
+                       "Database=core;" +
+                       "Username=mynwk-connection;" +
+                       "Password=kn8i6S9WHAqycEH;" +
+                       "Ssl Mode=Require;" +
+                       "Trust Server Certificate=true;")
+            .UseLazyLoadingProxies()
+            .UseSnakeCaseNamingConvention()
+            .LogTo(Console.WriteLine);
+        var dbContext = new CoreDbContext(optionsBuilder.Options);
+        var unitOfWork = new UnitOfWork(dbContext);
+        
+        unitOfWork.CategoriesRepository.Create(new Category { Title = "Продукты питания" });
+        unitOfWork.CategoriesRepository.Create(new Category { Title = "Одежда" });
+        await unitOfWork.CommitAsync(CancellationToken.None);
     }
 }
