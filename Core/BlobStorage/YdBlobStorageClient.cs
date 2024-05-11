@@ -12,6 +12,8 @@ public class YdBlobStorageClient : IBlobStorageClient
     private const int BufferSize = 32768;
     private readonly AmazonS3Client amazonS3Client;
 
+    private readonly Dictionary<CachedUrlKey, CachedUrl> downloadingUrlCache = new(); 
+
     public YdBlobStorageClient()
     {
         var config = new AmazonS3Config 
@@ -75,20 +77,30 @@ public class YdBlobStorageClient : IBlobStorageClient
             .ConfigureAwait(false);
     }
 
-    public Task<string> GetDownloadingUrlAsync(
+    public async Task<string> GetDownloadingUrlAsync(
         string container,
         Guid key)
     {
-        var request = new GetPreSignedUrlRequest()
+        var urlKey = new CachedUrlKey(container, key);
+        var currentTime = PreciseTimestampGenerator.Generate();
+        if (downloadingUrlCache.TryGetValue(urlKey, out var cachedUrl) && currentTime < cachedUrl.ExpiresAt)
+        {
+            return cachedUrl.Url;
+        }
+
+        var expiresAt = currentTime.AddHours(1);
+        var request = new GetPreSignedUrlRequest
         {
             BucketName = container,
             Key = key.ToString(),
-            Expires = DateTime.UtcNow.AddMinutes(10),
+            Expires = expiresAt,
             Verb = HttpVerb.GET,
             Protocol = Protocol.HTTPS
         };
 
-        return amazonS3Client.GetPreSignedURLAsync(request);
+        var url = await amazonS3Client.GetPreSignedURLAsync(request).ConfigureAwait(false);
+        downloadingUrlCache[urlKey] = new CachedUrl(url, expiresAt.AddMinutes(-5));
+        return url;
     }
 
     public async Task RemoveAsync(
@@ -106,4 +118,8 @@ public class YdBlobStorageClient : IBlobStorageClient
     {
         amazonS3Client.Dispose();
     }
+
+    private record CachedUrlKey(string Container, Guid Key);
+
+    private record CachedUrl(string Url, DateTime ExpiresAt);
 }

@@ -92,7 +92,7 @@ public class Startup
             .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUnitOfWorkProvider, UnitOfWorkProvider>();
-        services.AddScoped<IBlobStorageClient, YdBlobStorageClient>();
+        services.AddSingleton<IBlobStorageClient, YdBlobStorageClient>();
         services.AddScoped<ITgAuthService, TgAuthService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IOrdersService, OrderService>();
