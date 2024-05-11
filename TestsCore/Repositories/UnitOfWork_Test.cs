@@ -3,8 +3,10 @@ using Core.Objects.Markets;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
 using Core.Services.Orders;
+using Core.Services.Products;
 using Core.Objects.Users;
 using Microsoft.EntityFrameworkCore;
+using Core.BlobStorage;
 
 namespace TestsCore.Repositories;
 
@@ -13,6 +15,7 @@ public class UnitOfWork_Test
 {
     private readonly UnitOfWork unitOfWork;
     private readonly UnitOfWorkProvider unitOfWorkProvider;
+    private readonly IBlobStorageClient client;
     
     public UnitOfWork_Test()
     {
@@ -31,6 +34,7 @@ public class UnitOfWork_Test
         var dbContext = new CoreDbContext(optionsBuilder.Options);
         unitOfWork = new UnitOfWork(dbContext);
         unitOfWorkProvider = new UnitOfWorkProvider(dbContext);
+        client = new YdBlobStorageClient();
     }
 
     [Test]
@@ -74,8 +78,9 @@ public class UnitOfWork_Test
     [Test]
     public async Task TestCli()
     {
-        var y = new OrderService(unitOfWorkProvider);
-        var x = y.GetBuyerOrderIdsAsync(new Core.RequestContext(){ UserId = 1212, CancellationToken = CancellationToken.None });
-        Console.WriteLine(1);
+        var y = new ProductService(unitOfWorkProvider, client);
+        
+        var x = y.GetOrderProductsAsync(new Core.RequestContext(){ UserId = 1212, CancellationToken = CancellationToken.None }, new Guid());
+
     }
 }
