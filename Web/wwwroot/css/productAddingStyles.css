@@ -7,10 +7,10 @@
 
 
 .product-add-form-container {
-    position: relative;
+    position: fixed;
 
-    margin: 12.5vh auto;
-
+    top: 20vh;
+    left: 35vw;
 
     width: 400px;
     height: 400px;
@@ -23,6 +23,8 @@
     border-radius: 15px;
 
     color: var(--second-content-color);
+
+    z-index: 4;
 }
 
 
@@ -63,6 +65,8 @@
 
     color: var(--second-content-color);
     font-weight: 500;
+
+    cursor: pointer;
 }
 
 
