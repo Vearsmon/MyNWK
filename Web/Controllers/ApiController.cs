@@ -63,13 +63,13 @@ public class ApiController : Controller
 
     [HttpGet]
     [Route("get/user/info")]
-    public async Task<JsonResult> GetUserInfoAsync(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserInfoAsync(CancellationToken cancellationToken)
     {
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         var unitOfWork = unitOfWorkProvider.Get();
         
         var user = await unitOfWork.UsersRepository
-            .GetAsync<User>(u => u.Where(t => t.Name == HttpContext.User.Identity.Name),
+            .GetAsync<User>(u => u.Where(t => t.Id == requestContext.UserId),
                 requestContext.CancellationToken)
             .FirstOrDefaultAsync();
         if (user == null)
@@ -77,6 +77,54 @@ public class ApiController : Controller
             // по идее юзер должен уже находится, раз уж мы на странице пользователя
             
             throw new NotImplementedException();
-        return Json(new { address = user.Address, username = user.TelegramUsername });
+        return Json(new { address = user.Address, username = user.TelegramUsername, name = user.Name });
+    }
+
+    [HttpPost]
+    [Route("set/user/info/address")]
+    public async Task<IActionResult> SetUserInfoAddressAsync(CancellationToken cancellationToken)
+    {
+        var form = await HttpContext.Request.ReadFormAsync();
+        
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var unitOfWork = unitOfWorkProvider.Get();
+        
+        var user = await unitOfWork.UsersRepository
+            .GetAsync<User>(u => u.Where(t => t.Id == requestContext.UserId),
+                requestContext.CancellationToken)
+            .FirstOrDefaultAsync();
+        if (user == null)
+            
+            // по идее юзер должен уже находится, раз уж мы на странице пользователя
+            
+            throw new NotImplementedException();
+
+        user.Address = form["address"].ToString();
+        await unitOfWork.CommitAsync(requestContext.CancellationToken);
+        return Json(user.Address);
+    }
+    
+    [HttpPost]
+    [Route("set/user/info/name")]
+    public async Task<IActionResult> SetUserInfoNameAsync(CancellationToken cancellationToken)
+    {
+        var form = await HttpContext.Request.ReadFormAsync();
+        
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var unitOfWork = unitOfWorkProvider.Get();
+        
+        var user = await unitOfWork.UsersRepository
+            .GetAsync<User>(u => u.Where(t => t.Id == requestContext.UserId),
+                requestContext.CancellationToken)
+            .FirstOrDefaultAsync();
+        if (user == null)
+            
+            // по идее юзер должен уже находится, раз уж мы на странице пользователя
+            
+            throw new NotImplementedException();
+
+        user.Name = form["name"].ToString();
+        await unitOfWork.CommitAsync(requestContext.CancellationToken);
+        return Json(user.Address);
     }
 }
