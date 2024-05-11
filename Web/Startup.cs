@@ -1,4 +1,5 @@
-﻿using Core.Crypto;
+﻿using Core.BlobStorage;
+using Core.Crypto;
 using Core.Objects;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Services.Categories;
@@ -90,6 +91,7 @@ public class Startup
             .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUnitOfWorkProvider, UnitOfWorkProvider>();
+        services.AddScoped<IBlobStorageClient, YdBlobStorageClient>();
         services.AddScoped<ITgAuthService, TgAuthService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoriesService, CategoriesService>();

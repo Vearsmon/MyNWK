@@ -75,7 +75,7 @@ public class YdBlobStorageClient : IBlobStorageClient
             .ConfigureAwait(false);
     }
 
-    public async Task<string> GetDownloadingUrlAsync(
+    public Task<string> GetDownloadingUrlAsync(
         string container,
         Guid key)
     {
@@ -88,7 +88,7 @@ public class YdBlobStorageClient : IBlobStorageClient
             Protocol = Protocol.HTTPS
         };
 
-        return await amazonS3Client.GetPreSignedURLAsync(request).ConfigureAwait(false);
+        return amazonS3Client.GetPreSignedURLAsync(request);
     }
 
     public async Task RemoveAsync(

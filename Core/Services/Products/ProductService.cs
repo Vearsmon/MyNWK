@@ -1,4 +1,5 @@
-﻿using Core.Objects.MyNwkUnitOfWork;
+﻿using Core.BlobStorage;
+using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
 
 namespace Core.Services.Products;
@@ -6,10 +7,14 @@ namespace Core.Services.Products;
 public class ProductService : IProductService
 {
     private readonly IUnitOfWorkProvider unitOfWorkProvider;
+    private readonly IBlobStorageClient blobStorageClient;
 
-    public ProductService(IUnitOfWorkProvider unitOfWorkProvider)
+    public ProductService(
+        IUnitOfWorkProvider unitOfWorkProvider,
+        IBlobStorageClient blobStorageClient)
     {
         this.unitOfWorkProvider = unitOfWorkProvider;
+        this.blobStorageClient = blobStorageClient;
     }
     
     public async Task<ProductFullId> CreateAsync(
@@ -62,9 +67,11 @@ public class ProductService : IProductService
             .ToDictionaryAsync(t => t.Id, t => t.OwnerId)
             .ConfigureAwait(false);
         
-        return products
-            .Where(p => userIdsByMarketId.ContainsKey(p.MarketId))
-            .Select(p => Convert(p, userIdsByMarketId[p.MarketId]))
+        var productWithImageRef = await GetImageRefByMarketAndProductId(products)
+            .ConfigureAwait(false);
+        return productWithImageRef
+            .Where(p => userIdsByMarketId.ContainsKey(p.product.MarketId))
+            .Select(p => Convert(p.product, userIdsByMarketId[p.product.MarketId], p.imageRef))
             .ToList();
     }
 
@@ -81,15 +88,40 @@ public class ProductService : IProductService
                 requestContext.CancellationToken)
             .ConfigureAwait(false);
 
-        return products.Select(p => Convert(p, userId)).ToList();
+        var productWithImageRef = await GetImageRefByMarketAndProductId(products)
+            .ConfigureAwait(false);
+        return productWithImageRef
+            .Select(p => Convert(p.product, userId, p.imageRef))
+            .ToList();
     }
 
-    private static ProductDto Convert(Product product, int userId) =>
+    private async Task<List<(Product product, string? imageRef)>> GetImageRefByMarketAndProductId(
+        List<Product> products)
+    {
+        var result = new List<(Product product, string? imageRef)>();
+        foreach (var product in products)
+        {
+            if (product.ImageLocation is null)
+            {
+                result.Add((product, null));
+                continue;
+            }
+
+            var imageRef = await blobStorageClient
+                .GetDownloadingUrlAsync(BlobContainers.ProductImages, Guid.Parse(product.ImageLocation))
+                .ConfigureAwait(false);
+            result.Add((product, imageRef));
+        }
+
+        return result;
+    }
+    
+    private ProductDto Convert(Product product, int userId, string? imageRef) =>
         new()
         {
             CategoryId = product.CategoryId,
             FullId = new ProductFullId(userId, product.MarketId, product.ProductId),
-            ImageLocation = product.ImageLocation,
+            ImageRef = imageRef,
             Price = product.Price,
             Remained = product.Remained,
             Title = product.Title

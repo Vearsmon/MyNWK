@@ -22,7 +22,7 @@
         .then((products) => {
             for (product of products) {
                 const productImage = document.createElement('img');
-                productImage.setAttribute('src', "https://storage.yandexcloud.net/my-nwk-product-images/square_320_2d7203b023c0f9aa3f5e3ea48e7f680a.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJE7SE55rJbDeVSb8ump1J3%2F20240510%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20240510T143251Z&X-Amz-Expires=3600&X-Amz-Signature=D9B93925C69556E909B6CB655A9D3F1D07E6DF92FC387E93504977309842FC54&X-Amz-SignedHeaders=host");
+                productImage.setAttribute('src', product.imageLocation);
                 productImage.setAttribute('class', 'baraholka-slot-photo');
 
                 const productPrice = document.createElement('p');

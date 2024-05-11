@@ -7,5 +7,5 @@ public class ProductDto
     public string Title { get; init; } = null!;
     public double Price { get; init; }
     public int Remained { get; init; }
-    public string? ImageLocation { get; init; }
+    public string? ImageRef { get; init; }
 }
