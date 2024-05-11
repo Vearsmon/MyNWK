@@ -19,6 +19,50 @@ function openPurchases () {
     productsInnerContainer[0].style.opacity = 0;
     purchasesInnerContainer[0].style.opacity = 1;
 
+    const getProductsByUser = new URL('http://127.0.0.1:80/products/get/byBuyer');
+    const params = {pageNumber:0, batchSize:20};
+    getProductsByUser.search = new URLSearchParams(params).toString();
+    const slots = document.getElementsByClassName("profile-purchases-inner-container")[0];
+    slots.innerHTML = '';
+
+    // <div class="profile-purchases">
+    //     <div class="profile-purchases-name">${name}</div>
+
+    //     <div class="profile-purchases-content-header">Продавец</div>
+    //     <div class="profile-purchases-content">${seller}</div>
+
+    //     <div class="profile-purchases-content-header">Цена</div>
+    //     <div class="profile-purchases-content">${price} руб</div>
+
+    //     <div class="profile-purchases-content-header">Реквизиты оплаты</div>
+    //     <div class="profile-purchases-content">${number}, ${bank}</div>
+    // </div>
+        
+    fetch(getProductsByUser, {method: 'get'})
+        .then((response) => response.json())
+        .then((orders) => {
+            for (order of orders) {
+                const productImage = document.createElement('img');
+                productImage.setAttribute('src', product.imageRef);
+                productImage.setAttribute('class', 'profile-purchase-photo');
+
+                const productPrice = document.createElement('p');
+                productPrice.innerText = `${product['price']} р.`;
+
+                const productInfo = document.createElement('div');
+                productInfo.setAttribute('class', 'profile-purchase-info');
+                productInfo.textContent = product['title'];
+                productInfo.appendChild(productPrice);
+
+                const productSlot = document.createElement('div');
+                productSlot.setAttribute('class', 'profile-purchase');
+                productSlot.appendChild(productImage);
+                productSlot.appendChild(productInfo);
+
+               slots.appendChild(productSlot);
+            }
+        });
+
     for (let order of orders) {
         order.hidden = true;
     }

@@ -3,7 +3,7 @@
 public record CartDto
 {
     public int BuyerId;
-    public List<OrderItemToCrateDto> Items = null!;
+    public List<OrderItemToCreateDto> Items = null!;
 }
 
-public record OrderItemToCrateDto(int SellerId, int MarketId, int ProductId);
+public record OrderItemToCreateDto(int SellerId, int MarketId, int ProductId);
