@@ -13,4 +13,10 @@ public interface IOrdersService
     public Task CancelAsync(
         RequestContext requestContext,
         Guid orderId);
+
+    public Task<List<Guid>> GetBuyerOrderIdsAsync(
+        RequestContext requestContext);
+
+    public Task<List<Guid>> GetSellerOrderIdsAsync(
+        RequestContext requestContext);  
 }

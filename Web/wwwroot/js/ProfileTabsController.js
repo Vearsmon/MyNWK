@@ -41,7 +41,9 @@ function openProducts () {
     const getProductsByUser = new URL('http://127.0.0.1:80/products/get/byUser');
     const params = {pageNumber:0, batchSize:20};
     getProductsByUser.search = new URLSearchParams(params).toString();
-    const slots = document.getElementsByClassName("profile-products")[0];
+    const slots = document.getElementsByClassName("profile-products-inner-container")[0];
+    slots.innerHTML = '';
+        
     fetch(getProductsByUser, {method: 'get'})
         .then((response) => response.json())
         .then((products) => {

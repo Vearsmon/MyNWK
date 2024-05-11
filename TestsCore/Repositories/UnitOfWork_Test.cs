@@ -2,8 +2,11 @@
 using Core.Objects.Markets;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
+using Core.Services.Orders;
+using Core.Services.Products;
 using Core.Objects.Users;
 using Microsoft.EntityFrameworkCore;
+using Core.BlobStorage;
 
 namespace TestsCore.Repositories;
 
@@ -11,6 +14,8 @@ namespace TestsCore.Repositories;
 public class UnitOfWork_Test
 {
     private readonly UnitOfWork unitOfWork;
+    private readonly UnitOfWorkProvider unitOfWorkProvider;
+    private readonly IBlobStorageClient client;
     
     public UnitOfWork_Test()
     {
@@ -24,9 +29,12 @@ public class UnitOfWork_Test
                        "Ssl Mode=Require;" +
                        "Trust Server Certificate=true;")
             .UseLazyLoadingProxies()
-            .UseSnakeCaseNamingConvention();
+            .UseSnakeCaseNamingConvention()
+            .LogTo(s => Console.WriteLine(s));
         var dbContext = new CoreDbContext(optionsBuilder.Options);
         unitOfWork = new UnitOfWork(dbContext);
+        unitOfWorkProvider = new UnitOfWorkProvider(dbContext);
+        client = new YdBlobStorageClient();
     }
 
     [Test]
@@ -66,5 +74,13 @@ public class UnitOfWork_Test
         
         Console.WriteLine(market.Id);
         Console.WriteLine(user.Id);
+    }
+    [Test]
+    public async Task TestCli()
+    {
+        var y = new ProductService(unitOfWorkProvider, client);
+        
+        var x = await y.GetOrderProductsAsync(new Core.RequestContext(){ UserId = 1212, CancellationToken = CancellationToken.None }, new Guid());
+
     }
 }

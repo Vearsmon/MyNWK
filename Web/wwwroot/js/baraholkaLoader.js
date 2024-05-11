@@ -12,11 +12,87 @@
             }
         });
         
+    fetchProducts(null, null);    
     
+    const categoriesList = document.getElementsByClassName("baraholka-filters category")[0];
+    fetch('api/get/all/categories', {method: 'get'})
+        .then((response) => response.json())
+        .then((categories) => {
+            for (category of categories) {
+                const option = document.createElement("option");
+                option.setAttribute('value', category.id);
+                option.textContent = category.title;
+                categoriesList.appendChild(option);
+            }
+        })
+        
+    const marketsList = document.getElementsByClassName("baraholka-filters seller")[0];
+    fetch('api/get/all/markets', {method: 'get'})
+        .then((response) => response.json())
+        .then((markets) => {
+            for (market of markets) {
+                const option = document.createElement("option");
+                option.setAttribute('value', market.id);
+                option.textContent = market.name;
+                marketsList.appendChild(option);
+            }
+        })
+        
+        
+    const confirmButton = document.getElementsByClassName("baraholka-filters-confirm-button")[0];
+    confirmButton.addEventListener('click', () => {
+        const categorySelector = document.getElementsByClassName("baraholka-filters category")[0];
+        let categoryId = categorySelector.options[categorySelector.selectedIndex].value;
+        if (categoryId === 'defaultCategory') {
+            categoryId = null;
+        }
+        
+        const marketSelector = document.getElementsByClassName("baraholka-filters seller")[0];
+        let marketId = marketSelector.options[marketSelector.selectedIndex].value;
+        if (marketId === 'defaultSeller') {
+            marketId = null;
+        }
+        fetchProducts(categoryId, marketId);
+    });
+    
+    const resetButton = document.getElementsByClassName("baraholka-filters-reset-button")[0];
+    resetButton.addEventListener('click', () => alert('2'));
+});
+
+async function onTelegramAuth(user) {
+    const postData = async (url, data) => {
+        return fetch(url, {
+            method: 'POST',
+            redirect: 'manual',
+            body: data,
+            credentials: 'include'
+        });
+    }
+
+    let formData = new FormData();
+    formData.append('id', user.id);
+    formData.append('first_name', user.first_name);
+    formData.append('last_name', user.last_name);
+    formData.append('username', user.username);
+    formData.append('photo_url', user.photo_url);
+    formData.append('auth_date', user.auth_date);
+    formData.append('hash', user.hash);
+    postData("/Account/Login", formData)
+        .then(response => {location.reload();});
+}
+
+async function fetchProducts(categoryId, marketId) {
     const getAllProductsUrl = new URL('http://127.0.0.1:80/products/get/all');
     const params = {pageNumber:0, batchSize:20};
+    if (categoryId) {
+        params.categoryId = categoryId;
+    }
+    if (marketId) {
+        params.marketId = marketId;
+    }
     getAllProductsUrl.search = new URLSearchParams(params).toString();
     const slots = document.getElementsByClassName("baraholka-slots-container")[0];
+    slots.innerHTML = '';
     fetch(getAllProductsUrl, {method: 'get'})
         .then((response) => response.json())
         .then((products) => {
@@ -41,50 +117,4 @@
                slots.appendChild(productSlot);
             }
         });
-        
-    const categoriesList = document.getElementsByClassName("baraholka-filters category")[0];
-    fetch('api/get/all/categories', {method: 'get'})
-        .then((response) => response.json())
-        .then((categories) => {
-            for (category of categories) {
-                const option = document.createElement("option");
-                option.setAttribute('value', category.id);
-                option.textContent = category.title;
-                categoriesList.appendChild(option);
-            }
-        })
-        
-    const marketsList = document.getElementsByClassName("baraholka-filters seller")[0];
-    fetch('api/get/all/markets', {method: 'get'})
-        .then((response) => response.json())
-        .then((markets) => {
-            for (market of markets) {
-                const option = document.createElement("option");
-                option.setAttribute('value', market.id);
-                option.textContent = market.name;
-                marketsList.appendChild(option);
-            }
-        })
-});
-
-async function onTelegramAuth(user) {
-    const postData = async (url, data) => {
-        return fetch(url, {
-            method: 'POST',
-            redirect: 'manual',
-            body: data,
-            credentials: 'include'
-        });
-    }
-
-    let formData = new FormData();
-    formData.append('id', user.id);
-    formData.append('first_name', user.first_name);
-    formData.append('last_name', user.last_name);
-    formData.append('username', user.username);
-    formData.append('photo_url', user.photo_url);
-    formData.append('auth_date', user.auth_date);
-    formData.append('hash', user.hash);
-    postData("/Account/Login", formData)
-        .then(response => {location.reload();});
 }

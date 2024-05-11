@@ -55,11 +55,20 @@ public class AccountController : Controller
         var user = users.FirstOrDefault();
         if (user == null)
         {
+            var name = "";
+            if (form["first_name"] != "undefined")
+            {
+                name += form["first_name"];
+            }
+            if (form["last_name"] != "undefined")
+            {
+                name += form["last_name"];
+            }
             user = new User 
             { 
                 TelegramId = id,
                 TelegramUsername = form["username"].ToString(),
-                Name = form["first_name"] + form["last_name"]
+                Name = name
             };
             unitOfWork.UsersRepository.Create(user);
             await unitOfWork.CommitAsync(CancellationToken.None);

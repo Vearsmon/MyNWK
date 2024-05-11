@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="~/css/purchasesStyles.css">
     <link rel="stylesheet" href="~/css/ordersStyle.css">
     <link rel="stylesheet" href="~/css/productsStyles.css">
+    <link rel="stylesheet" href="~/css/ProductCardStyles.css">
+    <link rel="stylesheet" href="~/css/productAddingStyles.css">
     <script src="~/js/profileLoader.js" defer></script>
 </head>
 <body>
@@ -98,16 +100,7 @@
                 <button class="profile-products-buttons settings" id="profile-product-settings">Настройки магазина</button>
             </div>
 
-            @* <div class="profile-products-inner-container">
-                <div class="profile-product">
-                    <div class="profile-product-photo"></div>
-                    
-                    <div class="profile-product-info">
-                        Чипсы Lay's краб
-                        <p>150 руб</p>
-                    </div>
-                </div> *@
-
+            <div class="profile-products-inner-container">
                 @* <div class="profile-product">
                     <div class="profile-product-photo"></div>
                     
@@ -134,7 +127,16 @@
                         <p>150 руб</p>
                     </div>
                 </div> *@
-            @* </div> *@
+
+                @* <div class="profile-product">
+                    <div class="profile-product-photo"></div>
+                    
+                    <div class="profile-product-info">
+                        Чипсы Lay's краб
+                        <p>150 руб</p>
+                    </div>
+                </div> *@
+            </div>
             
         </div>
 
@@ -232,6 +234,43 @@
         </div>
     </div>
 
+    <div hidden="true" class="profile-product-add-window">
+        <div class="product-card-background-shadow"></div>
+
+        <form class="product-add-form-container" method="post" action="/products/create" enctype="multipart/form-data">
+            <div class="product-add-header">Выберите характеристики</div>
+            
+            <div class="product-add-content">
+                Название товара
+            </div>
+
+            <input class="product-add-fields" type="text" name="title"/>
+
+            <div class="product-add-content">
+                Цена товара
+            </div>
+
+            <input class="product-add-fields" type="number" name="price"/>
+
+            <div class="product-add-content">
+                Количество
+            </div>
+
+            <input class="product-add-fields" type="number" name="count"/>
+
+            <div class="product-add-content">
+                Изображение
+            </div>
+
+            <input class="product-add-buttons" type="file" name="image"/>
+            
+            <div class="product-add-buttons">
+                <input class="product-add-accept" type="submit" value="Добавить"/>
+            </div>
+        </form>
+    </div>
+
+    <script src="~/js/ProfileProductAddController.js"></script>
     <script src="~/js/ProfileTabsController.js"></script>
 </body>
 </html>

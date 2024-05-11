@@ -22,7 +22,8 @@ public class OrderService : IOrdersService
         var OrderIds = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.BuyerId == userId)
-                    .Select(m => m.OrderId), 
+                    .Select(m => m.OrderId)
+                    .Distinct(),
                 requestContext.CancellationToken)
             .ConfigureAwait(false);
         return OrderIds;
@@ -37,7 +38,8 @@ public class OrderService : IOrdersService
         var OrderIds = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.SellerId == userId)
-                    .Select(m => m.OrderId), 
+                    .Select(m => m.OrderId)
+                    .Distinct(), 
                 requestContext.CancellationToken)
             .ConfigureAwait(false);
         return OrderIds;

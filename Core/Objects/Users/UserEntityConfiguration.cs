@@ -16,8 +16,9 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
 
         builder
             .Property(t => t.Address)
-            .HasColumnType("varchar(64)");
-        
+            .HasColumnType("varchar(64)")
+            .IsRequired(false);
+
         builder
             .Property(t => t.TelegramId)
             .IsRequired();
