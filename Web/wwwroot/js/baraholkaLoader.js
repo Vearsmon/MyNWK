@@ -1,5 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', async function() {
-    fetch('Api/IsAuthenticated', {method: 'get'})
+    fetch('api/isAuthenticated', {method: 'get'})
         .then((response) => response.text())
         .then((userId) => {
             if (userId !== "non") {
@@ -12,10 +12,12 @@
             }
         });
         
+    
     const getAllProductsUrl = new URL('http://127.0.0.1:80/products/get/all');
     const params = {pageNumber:0, batchSize:20};
     getAllProductsUrl.search = new URLSearchParams(params).toString();
-    fetch(getAllProductsUrl)
+    const slots = document.getElementsByClassName("baraholka-slots-container")[0];
+    fetch(getAllProductsUrl, {method: 'get'})
         .then((response) => response.json())
         .then((products) => {
             for (product of products) {
@@ -36,9 +38,33 @@
                 productSlot.appendChild(productImage);
                 productSlot.appendChild(productInfo);
 
-                document.getElementsByClassName("baraholka-slots-container")[0].appendChild(productSlot);
+               slots.appendChild(productSlot);
             }
         });
+        
+    const categoriesList = document.getElementsByClassName("baraholka-filters category")[0];
+    fetch('api/get/all/categories', {method: 'get'})
+        .then((response) => response.json())
+        .then((categories) => {
+            for (category of categories) {
+                const option = document.createElement("option");
+                option.setAttribute('value', category.id);
+                option.textContent = category.title;
+                categoriesList.appendChild(option);
+            }
+        })
+        
+    const marketsList = document.getElementsByClassName("baraholka-filters seller")[0];
+    fetch('api/get/all/markets', {method: 'get'})
+        .then((response) => response.json())
+        .then((markets) => {
+            for (market of markets) {
+                const option = document.createElement("option");
+                option.setAttribute('value', market.id);
+                option.textContent = market.name;
+                marketsList.appendChild(option);
+            }
+        })
 });
 
 async function onTelegramAuth(user) {

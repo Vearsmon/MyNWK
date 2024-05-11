@@ -11,7 +11,7 @@ public interface IUnitOfWork : IAsyncDisposable
     public IRepository<Product> ProductRepository { get; }
     public IRepository<Market> MarketsRepository { get; }
     public IRepository<MarketInfo> MarketInfosRepository { get; }
-    public IRepository<Category> CategoriesInfosRepository { get; }
+    public IRepository<Category> CategoriesRepository { get; }
 
     public Task CommitAsync(CancellationToken cancellationToken);
 }

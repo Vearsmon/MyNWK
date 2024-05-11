@@ -70,7 +70,8 @@ public class ProductService : IProductService
 
     public async Task<List<ProductDto>> GetUserProductsAsync(RequestContext requestContext)
     {
-        var userId = requestContext.UserId;
+        var userId = requestContext.UserId 
+                     ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
         await using var unitOfWork = unitOfWorkProvider.Get();
         
         var products = await unitOfWork.MarketsRepository.GetAsync(

@@ -26,7 +26,7 @@ public class ProductsController : Controller
         int? marketId,
         CancellationToken cancellationToken)
     {
-        var requestContext = new RequestContext { CancellationToken = cancellationToken };
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         return Json(await productService
             .GetAllProductsAsync(
                 requestContext,
@@ -40,7 +40,7 @@ public class ProductsController : Controller
     [Route("get/byUser")]
     public async Task<JsonResult> GetByUserAsync(CancellationToken cancellationToken)
     {
-        var requestContext = new RequestContext { CancellationToken = cancellationToken };
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         return Json(await productService.GetUserProductsAsync(requestContext));
     }
     
@@ -52,11 +52,7 @@ public class ProductsController : Controller
         double price,
         CancellationToken cancellationToken)
     {
-        var requestContext = new RequestContext
-        {
-            CancellationToken = cancellationToken,
-            UserId = int.Parse(HttpContext.User.Identity!.Name!)
-        };
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         var productToCreate = new ProductToCreateDto
         {
             Title = title,

@@ -19,7 +19,7 @@ public sealed class UnitOfWork : IUnitOfWork
     public IRepository<Product> ProductRepository => productRepository.Value;
     public IRepository<Market> MarketsRepository => marketsRepository.Value;
     public IRepository<MarketInfo> MarketInfosRepository => marketInfosRepository.Value;
-    public IRepository<Category> CategoriesInfosRepository => categoriesInfosRepository.Value;
+    public IRepository<Category> CategoriesRepository => categoriesInfosRepository.Value;
 
     public UnitOfWork(CoreDbContext coreDbContext)
     {

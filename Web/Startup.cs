@@ -1,6 +1,8 @@
 ﻿using Core.Crypto;
 using Core.Objects;
 using Core.Objects.MyNwkUnitOfWork;
+using Core.Services.Categories;
+using Core.Services.Markets;
 using Core.Services.Products;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -90,5 +92,7 @@ public class Startup
         services.AddScoped<IUnitOfWorkProvider, UnitOfWorkProvider>();
         services.AddScoped<ITgAuthService, TgAuthService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICategoriesService, CategoriesService>();
+        services.AddScoped<IMarketsService, MarketsesService>();
     }
 }
