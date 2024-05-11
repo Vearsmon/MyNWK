@@ -26,14 +26,14 @@ public class CartController : Controller
         int productId,
         int marketId)
     {
-        var orderRecords = await Deserialize();
+        var orderRecords = Deserialize();
         orderRecords.Add(new OrderDto 
         { 
             ProductId = productId, 
             MarketId = marketId
         });
 
-        return await Serialize(orderRecords);
+        return Serialize(orderRecords);
     }
     
     [HttpPost]
@@ -44,13 +44,13 @@ public class CartController : Controller
         int marketId,
         int sellerId)
     {
-        var orderRecords = await Deserialize();
+        var orderRecords = Deserialize();
         var productToRemove = orderRecords
             .FirstOrDefault(p => p.ProductId == productId && p.MarketId == marketId);
         if (productToRemove != null)
             orderRecords.Remove(productToRemove);
 
-        return await Serialize(orderRecords);
+        return Serialize(orderRecords);
     }
     
     [HttpGet]
@@ -60,7 +60,7 @@ public class CartController : Controller
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         var userId = requestContext.UserId 
                      ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
-        var orderRecords = await Deserialize();
+        var orderRecords = Deserialize();
         var result = new List<ProductDto>();
         foreach (var orderRecord in orderRecords)
         {
@@ -72,7 +72,7 @@ public class CartController : Controller
         return Json(result);
     }
 
-    private async Task<JsonResult> Serialize(List<OrderDto> orderRecords)
+    private JsonResult Serialize(List<OrderDto> orderRecords)
     {
         var data = JsonConvert.SerializeObject(orderRecords);
         var newBase64Data = Convert.ToBase64String(Encoding.UTF8.GetBytes(data));
@@ -80,17 +80,17 @@ public class CartController : Controller
         return Json(orderRecords);
     }
 
-    private async Task<List<OrderDto>> Deserialize()
+    private List<OrderDto> Deserialize()
     {
-        if (HttpContext.Request.Cookies.TryGetValue("products", out var base64Data))
-            return ParseStringIntoOrder(base64Data);
-        return [];
+        return HttpContext.Request.Cookies.TryGetValue("products", out var base64Data) 
+            ? ParseStringIntoOrder(base64Data)
+            : new List<OrderDto>();
     }
     
     public List<OrderDto> ParseStringIntoOrder(string orderString)
     {
         var data = Encoding.UTF8.GetString(Convert.FromBase64String(orderString));
         var orderRecords = JsonConvert.DeserializeObject<List<OrderDto>>(data);
-        return orderRecords ?? [];
+        return orderRecords ?? new List<OrderDto>();
     }
 }
