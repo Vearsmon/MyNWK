@@ -16,6 +16,6 @@ public class ProfileController : Controller
     
     public async Task<IActionResult> Index(string smth)
     {
-        return View("~/Areas/User/Views/Index.cshtml");
+        return View("~/Pages/Profile.cshtml");
     }
 }
