@@ -19,6 +19,9 @@
 
 .baraholka-cart {
     position: absolute;
+    
+    width: 60px;
+    height: 60px;
 
     left: 1000px;
     top: 0px;
