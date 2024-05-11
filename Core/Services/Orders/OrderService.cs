@@ -13,28 +13,34 @@ public class OrderService : IOrdersService
         this.unitOfWorkProvider = unitOfWorkProvider;
     }
     
-    public async Task<Guid> CreateOrderAsync(RequestContext requestContext, OrderToCreateDto orderToCreate)
+    public async Task<List<Guid>> CreateOrdersAsync(RequestContext requestContext, CartDto cart)
     {
-        if (orderToCreate.Items.IsNullOrEmpty())
+        if (cart.Items.IsNullOrEmpty())
         {
             throw new ArgumentException(
                 "Could not create empty order. Order items is empty",
-                nameof(orderToCreate));
+                nameof(cart));
         }
 
         await using var unitOfWork = unitOfWorkProvider.Get();
-        var orderId = Guid.NewGuid();
-        await orderToCreate.Items
-            .Select(item => Order.Create(
-                unitOfWork,
-                orderId,
-                orderToCreate.BuyerId,
-                item.SellerId,
-                item.MarketId,
-                item.ProductId,
-                requestContext.CancellationToken))
-            .ForEachAsync(unitOfWork.OrdersRepository.Create);
+        var ordersWithId = cart.Items
+            .GroupBy(t => t.MarketId)
+            .Select(g => (Group: g, OrderId: Guid.NewGuid()))
+            .ToList();
+        await ordersWithId
+            .SelectMany(orderWithId => orderWithId.Group
+                .Select(item => 
+                    Order.Create(
+                        unitOfWork,
+                        orderWithId.OrderId,
+                        cart.BuyerId,
+                        item.SellerId,
+                        item.MarketId,
+                        item.ProductId,
+                        requestContext.CancellationToken)))
+            .ForEachAsync(unitOfWork.OrdersRepository.Create)
+            .ConfigureAwait(false);
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
-        return orderId;
+        return ordersWithId.Select(t => t.OrderId).ToList();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Core.Services.Orders;
 
-public record OrderToCreateDto
+public record CartDto
 {
     public int BuyerId;
     public List<OrderItemToCrateDto> Items = null!;
