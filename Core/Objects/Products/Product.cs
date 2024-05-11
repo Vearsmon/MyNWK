@@ -14,6 +14,7 @@ public class Product
     public string? ImageLocation { get; set; }
     public double Price { get; set; }
     public int Remained { get; set; }
+    public int Reserved { get; set; }
     public DateTime CreatedAt { get; set; }
     public virtual Category? Category { get; set; }
 }

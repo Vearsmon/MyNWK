@@ -97,6 +97,6 @@ public class Startup
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<ICategoriesService, CategoriesService>();
-        services.AddScoped<IMarketsService, MarketsesService>();
+        services.AddScoped<IMarketsService, MarketsService>();
     }
 }

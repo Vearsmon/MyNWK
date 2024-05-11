@@ -3,11 +3,11 @@ using Core.Objects.MyNwkUnitOfWork;
 
 namespace Core.Services.Markets;
 
-public class MarketsesService : IMarketsService
+public class MarketsService : IMarketsService
 {
     private readonly IUnitOfWorkProvider unitOfWorkProvider;
 
-    public MarketsesService(IUnitOfWorkProvider unitOfWorkProvider)
+    public MarketsService(IUnitOfWorkProvider unitOfWorkProvider)
     {
         this.unitOfWorkProvider = unitOfWorkProvider;
     }

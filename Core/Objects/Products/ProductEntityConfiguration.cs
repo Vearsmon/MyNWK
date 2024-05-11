@@ -29,6 +29,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
             .HasColumnType("varchar(255)");
         
         builder.Property(t => t.Remained).IsRequired();
+        builder.Property(t => t.Reserved).IsRequired();
         builder.Property(t => t.Price).IsRequired();
         builder.Property(t => t.CreatedAt).HasColumnType("timestamptz").IsRequired();
 
