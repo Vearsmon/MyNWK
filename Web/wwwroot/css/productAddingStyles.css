@@ -1,0 +1,83 @@
+:root {
+    --main-content-color: #FFA25E;
+    --second-content-color: #FF7B1B;
+    --background-color: #FFEDD8;
+    --margin: 20%;
+}
+
+
+.product-add-form-container {
+    position: relative;
+
+    margin: 12.5vh auto;
+
+
+    width: 400px;
+    height: 400px;
+
+    background-color: var(--background-color);
+    
+    border-color: var(--main-content-color);
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 15px;
+
+    color: var(--second-content-color);
+}
+
+
+.product-add-header {
+    position: relative;
+
+    margin-top: 10px;
+    margin-left: 20%;
+
+    font-weight: 500;
+    font-size: 18px;
+}
+
+
+.product-add-content {
+    position: relative;
+
+    margin-top: 20px;
+    margin-left: var(--margin);
+}
+
+
+.product-add-accept {
+    position: relative;
+
+    margin-top: 50px;
+    margin-left: 15%;
+
+    width: 150px;
+    height: 25px;
+
+    border-color: var(--main-content-color);
+    border-style:solid;
+    border-width: 2px;
+    border-radius: 5px;
+
+    background-color: var(--background-color);
+
+    color: var(--second-content-color);
+    font-weight: 500;
+}
+
+
+.product-add-fields {
+    position: relative;
+
+    margin-left: var(--margin);
+    border-color: var(--main-content-color);
+    border-style: solid;
+    border-radius: 2px;
+}
+
+
+.product-add-buttons {
+    position: relative;
+
+    margin-left: var(--margin);
+}
