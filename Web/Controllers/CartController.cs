@@ -14,7 +14,7 @@ public class CartController : Controller
 {
     private readonly IProductService productService;
     
-    public CartController(ProductService productService)
+    public CartController(IProductService productService)
     {
         this.productService = productService;
     }
