@@ -2,6 +2,16 @@
 
 public static class EnumerableExtension
 {
+    public static void ForEach<TEntity>(
+        this IEnumerable<TEntity> enumerable,
+        Action<TEntity> action)
+    {
+        foreach (var item in enumerable)
+        {
+            action(item);
+        }
+    }
+    
     public static bool IsNullOrEmpty<T>(this IEnumerable<T>? enumerable)
     {
         return enumerable is null || !enumerable.Any();

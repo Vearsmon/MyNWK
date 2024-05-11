@@ -9,4 +9,6 @@ public class Order
     public int BuyerId { get; init; }
     public int MarketId { get; init; }
     public int ProductId { get; init; }
+    public bool ReceivedByBuyer { get; init; }
+    public bool CanceledBySeller { get; init; }
 }
