@@ -2,7 +2,7 @@
 
 public interface IOrdersService
 {
-    public Task<Guid> CreateOrderAsync(
+    public Task<List<Guid>> CreateOrdersAsync(
         RequestContext requestContext,
-        OrderToCreateDto orderToCreate);
+        CartDto cart);
 }

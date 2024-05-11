@@ -102,6 +102,20 @@ public class ProductService : IProductService
             .Select(p => Convert(p.product, userId, p.imageRef))
             .ToList();
     }
+    
+    public async Task<ProductDto> GetProductByFullId(RequestContext requestContext, ProductFullId productFullId)
+    {
+        var unitOfWork = unitOfWorkProvider.Get();
+        var userId = requestContext.UserId 
+                     ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
+        var product = await unitOfWork.ProductRepository
+            .GetAsync(p => p
+                    .Where(x => x.ProductId == productFullId.ProductId),
+                requestContext.CancellationToken).FirstOrDefaultAsync().ConfigureAwait(false);
+        if (product != null)
+            return Convert(product, userId, null);
+        return null;
+    }
 
     private async Task<List<(Product product, string? imageRef)>> GetImageRefByMarketAndProductId(
         List<Product> products)
@@ -134,4 +148,6 @@ public class ProductService : IProductService
             Remained = product.Remained,
             Title = product.Title
         };
+    
+    
 }
