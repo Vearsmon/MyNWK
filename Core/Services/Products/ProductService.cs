@@ -117,6 +117,26 @@ public class ProductService : IProductService
         return null;
     }
 
+    // public async Task<List<ProductDto>> GetOrderProductsAsync(RequestContext requestContext, Guid OrderId)
+    // {
+    //     var userId = requestContext.UserId 
+    //                  ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
+    //     await using var unitOfWork = unitOfWorkProvider.Get();
+        
+    //     var products = await unitOfWork.OrdersRepository.GetAsync(
+    //             r => r
+    //                 .Where(m => m.OrderId == OrderId)
+    //                 .Select(m => m.ProductId), 
+    //             requestContext.CancellationToken)
+    //         .ConfigureAwait(false);
+
+    //     var productWithImageRef = await GetImageRefByMarketAndProductId(products)
+    //         .ConfigureAwait(false);
+    //     return productWithImageRef
+    //         .Select(p => Convert(p.product, userId, p.imageRef))
+    //         .ToList();
+    // }
+
     private async Task<List<(Product product, string? imageRef)>> GetImageRefByMarketAndProductId(
         List<Product> products)
     {

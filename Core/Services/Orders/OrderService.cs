@@ -12,6 +12,36 @@ public class OrderService : IOrdersService
     {
         this.unitOfWorkProvider = unitOfWorkProvider;
     }
+
+    public async Task<List<Guid>> GetBuyerOrderIdsAsync(RequestContext requestContext)
+    {
+        var userId = requestContext.UserId 
+                     ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
+        await using var unitOfWork = unitOfWorkProvider.Get();
+        
+        var OrderIds = await unitOfWork.OrdersRepository.GetAsync(
+                r => r
+                    .Where(m => m.BuyerId == userId)
+                    .Select(m => m.OrderId), 
+                requestContext.CancellationToken)
+            .ConfigureAwait(false);
+        return OrderIds;
+    }
+
+    public async Task<List<Guid>> GetSellerOrderIdsAsync(RequestContext requestContext)
+    {
+        var userId = requestContext.UserId 
+                     ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
+        await using var unitOfWork = unitOfWorkProvider.Get();
+        
+        var OrderIds = await unitOfWork.OrdersRepository.GetAsync(
+                r => r
+                    .Where(m => m.SellerId == userId)
+                    .Select(m => m.OrderId), 
+                requestContext.CancellationToken)
+            .ConfigureAwait(false);
+        return OrderIds;
+    }
     
     public async Task<List<Guid>> CreateOrdersAsync(RequestContext requestContext, CartDto cart)
     {
