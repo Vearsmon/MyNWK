@@ -17,6 +17,14 @@
 }
 
 
+.baraholka-cart {
+    position: absolute;
+
+    left: 1000px;
+    top: 0px;
+}
+
+
 .baraholka-header {
     position: absolute;
 
