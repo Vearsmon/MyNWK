@@ -1,4 +1,4 @@
-.profile-products-inner-container {
+.profile-products-container {
     position: absolute;
     top: 115px;
     left: 250px;
@@ -65,7 +65,7 @@
 }
 
 
-.profile-products {
+.profile-products-inner-container {
     position: relative;
 
     width: 846px;

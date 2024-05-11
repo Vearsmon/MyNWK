@@ -1,4 +1,4 @@
-.profile-orders-inner-container {
+.profile-orders-container {
     position: absolute;
     top: 115px;
     left: 250px;
@@ -20,7 +20,7 @@
 }
 
 
-.profile-orders-container {
+.profile-orders-inner-container {
     position: relative;
 
     width: 700px;

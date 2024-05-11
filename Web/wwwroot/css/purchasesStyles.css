@@ -1,4 +1,4 @@
-.profile-purchases-inner-container {
+.profile-purchases-container {
     position: absolute;
     top: 115px;
     left: 250px;
@@ -21,7 +21,7 @@
 
 
 
-.profile-purchases-container {
+.profile-purchases-inner-container {
     position: relative;
 
     width: 700px;
