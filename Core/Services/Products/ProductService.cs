@@ -134,4 +134,6 @@ public class ProductService : IProductService
             Remained = product.Remained,
             Title = product.Title
         };
+    
+        // get prod by full id
 }
