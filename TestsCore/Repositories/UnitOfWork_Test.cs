@@ -2,6 +2,7 @@
 using Core.Objects.Markets;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
+using Core.Services.Orders;
 using Core.Objects.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ namespace TestsCore.Repositories;
 public class UnitOfWork_Test
 {
     private readonly UnitOfWork unitOfWork;
+    private readonly UnitOfWorkProvider unitOfWorkProvider;
     
     public UnitOfWork_Test()
     {
@@ -24,9 +26,11 @@ public class UnitOfWork_Test
                        "Ssl Mode=Require;" +
                        "Trust Server Certificate=true;")
             .UseLazyLoadingProxies()
-            .UseSnakeCaseNamingConvention();
+            .UseSnakeCaseNamingConvention()
+            .LogTo(s => Console.WriteLine(s));
         var dbContext = new CoreDbContext(optionsBuilder.Options);
         unitOfWork = new UnitOfWork(dbContext);
+        unitOfWorkProvider = new UnitOfWorkProvider(dbContext);
     }
 
     [Test]
@@ -66,5 +70,12 @@ public class UnitOfWork_Test
         
         Console.WriteLine(market.Id);
         Console.WriteLine(user.Id);
+    }
+    [Test]
+    public async Task TestCli()
+    {
+        var y = new OrderService(unitOfWorkProvider);
+        var x = y.GetBuyerOrderIdsAsync(new Core.RequestContext(){ UserId = 1212, CancellationToken = CancellationToken.None });
+        Console.WriteLine(1);
     }
 }
