@@ -1,16 +1,29 @@
-﻿namespace Core.Helpers;
+﻿using JetBrains.Annotations;
+
+namespace Core.Helpers;
 
 public static class EnumerableExtension
 {
-    public static Task ForEachAsync<TEntity>(
+    public static async Task ForEachAsync<TEntity>(
         this IEnumerable<Task<TEntity>> enumerable,
-        Action<TEntity> action)
+        [InstantHandle] Action<TEntity> action)
     {
         var tasks = enumerable
             .Select(item => item.ContinueWith(t => action(t.Result)))
             .ToList();
 
-        return Task.WhenAll(tasks);
+        await Task.WhenAll(tasks).ConfigureAwait(false);
+    }
+    
+    public static async Task ForEachAsync<TEntity>(
+        this IEnumerable<TEntity> enumerable,
+        [InstantHandle] Func<TEntity, Task> func)
+    {
+        var tasks = enumerable
+            .Select(func)
+            .ToList();
+
+        await Task.WhenAll(tasks).ConfigureAwait(false);
     }
     
     public static bool IsNullOrEmpty<T>(this IEnumerable<T>? enumerable)
