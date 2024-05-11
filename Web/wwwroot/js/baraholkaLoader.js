@@ -22,7 +22,7 @@
         .then((products) => {
             for (product of products) {
                 const productImage = document.createElement('img');
-                productImage.setAttribute('src', product.imageLocation);
+                productImage.setAttribute('src', product.imageRef);
                 productImage.setAttribute('class', 'baraholka-slot-photo');
 
                 const productPrice = document.createElement('p');

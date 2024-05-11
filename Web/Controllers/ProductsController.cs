@@ -54,6 +54,7 @@ public class ProductsController : Controller
         CancellationToken cancellationToken)
     {
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        
         await using var productImageStream = HttpContext.Request.Form.Files.FirstOrDefault()?.OpenReadStream();
         string? imageLocation = null;
         if (productImageStream is not null)
@@ -68,6 +69,7 @@ public class ProductsController : Controller
             Price = price,
             ImageLocation = imageLocation
         };
+        
         return Json(await productService.CreateAsync(requestContext, productToCreate));
     }
 }

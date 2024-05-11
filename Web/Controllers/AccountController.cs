@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Core.Crypto;
+using Core.Objects.Markets;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Users;
 using Microsoft.AspNetCore.Authentication;
@@ -61,6 +62,18 @@ public class AccountController : Controller
                 Name = form["first_name"] + form["last_name"]
             };
             unitOfWork.UsersRepository.Create(user);
+            await unitOfWork.CommitAsync(CancellationToken.None);
+            
+            //TODO: вынести создание магазина
+
+            var market = new Market
+            {
+                OwnerId = user.Id,
+                Closed = false,
+                Name = "хуизин",
+                MarketInfo = new MarketInfo()
+            };
+            unitOfWork.MarketsRepository.Create(market);
             await unitOfWork.CommitAsync(CancellationToken.None);
         }
         

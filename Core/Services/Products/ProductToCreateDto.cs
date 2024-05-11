@@ -2,7 +2,7 @@
 
 public class ProductToCreateDto
 {
-    public int CategoryId { get; init; }
+    public int? CategoryId { get; init; }
     public string Title { get; init; } = null!;
     public double Price { get; init; }
     public int Count { get; init; }
