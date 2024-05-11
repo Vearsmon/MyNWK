@@ -95,7 +95,7 @@ public class Startup
         services.AddScoped<IBlobStorageClient, YdBlobStorageClient>();
         services.AddScoped<ITgAuthService, TgAuthService>();
         services.AddScoped<IProductService, ProductService>();
-        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IOrdersService, OrderService>();
         services.AddScoped<ICategoriesService, CategoriesService>();
         services.AddScoped<IMarketsService, MarketsService>();
     }
