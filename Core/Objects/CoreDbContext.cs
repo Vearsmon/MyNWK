@@ -1,5 +1,6 @@
 ﻿using Core.Objects.Categories;
 using Core.Objects.Markets;
+using Core.Objects.Orders;
 using Core.Objects.Products;
 using Core.Objects.Users;
 using JetBrains.Annotations;
@@ -23,6 +24,9 @@ public class CoreDbContext : DbContext
     
     [UsedImplicitly] 
     public DbSet<User> Users { get; set; } = null!;
+
+    [UsedImplicitly] 
+    public DbSet<Order> Orders { get; set; } = null!;
 
     public CoreDbContext(DbContextOptions options)
         : base(options)
