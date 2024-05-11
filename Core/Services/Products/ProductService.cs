@@ -126,14 +126,14 @@ public class ProductService : IProductService
         var productIds = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.OrderId == OrderId)
-                    .Select(m => new { m.ProductId, m.MarketId }), 
+                    .Select(m => m.ProductId), 
                 requestContext.CancellationToken)
+            .ContinueWith(t => t.Result.ToArray())
             .ConfigureAwait(false);
 
-        Console.WriteLine(1);
         var products = await unitOfWork.ProductRepository.GetAsync(
                 r => r
-                    .Where(m => productIds.Any(x => x.MarketId == m.MarketId && x.ProductId == m.ProductId)),
+                    .Where(m => productIds.Any(x => x == m.ProductId)),
                     requestContext.CancellationToken)
             .ConfigureAwait(false);
 

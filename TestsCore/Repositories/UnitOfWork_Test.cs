@@ -80,7 +80,7 @@ public class UnitOfWork_Test
     {
         var y = new ProductService(unitOfWorkProvider, client);
         
-        var x = y.GetOrderProductsAsync(new Core.RequestContext(){ UserId = 1212, CancellationToken = CancellationToken.None }, new Guid());
+        var x = await y.GetOrderProductsAsync(new Core.RequestContext(){ UserId = 1212, CancellationToken = CancellationToken.None }, new Guid());
 
     }
 }
