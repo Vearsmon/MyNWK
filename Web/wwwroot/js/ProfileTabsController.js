@@ -42,8 +42,8 @@ function openProducts () {
     const params = {pageNumber:0, batchSize:20};
     getProductsByUser.search = new URLSearchParams(params).toString();
     const slots = document.getElementsByClassName("profile-products-inner-container")[0];
-    for (child of slots.children)
-        slots.removeChild(child);
+    slots.innerHTML = '';
+        
     fetch(getProductsByUser, {method: 'get'})
         .then((response) => response.json())
         .then((products) => {
