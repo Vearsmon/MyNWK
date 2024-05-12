@@ -11,117 +11,116 @@
     <script src="~/js/baraholkaLoader.js" defer></script>
 </head>
 <body>
-<div hidden="hidden" class="profile-product-info-window">
-    <div class="product-info-background-shadow"></div>
+    <div hidden="hidden" class="profile-product-info-window">
+        <div class="product-info-background-shadow"></div>
 
-    <div class="product-info-form-container">
-        <div class="product-info-header"></div>
-        <div hidden="hidden" class="product-id"></div>
-        <div hidden="hidden" class="product-id"></div>
-        
-        <div class="product-info-content" id="product-info-title">
-        </div>
-        
-        <div class="product-info-content" id="product-info-price">
-        </div>
-        
-        <div class="product-info-content" id="product-info-remained">
-        </div>
-        
-        <div class="product-info-content" id="product-info-description">
-        </div>
-        
-        <button type="button" class="product-count-decrease-button" id="product-count-dec">
-            -
-        </button>
-        
-        <div class="product-info-current-count-for-order" id="product-curr-count">
-            1@* текущее число товара, которое добавится в корзину *@
-        </div>
-        
-        <button type="button" class="product-count-increase-button" id="product-count-inc">
-            +
-        </button>
-        
-        <button type="button" class="product-add-to-cart-button" id="product-add-to-cart">
-            В корзину
-        </button>
+        <div class="product-info-form-container">
+            <div class="product-info-header"></div>
+            <div hidden="hidden" class="product-id"></div>
+            <div hidden="hidden" class="product-id"></div>
+            
+            <div class="product-info-content" id="product-info-title">
+            </div>
+            
+            <div class="product-info-content" id="product-info-price">
+            </div>
+            
+            <div class="product-info-content" id="product-info-remained">
+            </div>
+            
+            <div class="product-info-content" id="product-info-description">
+            </div>
+            
+            <button type="button" class="product-count-decrease-button" id="product-count-dec">
+                -
+            </button>
+            
+            <div class="product-info-current-count-for-order" id="product-curr-count">
+                1@* текущее число товара, которое добавится в корзину *@
+            </div>
+            
+            <button type="button" class="product-count-increase-button" id="product-count-inc">
+                +
+            </button>
+            
+            <button type="button" class="product-add-to-cart-button" id="product-add-to-cart">
+                В корзину
+            </button>
 
-        @* <input class="product-info-buttons" type="file" name="image"/> *@
-        
-        @* <div class="product-info-buttons"> *@
-        @*     <input class="product-info-accept" type="submit" value="Добавить"/> *@
-        @* </div> *@
+            @* <input class="product-info-buttons" type="file" name="image"/> *@
+            
+            @* <div class="product-info-buttons"> *@
+            @*     <input class="product-info-accept" type="submit" value="Добавить"/> *@
+            @* </div> *@
+        </div>
     </div>
-</div>
 
-<div class="header">
-    <a class="logo">
-        <img src="~/assets/logo.png" alt="logo" width="121px" height="79px">
-    </a>
-
-    <ul class="ul" id="ul">
-        <li class="li" id="li">
-            <a class="link" href="#">Барахолка</a>
-        </li>
-
-        <li hidden="true" class="tgli" id="li">
-            <script async src="https://telegram.org/js/telegram-widget.js?22"
-                    data-telegram-login="My_NVK_bot"
-                    data-size="small"
-                    data-onauth="onTelegramAuth(user)"
-                    data-request-access="write"></script>
-        </li>
-    </ul>
-</div>
-
-<div class="baraholka-container">
-
-    <div class="baraholka-design-container">
-        <div class="baraholka-header">Барахолка</div>
-
-        <a class="baraholka-cart" href="/cart">
-            <img src="~/assets/cart.png" width="60px" height="60px">
+    <div class="header">
+        <a class="logo">
+            <img src="~/assets/logo.png" alt="logo" width="121px" height="79px">
         </a>
-        <div class="baraholka-design-lines">
-            <div class="baraholka-design-lines up-line"></div>
-        </div>
 
-        <div class="baraholka-filters-container">
+        <ul class="ul" id="ul">
+            <li class="li" id="li">
+                <a class="link" href="#">Барахолка</a>
+            </li>
+
+            <li hidden="true" class="tgli" id="li">
+                <script async src="https://telegram.org/js/telegram-widget.js?22"
+                        data-telegram-login="My_NVK_bot"
+                        data-size="small"
+                        data-onauth="onTelegramAuth(user)"
+                        data-request-access="write"></script>
+            </li>
+        </ul>
+    </div>
+
+    <div class="baraholka-container">
+
+        <div class="baraholka-design-container">
+            <div class="baraholka-header">Барахолка</div>
+
+            <a class="baraholka-cart" href="/cart">
+                <img src="~/assets/cart.png" width="60px" height="60px">
+            </a>
             <div class="baraholka-design-lines">
-                <div class="baraholka-design-lines vertical-line"></div>
+                <div class="baraholka-design-lines up-line"></div>
             </div>
 
-            <div class="baraholka-filters-content">Фильтры</div>
-
-            <div class="baraholka-filters-window">
-                <div class="baraholka-filters">
-                    <div class="category-headers">Категории</div>
-
-                    <select class="baraholka-filters category">
-                        <option selected value="defaultCategory" class="default-content">Выберать категорию</option>
-                    </select>
-
-                    <div class="seller-headers">Продавец</div>
-                    <select class="baraholka-filters seller">
-                        <option selected value="defaultSeller" class="default-content">Выбрать продавца</option>
-                    </select>
+            <div class="baraholka-filters-container">
+                <div class="baraholka-design-lines">
+                    <div class="baraholka-design-lines vertical-line"></div>
                 </div>
 
-                <div class="baraholka-filters-buttons">
-                    <button class="baraholka-filters-confirm-button" id="baraholka-filters-confirm">Применить</button>
+                <div class="baraholka-filters-content">Фильтры</div>
 
-                    <button class="baraholka-filters-reset-button" id="baraholka-filters-reset">Сбросить</button>
+                <div class="baraholka-filters-window">
+                    <div class="baraholka-filters">
+                        <div class="category-headers">Категории</div>
+
+                        <select class="baraholka-filters category">
+                            <option selected value="defaultCategory" class="default-content">Выберать категорию</option>
+                        </select>
+
+                        <div class="seller-headers">Продавец</div>
+                        <select class="baraholka-filters seller">
+                            <option selected value="defaultSeller" class="default-content">Выбрать продавца</option>
+                        </select>
+                    </div>
+
+                    <div class="baraholka-filters-buttons">
+                        <button class="baraholka-filters-confirm-button" id="baraholka-filters-confirm">Применить</button>
+
+                        <button class="baraholka-filters-reset-button" id="baraholka-filters-reset">Сбросить</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="baraholka-slots-container">
+            <div class="baraholka-slots-container">
+            </div>
         </div>
     </div>
-</div>
+
+    <script src="~/js/InversiaController.js"></script>
 </body>
-
-
-
 </html>
