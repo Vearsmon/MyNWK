@@ -224,6 +224,9 @@ async function openProductInfoUpdateWindow(data) {
     const price = document.createElement("div");
     const remained = document.createElement("div");
     const description = document.createElement("div");
+    const form = document.createElement('form');
+    const windowTitle = document.createElement('div');
+    const applyButton = document.createElement("div");
 
     title.setAttribute('class', 'product-info-content');
     title.setAttribute('id', 'product-info-title');
@@ -233,12 +236,12 @@ async function openProductInfoUpdateWindow(data) {
     remained.setAttribute('id', 'product-info-remained');
     description.setAttribute('class', 'product-info-content');
     description.setAttribute('id', 'product-info-description');
-
-    const info = document.getElementsByClassName('product-info-content');
-    const len = info.length;
-    for (let i = 0; i < len; i++) {
-        info[0].remove();
-    }
+    form.setAttribute('class', 'info-update-form-container');
+    form.setAttribute('encType', 'multipart/form-data');
+    windowTitle.setAttribute('class', 'info-update-header');
+    windowTitle.innerText = 'Информация о товаре';
+    applyButton.setAttribute('class', 'info-update-buttons');
+    applyButton.insertAdjacentHTML('afterbegin', `<input class="info-update-accept" type="button" value="Применить изменения"/>`)
 
     title.insertAdjacentText('afterbegin', `Название:`);
     price.insertAdjacentText('afterbegin', `Цена:`);
@@ -250,28 +253,16 @@ async function openProductInfoUpdateWindow(data) {
     remained.insertAdjacentHTML('beforeend', `<br><input class="product-info-fields" type="number" name="title" id="info-remained"/>`)
     description.insertAdjacentHTML('beforeend', `<br><textarea class="product-info-fields" name="description" id="info-desc"></textarea>`)
 
-    // title.insertAdjacentText('afterbegin', `Название: ${data['title']}`);
-    // price.insertAdjacentText('afterbegin', `Цена: ${data['price']} р.`);
-    // remained.insertAdjacentText('afterbegin', `Осталось: ${data['remained']} шт.`);
-    // description.insertAdjacentText('afterbegin', `Описание: ${data['description']}`);
+    document.getElementById("info-title").value = data['title'];
+    document.getElementById("info-price").value = data['price'];
+    document.getElementById("info-remained").value = data['remained'];
+    document.getElementById("info-desc").value = data['description'];
     
-    // const shadow = document.createElement('div');
-    // shadow.setAttribute('class', 'product-card-background-shadow');
-    // shadow.setAttribute('id', 'profile-market-info-update-close');
-    //
-    // document.getElementsByClassName('profile-market-info-update-window')[0].appendChild(shadow);
-
-    const form = document.createElement('form');
-    form.setAttribute('class', 'info-update-form-container');
-    form.setAttribute('encType', 'multipart/form-data');
-    
-    const windowTitle = document.createElement('div');
-    windowTitle.setAttribute('class', 'info-update-header');
-    windowTitle.innerText = 'Информация о товаре';
-    
-    const applyButton = document.createElement("div");
-    applyButton.setAttribute('class', 'info-update-buttons');
-    applyButton.insertAdjacentHTML('afterbegin', `<input class="info-update-accept" type="button" value="Применить изменения"/>`)
+    const info = document.getElementsByClassName('product-info-content');
+    const len = info.length;
+    for (let i = 0; i < len; i++) {
+        info[0].remove();
+    }
     
     form.appendChild(windowTitle);
     form.appendChild(title);
@@ -281,17 +272,6 @@ async function openProductInfoUpdateWindow(data) {
     form.appendChild(applyButton);
     
     document.getElementsByClassName('profile-market-info-update-window')[0].appendChild(form);
-    
-    // document.getElementsByClassName("info-update-form-container")[0].appendChild(applyButton);
-    // document.getElementsByClassName("info-update-form-container")[0].insertBefore(title, applyButton);
-    // document.getElementsByClassName("info-update-form-container")[0].insertBefore(price, applyButton);
-    // document.getElementsByClassName("info-update-form-container")[0].insertBefore(remained, applyButton);
-    // document.getElementsByClassName("info-update-form-container")[0].insertBefore(description, applyButton);
-
-    document.getElementById("info-title").value = data['title'];
-    document.getElementById("info-price").value = data['price'];
-    document.getElementById("info-remained").value = data['remained'];
-    document.getElementById("info-desc").value = data['description'];
 
     applyButton.addEventListener('click', async function () {
         let formData = new FormData();
@@ -311,18 +291,6 @@ async function openProductInfoUpdateWindow(data) {
     })
 
     productInfoUpdateWindow.hidden = false;
-
-    // <div id="profile-market-info-update-close" className="product-card-background-shadow"></div>
-    //
-    // <form className="info-update-form-container" encType="multipart/form-data">
-    //     <div className="info-update-header">Информация о товаре</div>
-    //
-    //     @* Информация о товаре *@
-    //
-    //     <div className="info-update-buttons">
-    //         <input className="info-update-accept" type="button" value="Применить изменения"/>
-    //     </div>
-    // </form>
 }
 
 function openPurchases() {
