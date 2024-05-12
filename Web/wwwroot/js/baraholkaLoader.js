@@ -1,4 +1,31 @@
 ﻿const productAddWindow = document.getElementsByClassName("profile-product-info-window");
+const increaseCountForCart = document.getElementById('product-count-inc');
+increaseCountForCart.addEventListener("click", function () {
+    const count = Number(document.getElementById('product-curr-count').innerText);
+    document.getElementById('product-curr-count').innerText = `${count + 1}`;
+});
+const decreaseCountForCart = document.getElementById('product-count-dec');
+decreaseCountForCart.addEventListener("click", function () {
+    const count = Number(document.getElementById('product-curr-count').innerText);
+    document.getElementById('product-curr-count').innerText = `${count - 1}`;
+});
+const addToCartButton = document.getElementById('product-add-to-cart');
+addToCartButton.addEventListener("click", async function () {
+    const count = document.getElementById('product-curr-count').innerText;
+    const productInfo = JSON.parse(document.getElementsByClassName('product-id')[0].textContent);
+    let formData = new FormData();
+    formData.append('count', count);
+    formData.append('marketId', productInfo['marketId']);
+    formData.append('productId', productInfo['productId']);
+    formData.append('sellerId', productInfo['userId']);
+    
+    await fetch('cart/add', {
+        method: 'post',
+        body: formData
+    });
+
+    closeProductInfoWindow();
+})
 
 async function openProductInfoWindow(data) {
     await fetch('api/get/product/info', {
@@ -39,6 +66,9 @@ async function openProductInfoWindow(data) {
             document.getElementsByClassName("product-info-form-container")[0].appendChild(price);
             document.getElementsByClassName("product-info-form-container")[0].appendChild(remained);
             document.getElementsByClassName("product-info-form-container")[0].appendChild(description);
+
+            document.getElementsByClassName('product-id')[0].textContent = JSON.stringify(data["fullId"]);
+            document.getElementById('product-curr-count').innerText = '1';
         });
     productAddWindow[0].hidden = false;
 }

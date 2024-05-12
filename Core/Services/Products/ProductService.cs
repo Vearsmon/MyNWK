@@ -106,14 +106,14 @@ public class ProductService : IProductService
     public async Task<ProductDto> GetProductByFullId(RequestContext requestContext, ProductFullId productFullId)
     {
         var unitOfWork = unitOfWorkProvider.Get();
-        var userId = requestContext.UserId 
-                     ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
         var product = await unitOfWork.ProductRepository
             .GetAsync(p => p
                     .Where(x => x.ProductId == productFullId.ProductId),
                 requestContext.CancellationToken).FirstOrDefaultAsync().ConfigureAwait(false);
+        var productWithImageRef = await GetImageRefByMarketAndProductId([product])
+            .ConfigureAwait(false);
         if (product != null)
-            return Convert(product, userId, null);
+            return Convert(product, productFullId.UserId, productWithImageRef.FirstOrDefault().imageRef);
         return null;
     }
 

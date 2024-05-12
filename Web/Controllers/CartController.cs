@@ -15,40 +15,54 @@ namespace Web.Controllers;
 public class CartController : Controller
 {
     private readonly IProductService productService;
+    private readonly IOrdersService orderService;
     
-    public CartController(IProductService productService)
+    public CartController(
+        IProductService productService, 
+        IOrdersService orderService)
     {
         this.productService = productService;
+        this.orderService = orderService;
+    }
+
+    [HttpGet]
+    public IActionResult Index()
+    {
+        return View();
     }
     
     [HttpPost]
     [Route("add")]
     public async Task<JsonResult> AddToCartWithCookie(
-        CancellationToken cancellationToken,
-        int productId,
-        int marketId)
+        CancellationToken cancellationToken)
     {
+        var form = await HttpContext.Request.ReadFormAsync(cancellationToken);
+        
         var orderRecords = Deserialize();
-        orderRecords.Add(new OrderDto 
-        { 
-            ProductId = productId, 
-            MarketId = marketId
-        });
-
+        for (var _ = 0; _ < int.Parse(form["count"].ToString()); _++)
+            orderRecords.Add(new OrderDto 
+            { 
+                ProductId = int.Parse(form["productId"].ToString()), 
+                MarketId = int.Parse(form["marketId"].ToString()),
+                SellerId = int.Parse(form["sellerId"].ToString())
+            });
+        
         return Serialize(orderRecords);
     }
     
     [HttpPost]
     [Route("remove")]
     public async Task<JsonResult> RemoveFromCartWithCookie(
-        CancellationToken cancellationToken,
-        int productId,
-        int marketId,
-        int sellerId)
+        CancellationToken cancellationToken)
     {
+        var form = await HttpContext.Request.ReadFormAsync(cancellationToken);
+        
         var orderRecords = Deserialize();
         var productToRemove = orderRecords
-            .FirstOrDefault(p => p.ProductId == productId && p.MarketId == marketId);
+            .FirstOrDefault(p => 
+                p.ProductId == int.Parse(form["productId"].ToString()) && 
+                p.MarketId == int.Parse(form["marketId"].ToString()) && 
+                p.SellerId == int.Parse(form["sellerId"].ToString()));
         if (productToRemove != null)
             orderRecords.Remove(productToRemove);
 
@@ -68,9 +82,26 @@ public class CartController : Controller
         {
             result.Add(await productService.GetProductByFullId(
                 requestContext, 
-                new ProductFullId(userId, orderRecord.MarketId, orderRecord.ProductId)));
+                new ProductFullId(orderRecord.SellerId, orderRecord.MarketId, orderRecord.ProductId)));
         }
         
+        return Json(result);
+    }
+
+    [HttpPost]
+    [Route("accept")]
+    public async Task<JsonResult> AcceptCartOrderByCookie(CancellationToken cancellationToken)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var cartProducts = Deserialize();
+        var cart = new CartDto
+        {
+            BuyerId = requestContext.UserId ?? -1,
+            Items = cartProducts.Select(p => new OrderItemToCreateDto(p.SellerId, p.MarketId, p.ProductId)).ToList()
+        };
+
+        Serialize([]);
+        var result = await orderService.CreateOrdersAsync(requestContext, cart);
         return Json(result);
     }
 
@@ -89,10 +120,18 @@ public class CartController : Controller
             : new List<OrderDto>();
     }
     
-    public List<OrderDto> ParseStringIntoOrder(string orderString)
+    private List<OrderDto> ParseStringIntoOrder(string orderString)
     {
         var data = Encoding.UTF8.GetString(Convert.FromBase64String(orderString));
         var orderRecords = JsonConvert.DeserializeObject<List<OrderDto>>(data);
         return orderRecords ?? new List<OrderDto>();
     }
+}
+
+public class OrderParams
+{
+    public int Count { get; set; }
+    public int MarketId { get; set; }
+    public int ProductId { get; set; }
+    public int UserId { get; set; }
 }
