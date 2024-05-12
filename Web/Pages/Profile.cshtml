@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="~/css/productAddingStyles.css">
     <link rel="stylesheet" href="~/css/SettingsStyles.css">
     <link rel="stylesheet" href="~/css/Colors.css">
+    <link rel="stylesheet" href="~/css/productInfoUpdateStyles.css">
     <script src="~/js/profileLoader.js" defer></script>
 </head>
 <body>
@@ -444,7 +445,7 @@
 
         <form class="settings-form-container" method="post" action="/api/market/update" enctype="multipart/form-data">
             @* <div class="settings-header">Настройте свой магазин</div> *@
-            @* *@
+                @* *@
             @* <div class="settings-content"> *@
             @*     Название магазина *@
             @* </div> *@
@@ -480,6 +481,20 @@
             @*     <input class="settings-accept" type="submit" value="Изменить"/> *@
             @* </div> *@
                  
+        </form>
+    </div>
+
+    <div hidden="true" class="profile-market-info-update-window">
+        <div id="profile-market-info-update-close" class="product-card-background-shadow"></div>
+
+        <form class="info-update-form-container" method="post" action="" enctype="multipart/form-data">
+            <div class="info-update-header">Информация о товаре</div>
+            
+            @* Информация о товаре *@
+            
+            <div class="info-update-buttons">
+                <input class="info-update-accept" type="submit" value="Применить изменения"/>
+            </div>
         </form>
     </div>
 

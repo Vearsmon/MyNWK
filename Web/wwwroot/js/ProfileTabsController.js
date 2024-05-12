@@ -63,10 +63,12 @@ function loadProducts() {
     fetch(getProductsByUser, {method: 'get'})
         .then((response) => response.json())
         .then((products) => {
-            for (product of products) {
+            let i = 0;
+            for (let product of products) {
                 const productImage = document.createElement('img');
                 productImage.setAttribute('src', product.imageRef);
                 productImage.setAttribute('class', 'profile-product-photo');
+                productImage.setAttribute('id', `profile-product-photo-id-${i}`)
 
                 const productPrice = document.createElement('p');
                 productPrice.innerText = `${product['price']} р.`;
@@ -82,6 +84,12 @@ function loadProducts() {
                 productSlot.appendChild(productInfo);
 
                 container.appendChild(productSlot);
+                document.getElementById(`profile-product-photo-id-${i}`)
+                    .addEventListener('click', async (event) => {
+                        const id = event.target.getAttribute('id').split('-').pop();
+                        await openProductInfoUpdateWindow(products[Number(id)]);
+                    });
+                i++;
             }
         });
 }
@@ -137,6 +145,75 @@ function loadOrders() {
                 container.appendChild(innerContainer);
             }
         });
+}
+
+async function openProductInfoUpdateWindow(data)
+{
+    const title = document.createElement("div");
+    const price = document.createElement("div");
+    const remained = document.createElement("div");
+    const description = document.createElement("div");
+
+    title.setAttribute('class', 'product-info-content');
+    title.setAttribute('id', 'product-info-title');
+    price.setAttribute('class', 'product-info-content');
+    price.setAttribute('id', 'product-info-price');
+    remained.setAttribute('class', 'product-info-content');
+    remained.setAttribute('id', 'product-info-remained');
+    description.setAttribute('class', 'product-info-content');
+    description.setAttribute('id', 'product-info-description');
+
+    const info = document.getElementsByClassName('product-info-content');
+    const len = info.length;
+    for (let i = 0; i < len; i++) {
+        info[0].remove();
+    }
+
+    title.insertAdjacentText('afterbegin', `Название:`);
+    price.insertAdjacentText('afterbegin', `Цена:`);
+    remained.insertAdjacentText('afterbegin', `Осталось:`);
+    description.insertAdjacentText('afterbegin', `Описание:`);
+    
+    title.insertAdjacentHTML('beforeend', `<br><input class="product-info-fields" type="text" name="title" id="info-title"/>`)
+    price.insertAdjacentHTML('beforeend', `<br><input class="product-info-fields" type="number" name="title" id="info-price"/>`)
+    remained.insertAdjacentHTML('beforeend', `<br><input class="product-info-fields" type="number" name="title" id="info-remained"/>`)
+    description.insertAdjacentHTML('beforeend', `<br><textarea class="product-info-fields" name="description" id="info-desc"></textarea>`)
+
+    // title.insertAdjacentText('afterbegin', `Название: ${data['title']}`);
+    // price.insertAdjacentText('afterbegin', `Цена: ${data['price']} р.`);
+    // remained.insertAdjacentText('afterbegin', `Осталось: ${data['remained']} шт.`);
+    // description.insertAdjacentText('afterbegin', `Описание: ${data['description']}`);
+
+    const applyButton = document.getElementsByClassName('info-update-buttons')[0]
+    
+    document.getElementsByClassName("info-update-form-container")[0].insertBefore(title, applyButton);
+    document.getElementsByClassName("info-update-form-container")[0].insertBefore(price, applyButton);
+    document.getElementsByClassName("info-update-form-container")[0].insertBefore(remained, applyButton);
+    document.getElementsByClassName("info-update-form-container")[0].insertBefore(description, applyButton);
+    
+    document.getElementById("info-title").value = data['title'];
+    document.getElementById("info-price").value = data['price'];
+    document.getElementById("info-remained").value = data['remained'];
+    document.getElementById("info-desc").value = data['description'];
+    
+    document.getElementsByClassName('info-update-accept')[0].addEventListener('click', async function () {
+        let formData = new FormData();
+        formData.append('marketId', JSON.stringify(data['fullId']['marketId']));
+        formData.append('userId', JSON.stringify(data['fullId']['userId']));
+        formData.append('productId', JSON.stringify(data['fullId']['productId']));
+        formData.append('title', data['title']);
+        formData.append('price', data['price']);
+        formData.append('remained', data['remained']);
+        formData.append('description', data['description']);
+        
+        await fetch('products/save', {
+            method: 'post',
+            body: formData
+        });
+        productInfoUpdateWindow[0].hidden = true;
+    })
+    
+    productInfoUpdateWindow[0].hidden = false;
 }
 
 function openPurchases () {
