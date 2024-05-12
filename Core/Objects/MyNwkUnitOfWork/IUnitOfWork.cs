@@ -16,6 +16,4 @@ public interface IUnitOfWork : IAsyncDisposable
     public IRepository<Order> OrdersRepository { get; }
 
     public Task CommitAsync(CancellationToken cancellationToken);
-
-    public Task RollbackAsync(CancellationToken cancellationToken);
 }
