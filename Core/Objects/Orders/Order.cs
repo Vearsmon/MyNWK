@@ -8,6 +8,7 @@ namespace Core.Objects.Orders;
 [EntityTypeConfiguration(typeof(OrderEntityConfiguration))]
 public class Order
 {
+    public long Id { get; }
     public Guid OrderId { get; }
     public int BuyerId { get; }
     public int SellerId { get; }

@@ -11,6 +11,12 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
     public void Configure(EntityTypeBuilder<Order> builder)
     {
         builder.ToTable("orders");
+        builder.HasKey(t => t.Id);
+        builder.Property(t => t.Id).ValueGeneratedOnAdd().HasColumnType("bigserial");
+        
+        builder.HasIndex(t => t.OrderId);
+        builder.HasIndex(t => t.BuyerId);
+        builder.HasIndex(t => t.SellerId);
 
         builder.Property(t => t.OrderId).IsRequired();
         builder.Property(t => t.BuyerId).IsRequired();
