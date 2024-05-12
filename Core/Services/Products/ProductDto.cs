@@ -2,11 +2,11 @@
 
 public class ProductDto
 {
-    public ProductFullId FullId { get; init; } = null!;
-    public int? CategoryId { get; init; }
-    public string Title { get; init; } = null!;
-    public double Price { get; init; }
-    public int Remained { get; init; }
-    public string? ImageRef { get; init; }
-    public string Description { get; init; }
+    public ProductFullId FullId { get; set; } = null!;
+    public int? CategoryId { get; set; }
+    public string Title { get; set; } = null!;
+    public double Price { get; set; }
+    public int Remained { get; set; }
+    public string? ImageRef { get; set; }
+    public string Description { get; set; }
 }

@@ -28,8 +28,6 @@
                 document.getElementsByClassName("profile-name-container")[0].appendChild(name)
             }
             
-
-
             waitForElm('user-room-editor').then((button) => {
                 button.addEventListener('click', function(){
                     const roomInput = document.createElement('input');
@@ -121,12 +119,3 @@
         document.getElementsByClassName("profile-user-room-container")[0].appendChild(room)
     }
 });
-
-
-
-// <div class="profile-name">
-//     @* Имя пользователя *@
-//     <button class="editorButton" id="user-name-editor">
-//         <img src="~/assets/editButton.png" width="28px" height="26px">
-//     </button>
-// </div>

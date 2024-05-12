@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="~/css/ProductCardStyles.css">
     <link rel="stylesheet" href="~/css/productAddingStyles.css">
     <link rel="stylesheet" href="~/css/SettingsStyles.css">
+    <link rel="stylesheet" href="~/css/productInfoUpdateStyles.css">
     <script src="~/js/profileLoader.js" defer></script>
 </head>
 <body>
@@ -438,7 +439,7 @@
 
         <form class="settings-form-container" method="post" action="/products/create" enctype="multipart/form-data">
             <div class="settings-header">Настройте свой магазин</div>
-            
+                
             <div class="settings-content">
                 Название магазина
             </div>
@@ -462,9 +463,23 @@
             </div>
 
             <input id="time-to" class="settings-fields" type="time" name="appt-time" value="20:00"/>
-            
+                
             <div class="settings-buttons">
                 <input class="settings-accept" type="submit" value="Добавить"/>
+            </div>
+        </form>
+    </div>
+
+    <div hidden="true" class="profile-market-info-update-window">
+        <div id="profile-market-info-update-close" class="product-card-background-shadow"></div>
+
+        <form class="info-update-form-container" method="post" action="" enctype="multipart/form-data">
+            <div class="info-update-header">Информация о товаре</div>
+            
+            @* Информация о товаре *@
+            
+            <div class="info-update-buttons">
+                <input class="info-update-accept" type="submit" value="Применить изменения"/>
             </div>
         </form>
     </div>
