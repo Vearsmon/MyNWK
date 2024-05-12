@@ -19,12 +19,12 @@
     width: 1000px;
     height: 500px;
 
-    background-color: #FFE1BD;
+    background-color: var(--background-card-color);
 
     border-radius: 15px;
     border-width: 2px;
     border-style: solid;
-    border-color: #FFA25E;
+    border-color: var(--border-color);
 }
 
 
@@ -52,7 +52,7 @@
     font-size: 20px;
     font-weight: 550;
     font-style: italic;
-    color: #FFA25E;
+    color: var(--content-color);
 }
 
 
@@ -65,7 +65,7 @@
     width: 500px;
     height: 2px;
 
-    background-color: #FFA25E;
+    background-color: var(--content-color);
 
     border-radius: 2px;
 }
@@ -121,7 +121,7 @@
  
     font-size: 20px;
     font-family: 'Inter';
-    color: #FFA25E;
+    color: var(--content-color);
     font-weight: 550;
 }
 
@@ -138,13 +138,13 @@
     border-radius: 5px;
     border-width: 1px;
     border-style: solid;
-    border-color: #FFA25E;
+    border-color: var(--border-color);
 
     font-family: 'Inter';
     font-size: 20px;
     font-weight: 550;
     font-style: italic;
-    color: #FFA25E;
+    color: var(--content-color);
     line-height: 30px;
 
     text-align: center;
