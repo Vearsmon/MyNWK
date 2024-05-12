@@ -105,7 +105,7 @@ public class ProductService : IProductService
     
     public async Task<ProductDto?> GetProductByFullId(RequestContext requestContext, ProductFullId productFullId)
     {
-        var unitOfWork = unitOfWorkProvider.Get();
+        await using var unitOfWork = unitOfWorkProvider.Get();
         var product = await unitOfWork.ProductRepository
             .GetAsync(p => p
                     .Where(x => x.MarketId == productFullId.MarketId && x.ProductId == productFullId.ProductId), 
@@ -148,6 +148,28 @@ public class ProductService : IProductService
         return productWithImageRef
             .Select(p => Convert(p.product, userId, p.imageRef))
             .ToList();
+    }
+
+    public async Task<ProductDto?> UpdateProductInfoAsync(RequestContext requestContext, Dictionary<string, string> parametersToUpdate)
+    {
+        var userId = requestContext.UserId 
+                     ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
+        await using var unitOfWork = unitOfWorkProvider.Get();
+        var productToChange = await unitOfWork.ProductRepository
+            .GetAsync(p => p
+                    .Where(t => t.ProductId == int.Parse(parametersToUpdate["productId"])),
+                requestContext.CancellationToken).FirstOrDefaultAsync().ConfigureAwait(false);
+        
+        if (productToChange == null)
+            throw new NotImplementedException();
+
+        productToChange.Description = parametersToUpdate["description"];
+        productToChange.Price = int.Parse(parametersToUpdate["price"]);
+        productToChange.Title = parametersToUpdate["title"];
+        productToChange.Remained = int.Parse(parametersToUpdate["remained"]);
+        
+        await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
+        return Convert(productToChange, userId, null);
     }
 
     private async Task<List<(Product product, string? imageRef)>> GetImageRefByMarketAndProductId(
