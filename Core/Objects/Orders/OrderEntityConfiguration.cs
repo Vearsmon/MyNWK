@@ -23,8 +23,7 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(t => t.SellerId).IsRequired();
         builder.Property(t => t.MarketId).IsRequired();
         builder.Property(t => t.ProductId).IsRequired();
-        builder.Property(t => t.CanceledBySeller).IsRequired();
-        builder.Property(t => t.CanceledBySeller).IsRequired();
+        builder.Property(t => t.WorkflowState).HasColumnType("int").IsRequired();
         builder.Property(t => t.CreatedAt).IsRequired();
 
         builder

@@ -109,8 +109,8 @@ p {
 .profile-orders-cancel {
     position: absolute;
 
-    top: 7px;
-    right: 10px;
+    top: 40px;
+    right: 27px;
 
     width: 200px;
     height: 30px;
@@ -137,4 +137,30 @@ p {
     right: 50px;
 
     color: var(--content-color);
+}
+
+
+.profile-orders-accept {
+    position: relative;
+
+    left: 27px;
+
+    margin-bottom: 10px;
+
+    width: 200px;
+    height: 30px;
+
+    background-color: var(--background-card-color);
+
+    border-color: var(--border-color);
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 5px;
+
+    color: var(--content-color);
+    font-size: 15px;
+
+    cursor: pointer;
+
+    z-index: 2;
 }

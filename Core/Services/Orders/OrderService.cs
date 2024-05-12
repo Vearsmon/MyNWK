@@ -1,21 +1,16 @@
 ﻿using Core.Helpers;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Orders;
-using Microsoft.Extensions.Logging;
 
 namespace Core.Services.Orders;
 
 public class OrderService : IOrdersService
 {
     private readonly IUnitOfWorkProvider unitOfWorkProvider;
-    private readonly ILogger<OrderService> logger;
 
-    public OrderService(
-        IUnitOfWorkProvider unitOfWorkProvider,
-        ILogger<OrderService> logger)
+    public OrderService(IUnitOfWorkProvider unitOfWorkProvider)
     {
         this.unitOfWorkProvider = unitOfWorkProvider;
-        this.logger = logger;
     }
 
     public async Task<List<OrderStatus>> GetBuyerOrderIdsAsync(RequestContext requestContext)
@@ -24,20 +19,22 @@ public class OrderService : IOrdersService
                      ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
         await using var unitOfWork = unitOfWorkProvider.Get();
         
-        var Orders = await unitOfWork.OrdersRepository.GetAsync(
+        var orders = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.BuyerId == userId)
-                    .Select(m => new { m.OrderId, m.CanceledBySeller, m.ReceivedByBuyer, m.CreatedAt })
+                    .Select(m => new { m.OrderId, m.WorkflowState, m.CreatedAt })
                     .Distinct()
-                    .OrderBy(m => m.ReceivedByBuyer || m.CanceledBySeller)
+                    .OrderBy(m => m.WorkflowState == OrderWorkflowState.Cancelled 
+                                  || m.WorkflowState == OrderWorkflowState.ConfirmedByBuyer)
                     .ThenByDescending(m => m.CreatedAt), 
                 requestContext.CancellationToken)
             .ConfigureAwait(false);
-        return Orders
-            .Select(o => new OrderStatus() {
-            OrderId = o.OrderId, 
-            CanceledBySeller = o.CanceledBySeller, 
-            ReceivedByBuyer = o.ReceivedByBuyer
+        
+        return orders
+            .Select(o => new OrderStatus
+            {
+                OrderId = o.OrderId, 
+                WorkflowState = o.WorkflowState
             })
             .ToList();
     }
@@ -48,20 +45,22 @@ public class OrderService : IOrdersService
                      ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
         await using var unitOfWork = unitOfWorkProvider.Get();
         
-        var Orders = await unitOfWork.OrdersRepository.GetAsync(
+        var orders = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.SellerId == userId)
-                    .Select(m => new { m.OrderId, m.CanceledBySeller, m.ReceivedByBuyer, m.CreatedAt })
+                    .Select(m => new { m.OrderId, m.WorkflowState, m.CreatedAt })
                     .Distinct()
-                    .OrderBy(m => m.ReceivedByBuyer || m.CanceledBySeller)
+                    .OrderBy(m => m.WorkflowState == OrderWorkflowState.Cancelled 
+                                  || m.WorkflowState == OrderWorkflowState.ConfirmedByBuyer)
                     .ThenByDescending(m => m.CreatedAt), 
                 requestContext.CancellationToken)
             .ConfigureAwait(false);
-        return Orders
-            .Select(o => new OrderStatus() {
-            OrderId = o.OrderId, 
-            CanceledBySeller = o.CanceledBySeller, 
-            ReceivedByBuyer = o.ReceivedByBuyer
+        
+        return orders
+            .Select(o => new OrderStatus() 
+            {
+                OrderId = o.OrderId,
+                WorkflowState = o.WorkflowState
             })
             .ToList();
     }
@@ -114,20 +113,13 @@ public class OrderService : IOrdersService
             .GetOrder(orderId, requestContext.CancellationToken)
             .ConfigureAwait(false);
 
-        var confirmationOnce = true;
         foreach (var order in orders)
         {
-            var isConfirmed = await order.ConfirmAsync(requestContext, unitOfWork).ConfigureAwait(false);
-            confirmationOnce = confirmationOnce && isConfirmed;
+            await order.ConfirmAsync(requestContext, unitOfWork).ConfigureAwait(false);
         }
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
-
-        if (!confirmationOnce)
-        {
-            logger.LogInformation($"Confirmation for order [{orderId}] was requests several times by user [{requestContext.UserId}]");
-        }
     }
-    
+
     public async Task CancelAsync(
         RequestContext requestContext, 
         Guid orderId)
@@ -137,17 +129,10 @@ public class OrderService : IOrdersService
             .GetOrder(orderId, requestContext.CancellationToken)
             .ConfigureAwait(false);
 
-        var cancellationOnce = true;
         foreach (var order in orders)
         {
-            var isCanceled = await order.CancelAsync(requestContext, unitOfWork).ConfigureAwait(false);
-            cancellationOnce = cancellationOnce && isCanceled;
+            await order.CancelAsync(requestContext, unitOfWork).ConfigureAwait(false);
         }
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
-
-        if (!cancellationOnce)
-        {
-            logger.LogInformation($"Cancellation for order [{orderId}] was requests several times by user [{requestContext.UserId}]");
-        }
     }
 }

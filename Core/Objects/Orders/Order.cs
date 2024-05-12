@@ -1,5 +1,4 @@
-﻿using Core.Helpers;
-using Core.Objects.MyNwkUnitOfWork;
+﻿using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,8 +13,7 @@ public class Order
     public int SellerId { get; }
     public int MarketId { get; }
     public int ProductId { get; }
-    public bool ReceivedByBuyer { get; private set; }
-    public bool CanceledBySeller { get; private set; }
+    public OrderWorkflowState WorkflowState { get; private set; }
     public DateTime CreatedAt { get; }
 
     public Order()
@@ -37,6 +35,7 @@ public class Order
         MarketId = marketId;
         ProductId = productId;
         CreatedAt = createdAt;
+        WorkflowState = OrderWorkflowState.Created;
     }
 
     public static async Task<Order> CreateAsync(
@@ -59,63 +58,81 @@ public class Order
         {
             throw new InvalidOperationException("Could not crate order cause not products remained");
         }
-        product.Reserved += 1;
         var order = new Order(orderId, buyerId, sellerId, marketId, productId, createdAt);
         unitOfWork.OrdersRepository.Create(order);
         return order;
     }
-
-    public async Task<bool> ConfirmAsync(RequestContext requestContext, IUnitOfWork unitOfWork)
+    
+    public async Task ConfirmAsync(RequestContext requestContext, IUnitOfWork unitOfWork)
     {
-        if (requestContext.UserId != BuyerId)
+        var userId = requestContext.UserId;
+        if (userId == SellerId)
         {
-            throw new InvalidOperationException($"Action not allowed for user: {requestContext.UserId}");
+            await ConfirmBySellerAsync(requestContext, unitOfWork).ConfigureAwait(false);
         }
-
-        if (ReceivedByBuyer || CanceledBySeller)
+        else if (userId == BuyerId)
         {
-            return false;
+            await ConfirmByBuyerAsync(requestContext, unitOfWork).ConfigureAwait(false);
         }
-
-        await UpdateMarketProductAsync(requestContext, unitOfWork, true).ConfigureAwait(false);
-        ReceivedByBuyer = true;
-        return true;
+        else
+        {
+            throw new InvalidOperationException(
+                $"Action not allowed for user: {requestContext.UserId}");
+        }
     }
-
-    public async Task<bool> CancelAsync(RequestContext requestContext, IUnitOfWork unitOfWork)
+    
+    public async Task CancelAsync(RequestContext requestContext, IUnitOfWork unitOfWork)
     {
         if (requestContext.UserId != SellerId)
         {
             throw new InvalidOperationException($"Action not allowed for user: {requestContext.UserId}");
         }
 
-        if (ReceivedByBuyer || CanceledBySeller)
+        if (WorkflowState is OrderWorkflowState.ConfirmedByBuyer or OrderWorkflowState.Cancelled)
         {
-            return false;
+            return;
         }
         
-        await UpdateMarketProductAsync(requestContext, unitOfWork, false).ConfigureAwait(false);
-        CanceledBySeller = true;
-        return true;
+        var product = await GetOrderProduct(requestContext, unitOfWork).ConfigureAwait(false);
+
+        if (WorkflowState == OrderWorkflowState.ConfirmedBySeller)
+        {
+            product.Reserved = Math.Max(0, product.Reserved - 1);
+        }
+        WorkflowState = OrderWorkflowState.Cancelled;
     }
 
-    private async Task UpdateMarketProductAsync(
-        RequestContext requestContext,
-        IUnitOfWork unitOfWork,
-        bool isReceivedByBuyer)
+    private async Task ConfirmBySellerAsync(RequestContext requestContext, IUnitOfWork unitOfWork)
     {
-        var product = await unitOfWork.ProductRepository
+        if (WorkflowState != OrderWorkflowState.Created)
+        {
+            return;
+        }
+        
+        var product = await GetOrderProduct(requestContext, unitOfWork).ConfigureAwait(false);
+
+        product.Reserved += 1;
+        WorkflowState = OrderWorkflowState.ConfirmedBySeller;
+    }
+
+    private async Task ConfirmByBuyerAsync(RequestContext requestContext, IUnitOfWork unitOfWork)
+    {
+        if (WorkflowState != OrderWorkflowState.ConfirmedBySeller)
+        {
+            return;
+        }
+
+        var product = await GetOrderProduct(requestContext, unitOfWork).ConfigureAwait(false);
+
+        product.Remained = Math.Max(0, product.Remained - 1);
+        product.Reserved = Math.Max(0, product.Reserved - 1);
+        WorkflowState = OrderWorkflowState.ConfirmedByBuyer;
+    }
+
+    private Task<Product> GetOrderProduct(RequestContext requestContext, IUnitOfWork unitOfWork) =>
+        unitOfWork.ProductRepository
             .GetProduct(
                 MarketId, 
                 ProductId,
-                requestContext.CancellationToken)
-            .ConfigureAwait(false)!;
-        
-        if (isReceivedByBuyer)
-        {
-            product.Remained = Math.Max(0, product.Remained - 1);
-        }
-        product.Reserved = Math.Max(0, product.Reserved - 1);
-    }
-
+                requestContext.CancellationToken)!;
 }

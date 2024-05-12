@@ -5,7 +5,7 @@ public interface IOrdersService
     public Task<List<Guid>> CreateOrdersAsync(
         RequestContext requestContext,
         CartDto cart);
-    
+
     public Task ConfirmAsync(
         RequestContext requestContext,
         Guid orderId);

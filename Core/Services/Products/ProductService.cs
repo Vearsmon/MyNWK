@@ -1,4 +1,5 @@
-﻿using Core.BlobStorage;
+﻿using System.Security.Cryptography.X509Certificates;
+using Core.BlobStorage;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
 
@@ -79,7 +80,7 @@ public class ProductService : IProductService
             .ConfigureAwait(false);
         return productWithImageRef
             .Where(p => userIdsByMarketId.ContainsKey(p.product.MarketId))
-            .Select(p => Convert(p.product, userIdsByMarketId[p.product.MarketId], p.imageRef))
+            .Select(p => Convert(p.product, userIdsByMarketId[p.product.MarketId], p.imageRef, p.product.Remained))
             .ToList();
     }
 
@@ -99,7 +100,7 @@ public class ProductService : IProductService
         var productWithImageRef = await GetImageRefByMarketAndProductId(products)
             .ConfigureAwait(false);
         return productWithImageRef
-            .Select(p => Convert(p.product, userId, p.imageRef))
+            .Select(p => Convert(p.product, userId, p.imageRef, p.product.Remained))
             .ToList();
     }
     
@@ -120,7 +121,7 @@ public class ProductService : IProductService
         var productWithImageRef = await GetImageRefByMarketAndProductId(new List<Product> { product })
             .ConfigureAwait(false);
         
-        return Convert(product, productFullId.UserId, productWithImageRef.FirstOrDefault().imageRef);
+        return Convert(product, productFullId.UserId, productWithImageRef.FirstOrDefault().imageRef, product.Remained);
     }
 
     public async Task<List<ProductDto>> GetOrderProductsAsync(RequestContext requestContext, Guid OrderId)
@@ -136,6 +137,10 @@ public class ProductService : IProductService
                 requestContext.CancellationToken)
             .ConfigureAwait(false);
 
+        var countDict = productIds
+            .GroupBy(p => p)
+            .ToDictionary(x => x.Key, x => x.Count());
+
         var products = await unitOfWork.ProductRepository.GetAsync(
                 r => r
                     .Where(m => productIds.Any(x => x == m.ProductId)),
@@ -145,7 +150,7 @@ public class ProductService : IProductService
         var productWithImageRef = await GetImageRefByMarketAndProductId(products)
             .ConfigureAwait(false);
         return productWithImageRef
-            .Select(p => Convert(p.product, userId, p.imageRef))
+            .Select(p => Convert(p.product, userId, p.imageRef, countDict[p.product.ProductId]))
             .ToList();
     }
 
@@ -168,7 +173,7 @@ public class ProductService : IProductService
         productToChange.Remained = int.Parse(parametersToUpdate["remained"]);
         
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
-        return Convert(productToChange, userId, null);
+        return Convert(productToChange, userId, null, productToChange.Remained);
     }
 
     private async Task<List<(Product product, string? imageRef)>> GetImageRefByMarketAndProductId(
@@ -192,14 +197,14 @@ public class ProductService : IProductService
         return result;
     }
     
-    private ProductDto Convert(Product product, int userId, string? imageRef) =>
+    private ProductDto Convert(Product product, int userId, string? imageRef, int number) =>
         new()
         {
             CategoryId = product.CategoryId,
             FullId = new ProductFullId(userId, product.MarketId, product.ProductId),
             ImageRef = imageRef,
             Price = product.Price,
-            Remained = product.Remained,
+            Remained = number,
             Title = product.Title,
             Description = product.Description ?? ""
         };
