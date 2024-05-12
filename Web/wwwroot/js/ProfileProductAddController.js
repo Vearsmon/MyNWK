@@ -1,11 +1,11 @@
 function openProductAddWindow() {
     productAddWindow[0].hidden = false;
-    alert('OPENED');
+    //alert('OPENED');
 }
 
 function closeProductAddWindow() {
     productAddWindow[0].hidden = true;
-    alert('CLOSED');
+    //alert('CLOSED');
 }
 
 

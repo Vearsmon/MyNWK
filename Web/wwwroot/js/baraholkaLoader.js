@@ -63,6 +63,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 li.insertAdjacentHTML("afterbegin", `<button class="profileButton"><a class="link" href="Profile">Профиль</a></button>`);
                 document.getElementsByClassName("ul")[0].appendChild(li)
             }
+            else {
+                const tgli = document.getElementsByClassName('tgli')[0];
+                tgli.hidden = false;
+            }
         });
         
     fetchProducts(null, null);    
