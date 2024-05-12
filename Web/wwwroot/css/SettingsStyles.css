@@ -1,8 +1,5 @@
 :root {
-    --main-content-color: #FFA25E;
-    --second-content-color: #FF7B1B;
-    --background-color: #FFEDD8;
-    --margin: 20%;
+    --margin: 15%;
 }
 
 
@@ -10,19 +7,19 @@
     position: fixed;
 
     top: 20vh;
-    left: 35vw;
+    left: 42vw;
 
     width: 450px;
     height: 450px;
 
-    background-color: var(--background-color);
+    background-color: var(--background-card-color);
     
-    border-color: var(--main-content-color);
+    border-color: var(--border-color);
     border-width: 3px;
     border-style: solid;
     border-radius: 15px;
 
-    color: var(--second-content-color);
+    color: var(--content-color-2);
 
     z-index: 4;
 }
@@ -56,14 +53,14 @@
     width: 150px;
     height: 25px;
 
-    border-color: var(--main-content-color);
-    border-style:solid;
+    border-color: var(--border-color);
+    border-style: solid;
     border-width: 2px;
     border-radius: 5px;
 
-    background-color: var(--background-color);
+    background-color: var(--background-card-color);
 
-    color: var(--second-content-color);
+    color: var(--content-color-2);
     font-weight: 500;
 
     cursor: pointer;
@@ -74,7 +71,7 @@
     position: relative;
 
     margin-left: var(--margin);
-    border-color: var(--main-content-color);
+    border-color: var(--border-color);
     border-style: solid;
     border-radius: 2px;
 }
