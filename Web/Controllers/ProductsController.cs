@@ -26,8 +26,8 @@ public class ProductsController : Controller
     [AllowAnonymous]
     [Route("get/all")]
     public async Task<JsonResult> GetAllAsync(
-        int pageNumber,
-        int batchSize,
+        [Range(0, int.MaxValue)] int pageNumber,
+        [Range(0, 100)] int batchSize,
         int? categoryId,
         int? marketId,
         CancellationToken cancellationToken)
