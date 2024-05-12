@@ -63,7 +63,7 @@ async function openProductInfoWindow(data) {
             document.getElementsByClassName("product-info-form-container")[0].appendChild(remained);
             document.getElementsByClassName("product-info-form-container")[0].appendChild(description);
 
-            document.getElementsByClassName('product-id')[0].textContent = JSON.stringify(data["fullId"]);
+            document.getElementsByClassName('product-id')[0].textContent = JSON.stringify(data);
             document.getElementById('product-curr-count').innerText = '1';
         });
     productAddWindow[0].hidden = false;
