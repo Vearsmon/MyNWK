@@ -45,6 +45,12 @@ function openSettingsWindow() {
 
             <input id="time-to" class="settings-fields" type="time" name="worksTo" value="${marketInfo.worksTo}"/>
             
+            <div class="settings-content">
+                Скрывать товары вне времени работы:
+            </div>
+
+            <input id="auto-hide" class="settings-fields" type="checkbox" name="autoHide" ${marketInfo.autoHide ? "checked" : ""}>
+            
             <div class="settings-buttons">
                 <input class="settings-accept" type="submit" value="Изменить"/>
             </div>`;

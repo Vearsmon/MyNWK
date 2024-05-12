@@ -1,6 +1,5 @@
 ﻿using Core.Objects.Markets;
 using Core.Objects.MyNwkUnitOfWork;
-using Web.Models;
 
 namespace Core.Services.Markets;
 
@@ -52,34 +51,34 @@ public class MarketsService : IMarketsService
         return Convert(market, marketInfo!);
     }
 
-    public async Task UpdateAsync(RequestContext requestContext, MarketToUpdate marketToUpdate)
+    public async Task UpdateAsync(RequestContext requestContext, MarketToUpdateDto marketToUpdateDto)
     {
         await using var unitOfWork = unitOfWorkProvider.Get();
         var market = await unitOfWork.MarketsRepository.GetAsync(
-                r => r.Where(m => m.Id == marketToUpdate.Id),
+                r => r.Where(m => m.Id == marketToUpdateDto.Id),
                 requestContext.CancellationToken)
             .FirstOrDefaultAsync()
             .ConfigureAwait(false);
         
         if (market is null)
         {
-            throw new InvalidOperationException($"Could not find market with id: {marketToUpdate.Id}");
+            throw new InvalidOperationException($"Could not find market with id: {marketToUpdateDto.Id}");
         }
 
         if (market.OwnerId != requestContext.UserId)
         {
-            throw new InvalidOperationException($"User is not allowed to update market with id: {marketToUpdate.Id}");
+            throw new InvalidOperationException($"User is not allowed to update market with id: {marketToUpdateDto.Id}");
         }
         
-        market.Closed = marketToUpdate.Closed;
-        market.Name = marketToUpdate.Name;
+        market.Closed = marketToUpdateDto.Closed;
+        market.Name = marketToUpdateDto.Name;
         var marketInfo = new MarketInfo
         {
-            MarketId = marketToUpdate.Id,
-            AutoHide = marketToUpdate.AutoHide,
-            Description = marketToUpdate.Description,
-            WorksFrom = marketToUpdate.WorksFrom,
-            WorksTo = marketToUpdate.WorksTo
+            MarketId = marketToUpdateDto.Id,
+            AutoHide = marketToUpdateDto.AutoHide,
+            Description = marketToUpdateDto.Description,
+            WorksFrom = marketToUpdateDto.WorksFrom,
+            WorksTo = marketToUpdateDto.WorksTo
         };
         unitOfWork.MarketInfosRepository.Update(marketInfo);
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);

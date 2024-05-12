@@ -79,8 +79,18 @@ public class ApiController : Controller
         CancellationToken cancellationToken)
     {
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
-        await marketsService.UpdateAsync(requestContext, marketToUpdate);
-        return View("~/Pages/Profile.cshtml");
+        var marketToUpdateDto = new MarketToUpdateDto
+        {
+            AutoHide = marketToUpdate.AutoHide == "on",
+            Closed = marketToUpdate.Closed,
+            Description = marketToUpdate.Description,
+            Id = marketToUpdate.Id,
+            Name = marketToUpdate.Name,
+            WorksFrom = marketToUpdate.WorksFrom,
+            WorksTo = marketToUpdate.WorksTo
+        };
+        await marketsService.UpdateAsync(requestContext, marketToUpdateDto);
+        return Redirect("/Profile");
     }
 
     [Authorize(Policy = "UserPolicy")]
