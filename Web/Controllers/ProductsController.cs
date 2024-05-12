@@ -87,11 +87,9 @@ public class ProductsController : Controller
             result.Add(new FullOrder {
                 OrderId = o.OrderId,
                 Products = products,
-                CanceledBySeller = o.CanceledBySeller,
-                ReceivedByBuyer = o.ReceivedByBuyer
+                WorkflowState = o.WorkflowState
             });
         }
-        Console.WriteLine(Json(result));
         return Json(result);
     }
 
@@ -108,8 +106,8 @@ public class ProductsController : Controller
             result.Add(new FullOrder {
                 OrderId = o.OrderId,
                 Products = products,
-                CanceledBySeller = o.CanceledBySeller,
-                ReceivedByBuyer = o.ReceivedByBuyer
+                WorkflowState = o.WorkflowState
+
             });
         }
         return Json(result);

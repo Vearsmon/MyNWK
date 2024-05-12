@@ -1,10 +1,6 @@
-using System.ComponentModel.DataAnnotations;
-using Core;
-using Core.Helpers;
 using Core.Services.Orders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Web.Models.ViewComponents;
 
 namespace Web.Controllers;
 
