@@ -184,7 +184,7 @@ async function openProductInfoUpdateWindow(data)
     // remained.insertAdjacentText('afterbegin', `Осталось: ${data['remained']} шт.`);
     // description.insertAdjacentText('afterbegin', `Описание: ${data['description']}`);
 
-    const applyButton = document.getElementsByClassName('info-update-buttons')[0]
+    const applyButton = document.getElementsByClassName('info-update-buttons')[0];
     
     document.getElementsByClassName("info-update-form-container")[0].insertBefore(title, applyButton);
     document.getElementsByClassName("info-update-form-container")[0].insertBefore(price, applyButton);
@@ -196,24 +196,24 @@ async function openProductInfoUpdateWindow(data)
     document.getElementById("info-remained").value = data['remained'];
     document.getElementById("info-desc").value = data['description'];
     
-    document.getElementsByClassName('info-update-accept')[0].addEventListener('click', async function () {
+    applyButton.addEventListener('click', async function () {
         let formData = new FormData();
         formData.append('marketId', JSON.stringify(data['fullId']['marketId']));
         formData.append('userId', JSON.stringify(data['fullId']['userId']));
         formData.append('productId', JSON.stringify(data['fullId']['productId']));
-        formData.append('title', data['title']);
-        formData.append('price', data['price']);
-        formData.append('remained', data['remained']);
-        formData.append('description', data['description']);
-        
+        formData.append('title', document.getElementById("info-title").value);
+        formData.append('price', document.getElementById("info-price").value);
+        formData.append('remained', document.getElementById("info-remained").value);
+        formData.append('description', document.getElementById("info-desc").value);
+
         await fetch('products/save', {
             method: 'post',
             body: formData
         });
-        productInfoUpdateWindow[0].hidden = true;
+        productInfoUpdateWindow.hidden = true;
     })
     
-    productInfoUpdateWindow[0].hidden = false;
+    productInfoUpdateWindow.hidden = false;
 }
 
 function openPurchases () {

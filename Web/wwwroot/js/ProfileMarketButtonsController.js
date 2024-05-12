@@ -59,7 +59,7 @@ function closeSettingsWindow() {
 }
 
 function closeProductInfoUpdateWindow() {
-    productInfoUpdateWindow[0].hidden = true;
+    productInfoUpdateWindow.hidden = true;
     alert('CLOSED');
 }
 
