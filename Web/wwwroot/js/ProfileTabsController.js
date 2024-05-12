@@ -166,8 +166,7 @@ function loadOrders() {
         });
 }
 
-async function openProductInfoUpdateWindow(data)
-{
+async function openProductInfoUpdateWindow(data) {
     const title = document.createElement("div");
     const price = document.createElement("div");
     const remained = document.createElement("div");
@@ -192,7 +191,7 @@ async function openProductInfoUpdateWindow(data)
     price.insertAdjacentText('afterbegin', `Цена:`);
     remained.insertAdjacentText('afterbegin', `Осталось:`);
     description.insertAdjacentText('afterbegin', `Описание:`);
-    
+
     title.insertAdjacentHTML('beforeend', `<br><input class="product-info-fields" type="text" name="title" id="info-title"/>`)
     price.insertAdjacentHTML('beforeend', `<br><input class="product-info-fields" type="number" name="title" id="info-price"/>`)
     remained.insertAdjacentHTML('beforeend', `<br><input class="product-info-fields" type="number" name="title" id="info-remained"/>`)
@@ -202,19 +201,45 @@ async function openProductInfoUpdateWindow(data)
     // price.insertAdjacentText('afterbegin', `Цена: ${data['price']} р.`);
     // remained.insertAdjacentText('afterbegin', `Осталось: ${data['remained']} шт.`);
     // description.insertAdjacentText('afterbegin', `Описание: ${data['description']}`);
+    
+    // const shadow = document.createElement('div');
+    // shadow.setAttribute('class', 'product-card-background-shadow');
+    // shadow.setAttribute('id', 'profile-market-info-update-close');
+    //
+    // document.getElementsByClassName('profile-market-info-update-window')[0].appendChild(shadow);
 
-    const applyButton = document.getElementsByClassName('info-update-buttons')[0];
+    const form = document.createElement('form');
+    form.setAttribute('class', 'info-update-form-container');
+    form.setAttribute('encType', 'multipart/form-data');
     
-    document.getElementsByClassName("info-update-form-container")[0].insertBefore(title, applyButton);
-    document.getElementsByClassName("info-update-form-container")[0].insertBefore(price, applyButton);
-    document.getElementsByClassName("info-update-form-container")[0].insertBefore(remained, applyButton);
-    document.getElementsByClassName("info-update-form-container")[0].insertBefore(description, applyButton);
+    const windowTitle = document.createElement('div');
+    windowTitle.setAttribute('class', 'info-update-header');
+    windowTitle.innerText = 'Информация о товаре';
     
+    const applyButton = document.createElement("div");
+    applyButton.setAttribute('class', 'info-update-buttons');
+    applyButton.insertAdjacentHTML('afterbegin', `<input class="info-update-accept" type="button" value="Применить изменения"/>`)
+    
+    form.appendChild(windowTitle);
+    form.appendChild(title);
+    form.appendChild(price);
+    form.appendChild(remained);
+    form.appendChild(description);
+    form.appendChild(applyButton);
+    
+    document.getElementsByClassName('profile-market-info-update-window')[0].appendChild(form);
+    
+    // document.getElementsByClassName("info-update-form-container")[0].appendChild(applyButton);
+    // document.getElementsByClassName("info-update-form-container")[0].insertBefore(title, applyButton);
+    // document.getElementsByClassName("info-update-form-container")[0].insertBefore(price, applyButton);
+    // document.getElementsByClassName("info-update-form-container")[0].insertBefore(remained, applyButton);
+    // document.getElementsByClassName("info-update-form-container")[0].insertBefore(description, applyButton);
+
     document.getElementById("info-title").value = data['title'];
     document.getElementById("info-price").value = data['price'];
     document.getElementById("info-remained").value = data['remained'];
     document.getElementById("info-desc").value = data['description'];
-    
+
     applyButton.addEventListener('click', async function () {
         let formData = new FormData();
         formData.append('marketId', JSON.stringify(data['fullId']['marketId']));
@@ -231,11 +256,23 @@ async function openProductInfoUpdateWindow(data)
         });
         productInfoUpdateWindow.hidden = true;
     })
-    
+
     productInfoUpdateWindow.hidden = false;
+
+    // <div id="profile-market-info-update-close" className="product-card-background-shadow"></div>
+    //
+    // <form className="info-update-form-container" encType="multipart/form-data">
+    //     <div className="info-update-header">Информация о товаре</div>
+    //
+    //     @* Информация о товаре *@
+    //
+    //     <div className="info-update-buttons">
+    //         <input className="info-update-accept" type="button" value="Применить изменения"/>
+    //     </div>
+    // </form>
 }
 
-function openPurchases () {
+function openPurchases() {
     purchasesInnerContainer[0].hidden = false;
     productsInnerContainer[0].hidden = true;
     ordersInnerContainer[0].hidden = true;

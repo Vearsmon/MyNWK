@@ -66,6 +66,9 @@ function closeSettingsWindow() {
 
 function closeProductInfoUpdateWindow() {
     productInfoUpdateWindow.hidden = true;
+    productInfoUpdateWindow.innerHTML = `<div id="profile-market-info-update-close" class="product-card-background-shadow"></div>`;
+    productInfoUpdateCloseButton = document.getElementById("profile-market-info-update-close");
+    productInfoUpdateCloseButton.addEventListener('click', () => closeProductInfoUpdateWindow());
     alert('CLOSED');
 }
 
@@ -81,7 +84,7 @@ settingsOpenButton.addEventListener('click', () => openSettingsWindow());
 
 const productAddCloseButton = document.getElementById("profile-product-add-close");
 const settingsCloseButton = document.getElementById("profile-market-settings-close");
-const productInfoUpdateCloseButton = document.getElementById("profile-market-info-update-close");
+let productInfoUpdateCloseButton = document.getElementById("profile-market-info-update-close");
 
 productAddCloseButton.addEventListener('click', () => closeProductAddWindow());
 settingsCloseButton.addEventListener('click', () => closeSettingsWindow());
