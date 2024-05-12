@@ -32,4 +32,16 @@
       <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="ModelBinders\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="ModelBinders\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="ModelBinders\**" />
+    </ItemGroup>
+
 </Project>

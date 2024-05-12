@@ -18,6 +18,11 @@ public class Order
     public bool CanceledBySeller { get; private set; }
     public DateTime CreatedAt { get; }
 
+    public Order()
+    {
+
+    }
+
     private Order(
         Guid orderId,
         int buyerId,
