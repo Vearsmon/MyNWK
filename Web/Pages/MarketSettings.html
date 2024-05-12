@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link 
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" 
+        rel="stylesheet" 
+    >
+
+    <link rel="stylesheet" href="/mainPageStyles.css">
+    <link rel="stylesheet" href="/over/SettingsStyles.css">
+    <link rel="stylesheet" href="/over/ProductCardStyles.css">
+</head>
+<body>
+    <div class="product-card-background-shadow"></div>
+
+    <form class="settings-form-container" method="post" action="/products/create" enctype="multipart/form-data">
+        <div class="settings-header">Настройте свой магазин</div>
+        
+        <div class="settings-content">
+            Название магазина
+        </div>
+
+        <input class="settings-fields" type="text" name="title"/>
+
+        <div class="settings-content">
+            Описание магазина
+        </div>
+
+        <input class="settings-fields" type="text" name="description" />
+
+        <div class="settings-content">
+            Время работы от:
+        </div>
+
+        <input id="time-from" class="settings-fields" type="time" name="appt-time" value="12:00"/>
+
+        <div class="settings-content">
+            Время работы до:
+        </div>
+
+        <input id="time-to" class="settings-fields" type="time" name="appt-time" value="20:00"/>
+        
+        <div class="settings-buttons">
+            <input class="settings-accept" type="submit" value="Добавить"/>
+        </div>
+    </form>
+</body>
+</html>
