@@ -13,38 +13,52 @@ public class OrderService : IOrdersService
         this.unitOfWorkProvider = unitOfWorkProvider;
     }
 
-    public async Task<List<Guid>> GetBuyerOrderIdsAsync(RequestContext requestContext)
+    public async Task<List<OrderStatus>> GetBuyerOrderIdsAsync(RequestContext requestContext)
     {
         var userId = requestContext.UserId 
                      ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
         await using var unitOfWork = unitOfWorkProvider.Get();
         
-        var OrderIds = await unitOfWork.OrdersRepository.GetAsync(
+        var Orders = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.BuyerId == userId)
-                    .OrderByDescending(m => m.CreatedAt)
-                    .Select(m => m.OrderId)
+                    .OrderBy(m => m.ReceivedByBuyer || m.CanceledBySeller)
+                    .ThenByDescending(m => m.CreatedAt)
+                    .Select(m => new { m.OrderId, m.CanceledBySeller, m.ReceivedByBuyer })
                     .Distinct(),
                 requestContext.CancellationToken)
             .ConfigureAwait(false);
-        return OrderIds;
+        return Orders
+            .Select(o => new OrderStatus() {
+            OrderId = o.OrderId, 
+            CanceledBySeller = o.CanceledBySeller, 
+            ReceivedByBuyer = o.ReceivedByBuyer
+            })
+            .ToList();
     }
 
-    public async Task<List<Guid>> GetSellerOrderIdsAsync(RequestContext requestContext)
+    public async Task<List<OrderStatus>> GetSellerOrderIdsAsync(RequestContext requestContext)
     {
         var userId = requestContext.UserId 
                      ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
         await using var unitOfWork = unitOfWorkProvider.Get();
         
-        var OrderIds = await unitOfWork.OrdersRepository.GetAsync(
+        var Orders = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.SellerId == userId)
-                    .OrderByDescending(m => m.CreatedAt)
-                    .Select(m => m.OrderId)
+                    .OrderBy(m => m.ReceivedByBuyer || m.CanceledBySeller)
+                    .ThenByDescending(m => m.CreatedAt)
+                    .Select(m => new { m.OrderId, m.CanceledBySeller, m.ReceivedByBuyer })
                     .Distinct(), 
                 requestContext.CancellationToken)
             .ConfigureAwait(false);
-        return OrderIds;
+        return Orders
+            .Select(o => new OrderStatus() {
+            OrderId = o.OrderId, 
+            CanceledBySeller = o.CanceledBySeller, 
+            ReceivedByBuyer = o.ReceivedByBuyer
+            })
+            .ToList();
     }
     
     public async Task<List<Guid>> CreateOrdersAsync(RequestContext requestContext, CartDto cart)
