@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="~/css/ProductCardStyles.css">
     <link rel="stylesheet" href="~/css/productAddingStyles.css">
     <link rel="stylesheet" href="~/css/SettingsStyles.css">
+    <link rel="stylesheet" href="~/css/Colors.css">
+    <link rel="stylesheet" href="~/css/productInfoUpdateStyles.css">
     <script src="~/js/profileLoader.js" defer></script>
 </head>
 <body>
@@ -261,6 +263,11 @@
                 <button class="profile-products-buttons add" id="profile-product-add">Добавить товар</button>
 
                 <button class="profile-products-buttons settings" id="profile-market-settings">Настройки магазина</button>
+
+                <div class="profile-products-buttons hide" id="profile-market-hide">
+                    <input id="products-hide" type="checkbox" name="hide">
+                    Скрыть продукты
+                </div> 
             </div>
 
             <div class="profile-products-inner-container">
@@ -436,40 +443,63 @@
     <div hidden="true" class="profile-market-settings-window">
         <div id="profile-market-settings-close" class="product-card-background-shadow"></div>
 
-        <form class="settings-form-container" method="post" action="/products/create" enctype="multipart/form-data">
-            <div class="settings-header">Настройте свой магазин</div>
+        <form class="settings-form-container" method="post" action="/api/market/update" enctype="multipart/form-data">
+            @* <div class="settings-header">Настройте свой магазин</div> *@
+                @* *@
+            @* <div class="settings-content"> *@
+            @*     Название магазина *@
+            @* </div> *@
+            @* *@
+            @* <input class="settings-fields" type="text" name="title"/> *@
+            @* *@
+            @* <div class="settings-content"> *@
+            @*     Описание магазина *@
+            @* </div> *@
+            @* *@
+            @* <input class="settings-fields" type="text" name="description" /> *@
+            @* *@
+            @* <div class="settings-content"> *@
+            @*     Время работы от: *@
+            @* </div> *@
+            @* *@
+            @* <input id="time-from" class="settings-fields" type="time" name="appt-time" value="12:00"/> *@
+            @* *@
+            @* <div class="settings-content"> *@
+            @*     Время работы до: *@
+            @* </div> *@
+            @* *@
+            @* <input id="time-to" class="settings-fields" type="time" name="appt-time" value="20:00"/> *@
+            @* *@
+            @*<div class="settings-content">
+                Скрывать товары вне времени работы:
+            </div>
+
+            <input id="auto-hide" class="settings-fields" type="checkbox" name="auto-hide">
+            *@
+                               
+            @* <div class="settings-buttons"> *@
+            @*     <input class="settings-accept" type="submit" value="Изменить"/> *@
+            @* </div> *@
+                 
+        </form>
+    </div>
+
+    <div hidden="true" class="profile-market-info-update-window">
+        <div id="profile-market-info-update-close" class="product-card-background-shadow"></div>
+
+        <form class="info-update-form-container" method="post" action="" enctype="multipart/form-data">
+            <div class="info-update-header">Информация о товаре</div>
             
-            <div class="settings-content">
-                Название магазина
-            </div>
-
-            <input class="settings-fields" type="text" name="title"/>
-
-            <div class="settings-content">
-                Описание магазина
-            </div>
-
-            <input class="settings-fields" type="text" name="description" />
-
-            <div class="settings-content">
-                Время работы от:
-            </div>
-
-            <input id="time-from" class="settings-fields" type="time" name="appt-time" value="12:00"/>
-
-            <div class="settings-content">
-                Время работы до:
-            </div>
-
-            <input id="time-to" class="settings-fields" type="time" name="appt-time" value="20:00"/>
+            @* Информация о товаре *@
             
-            <div class="settings-buttons">
-                <input class="settings-accept" type="submit" value="Добавить"/>
+            <div class="info-update-buttons">
+                <input class="info-update-accept" type="submit" value="Применить изменения"/>
             </div>
         </form>
     </div>
 
     <script src="~/js/ProfileMarketButtonsController.js"></script>
     <script src="~/js/ProfileTabsController.js"></script>
+    <script src="~/js/InversiaController.js"></script>
 </body>
 </html>

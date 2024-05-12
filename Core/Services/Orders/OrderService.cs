@@ -109,9 +109,10 @@ public class OrderService : IOrdersService
             .GetOrder(orderId, requestContext.CancellationToken)
             .ConfigureAwait(false);
         
-        await orders
-            .ForEachAsync(t => t.ConfirmAsync(requestContext, unitOfWork))
-            .ConfigureAwait(false);
+        foreach (var order in orders)
+        {
+            await order.ConfirmAsync(requestContext, unitOfWork).ConfigureAwait(false);
+        }
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
     }
     
@@ -124,9 +125,10 @@ public class OrderService : IOrdersService
             .GetOrder(orderId, requestContext.CancellationToken)
             .ConfigureAwait(false);
 
-        await orders
-            .ForEachAsync(t => t.CancelAsync(requestContext, unitOfWork))
-            .ConfigureAwait(false);
+        foreach (var order in orders)
+        {
+            await order.CancelAsync(requestContext, unitOfWork).ConfigureAwait(false);
+        }
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
     }
 }

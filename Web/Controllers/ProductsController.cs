@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Core;
 using Core.Helpers;
+using Core.Objects.MyNwkUnitOfWork;
 using Core.Services.Orders;
 using Core.Services.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Web.Models.ViewComponents;
 
 namespace Web.Controllers;
@@ -15,11 +17,16 @@ public class ProductsController : Controller
 {
     private readonly IProductService productService;
     private readonly IOrdersService ordersService;
+    private readonly IUnitOfWorkProvider unitOfWorkProvider;
 
-    public ProductsController(IProductService productService, IOrdersService ordersService)
+    public ProductsController(
+        IProductService productService, 
+        IOrdersService ordersService,
+        IUnitOfWorkProvider unitOfWorkProvider)
     {
         this.productService = productService;
         this.ordersService = ordersService;
+        this.unitOfWorkProvider = unitOfWorkProvider;
     }
     
     [HttpGet]
@@ -134,5 +141,30 @@ public class ProductsController : Controller
         await productService.CreateAsync(requestContext, productToCreate);
 
         return Redirect("/Profile");
+    }
+
+    [HttpPost]
+    [Route("save")]
+    public async Task<IActionResult> SaveInfoChanges(CancellationToken cancellationToken)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var form = await HttpContext.Request.ReadFormAsync(cancellationToken);
+        var fullId = new ProductFullId(
+            int.Parse(form["userId"].ToString()),
+            int.Parse(form["marketId"].ToString()),
+            int.Parse(form["productId"].ToString()));
+
+        var productToChange = await productService.GetProductByFullId(requestContext, fullId);
+        if (productToChange == null)
+            throw new NotImplementedException();
+
+        productToChange.Description = form["description"].ToString();
+        productToChange.Price = int.Parse(form["price"].ToString());
+        productToChange.Title = form["title"].ToString();
+        productToChange.Remained = int.Parse(form["remained"].ToString());
+
+        var unitOfWork = unitOfWorkProvider.Get();
+        await unitOfWork.CommitAsync(requestContext.CancellationToken);
+        return Json(productToChange);
     }
 }
