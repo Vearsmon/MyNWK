@@ -38,8 +38,6 @@ public sealed class UnitOfWork : IUnitOfWork
         marketsRepository = new Lazy<IRepository<Market>>(() => BeginTransactionIfNotExists(new Repository<Market>(coreDbContext)));
         marketInfosRepository = new Lazy<IRepository<MarketInfo>>(() => BeginTransactionIfNotExists(new Repository<MarketInfo>(coreDbContext)));
         categoriesInfosRepository = new Lazy<IRepository<Category>>(() => BeginTransactionIfNotExists(new Repository<Category>(coreDbContext)));
-
-        transaction = coreDbContext.Database.BeginTransaction();
     }
 
     public async Task CommitAsync(CancellationToken cancellationToken)
@@ -55,6 +53,7 @@ public sealed class UnitOfWork : IUnitOfWork
             try
             {
                 await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
+                return;
             }
             catch (SerializationException serializationException)
             {
@@ -90,7 +89,7 @@ public sealed class UnitOfWork : IUnitOfWork
 
     private T BeginTransactionIfNotExists<T>(T obj)
     {
-        transaction = coreDbContext.Database.BeginTransaction();
+        transaction ??= coreDbContext.Database.BeginTransaction();
         return obj;
     }
 }

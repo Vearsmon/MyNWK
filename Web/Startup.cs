@@ -70,14 +70,15 @@ public class Startup
 
     private void AddServices(IServiceCollection services, string connection)
     {
-        services.AddDbContextFactory<CoreDbContext>(t => t
-            .UseNpgsql(connection)
-            .UseLazyLoadingProxies()
-            .UseSnakeCaseNamingConvention());
         services.AddDbContext<CoreDbContext>(t => t
             .UseNpgsql(connection)
             .UseLazyLoadingProxies()
             .UseSnakeCaseNamingConvention());
+        services.AddScoped<Func<CoreDbContext>>(c => () => c.GetService<CoreDbContext>()!);
+        // services.AddDbContext<CoreDbContext>(t => t
+        //     .UseNpgsql(connection)
+        //     .UseLazyLoadingProxies()
+        //     .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUnitOfWorkProvider, UnitOfWorkProvider>();
         services.AddSingleton<IBlobStorageClient, YdBlobStorageClient>();

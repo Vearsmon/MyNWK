@@ -2,12 +2,12 @@
 
 public class UnitOfWorkProvider : IUnitOfWorkProvider
 {
-    private readonly CoreDbContext coreDbContext;
+    private readonly Func<CoreDbContext> coreDbContextGenerator;
 
-    public UnitOfWorkProvider(CoreDbContext coreDbContext)
+    public UnitOfWorkProvider(Func<CoreDbContext> coreDbContextGenerator)
     {
-        this.coreDbContext = coreDbContext;
+        this.coreDbContextGenerator = coreDbContextGenerator;
     }
 
-    public IUnitOfWork Get() => new UnitOfWork(coreDbContext);
+    public IUnitOfWork Get() => new UnitOfWork(coreDbContextGenerator());
 }
