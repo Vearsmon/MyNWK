@@ -96,6 +96,26 @@ public class ApiController : Controller
     [Authorize(Policy = "UserPolicy")]
     [HttpGet]
     [Route("get/user/info")]
+    public async Task<IActionResult> GetUserMyInfoAsync(CancellationToken cancellationToken, int userId)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var unitOfWork = unitOfWorkProvider.Get();
+        
+        var user = await unitOfWork.UsersRepository
+            .GetAsync<User>(u => u.Where(t => t.Id == userId),
+                requestContext.CancellationToken)
+            .FirstOrDefaultAsync();
+        if (user == null)
+            
+            // по идее юзер должен уже находится, раз уж мы на странице пользователя
+            
+            throw new NotImplementedException();
+        return Json(new { address = user.Address, username = user.TelegramUsername, name = user.Name, id = user.Id });
+    }
+
+    [Authorize(Policy = "UserPolicy")]
+    [HttpGet]
+    [Route("get/user/myInfo")]
     public async Task<IActionResult> GetUserInfoAsync(CancellationToken cancellationToken)
     {
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);

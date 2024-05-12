@@ -124,7 +124,7 @@ public class ProductService : IProductService
         return Convert(product, productFullId.UserId, productWithImageRef.FirstOrDefault().imageRef, product.Remained);
     }
 
-    public async Task<List<ProductDto>> GetOrderProductsAsync(RequestContext requestContext, Guid OrderId)
+    public async Task<List<ProductDto>> GetOrderProductsAsync(RequestContext requestContext, Guid orderId)
     {
         var userId = requestContext.UserId 
                      ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
@@ -132,7 +132,7 @@ public class ProductService : IProductService
         
         var productIds = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
-                    .Where(m => m.OrderId == OrderId)
+                    .Where(m => m.OrderId == orderId)
                     .Select(m => m.ProductId), 
                 requestContext.CancellationToken)
             .ConfigureAwait(false);

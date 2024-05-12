@@ -61,7 +61,7 @@ async function openProductInfoWindow(data) {
             container.appendChild(remained);
             container.appendChild(description);
             
-            fetch('api/get/user/info', {method: 'get'})
+            fetch('api/get/user/myInfo', {method: 'get'})
                 .then((response) => response.json())
                 .then((json) => {
                     if (json['id'] !== Number(data["userId"])) {

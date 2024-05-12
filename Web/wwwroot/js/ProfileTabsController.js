@@ -59,7 +59,8 @@ function loadPurchases() {
                 } else if (order["workflowState"] === 2) {
                     const div = document.createElement('div');
                     div.setAttribute('class', "profile-purchases-status");
-                    div.innerHTML = `Принят в работу`;
+                    div.innerHTML = `Принят в работу
+                    <img src="/assets/prinyato.png" width="15px" height="15px">`;
                     innerContainer.appendChild(div);
                     
                     const button = document.createElement('button');
@@ -74,15 +75,24 @@ function loadPurchases() {
                             .then(() => loadPurchases());
                     });
                     innerContainer.appendChild(button);
-                }else if (order["workflowState"] === 1){
-                    const button = document.createElement('button');
-                    button.setAttribute('class', "profile-purchases-accept");
-                    button.setAttribute('id', `accept-${order["orderId"]}`);
-                    button.innerHTML = 'Подтвердить получение';
-                    innerContainer.appendChild(button);
-                }
-                
-                container.appendChild(innerContainer);
+                } else if (order["workflowState"] === 1) {
+                    const div = document.createElement('div');
+                    div.setAttribute('class', "profile-purchases-status");
+                    div.innerHTML = `Ожидание ответа продавца`;
+                    innerContainer.appendChild(div);
+                } 
+                getUserInfo = new URL('http://127.0.0.1:80/api/get/user/info');
+                getUserInfo.search = new URLSearchParams({userId: order["products"][0]["fullId"]["userId"]}).toString();
+                console.log(order);
+                fetch(getUserInfo, {method: 'get'})
+                    .then((response) => response.json())
+                    .then((userId) => {
+                        console.log(userId);
+                        const userDiv = document.createElement('div');
+                        userDiv.setAttribute('class', "profile-purchases-status");
+                        userDiv.innerHTML = `@${userId["username"]}`;
+                        container.appendChild(innerContainer);
+                    });
             }
         });
 }
@@ -197,8 +207,22 @@ function loadOrders() {
                 } else if (order["workflowState"] === 2) {
                     const div = document.createElement('div');
                     div.setAttribute('class', "profile-orders-status");
-                    div.innerHTML = `Принят в работу`;
+                    div.innerHTML = `Принят в работу
+                    <img src="/assets/prinyato.png" width="15px" height="15px">`;
                     innerContainer.appendChild(div);
+
+                    const cancelButton = document.createElement('button');
+                    cancelButton.setAttribute('class', "profile-orders-cancel");
+                    cancelButton.setAttribute('id', `cancel-${order["orderId"]}`);
+                    cancelButton.innerHTML = 'Отменить заказ';
+                    cancelButton.addEventListener('click', async (event) => {
+                        const id = event.target.getAttribute('id');
+                        const cancel = new URL('http://127.0.0.1:80/orders/cancel');
+                        cancel.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
+                        fetch(cancel, {method: 'get'})
+                            .then(() => loadOrders());
+                    });
+                    innerContainer.appendChild(cancelButton);
                 } else if (order['workflowState'] === 1) {
                     const cancelButton = document.createElement('button');
                     cancelButton.setAttribute('class', "profile-orders-cancel");
@@ -211,6 +235,8 @@ function loadOrders() {
                         fetch(cancel, {method: 'get'})
                             .then(() => loadOrders());
                     });
+                    innerContainer.appendChild(cancelButton);
+                    
                     const confirmButton = document.createElement('button');
                     confirmButton.setAttribute('class', "profile-orders-accept");
                     confirmButton.setAttribute('id', `cancel-${order["orderId"]}`);
@@ -223,7 +249,6 @@ function loadOrders() {
                             .then(() => loadOrders());
                     });
                     innerContainer.appendChild(confirmButton);
-                    innerContainer.appendChild(cancelButton);
                 }
 
                 container.appendChild(innerContainer);
