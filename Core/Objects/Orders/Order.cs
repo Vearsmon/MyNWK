@@ -33,7 +33,7 @@ public class Order
         CreatedAt = createdAt;
     }
 
-    public static async Task<Order> Create(
+    public static async Task<Order> CreateAsync(
         IUnitOfWork unitOfWork,
         Guid orderId,
         int buyerId,
@@ -54,7 +54,9 @@ public class Order
             throw new InvalidOperationException("Could not crate order cause not products remained");
         }
         product.Reserved += 1;
-        return new Order(orderId, buyerId, sellerId, marketId, productId, createdAt);
+        var order = new Order(orderId, buyerId, sellerId, marketId, productId, createdAt);
+        unitOfWork.OrdersRepository.Create(order);
+        return order;
     }
 
     public async Task ConfirmAsync(RequestContext requestContext, IUnitOfWork unitOfWork)

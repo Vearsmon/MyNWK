@@ -61,26 +61,29 @@ public class OrderService : IOrdersService
             .GroupBy(t => t.MarketId)
             .Select(g => (Group: g, OrderId: Guid.NewGuid()))
             .ToList();
-        await ordersWithId
-            .SelectMany(orderWithId =>
+
+        var orderCreatedIds = new List<Guid>();
+        foreach (var (items, orderId) in ordersWithId)
+        {
+            var createdAt = PreciseTimestampGenerator.Generate();
+            foreach (var item in items)
             {
-                var createdAt = PreciseTimestampGenerator.Generate();
-                return orderWithId.Group
-                    .Select(item =>
-                        Order.Create(
-                            unitOfWork,
-                            orderWithId.OrderId,
-                            cart.BuyerId,
-                            item.SellerId,
-                            item.MarketId,
-                            item.ProductId,
-                            createdAt,
-                            requestContext.CancellationToken));
-            })
-            .ForEachAsync(unitOfWork.OrdersRepository.Create)
-            .ConfigureAwait(false);
+                await Order.CreateAsync(
+                        unitOfWork,
+                        orderId,
+                        cart.BuyerId,
+                        item.SellerId,
+                        item.MarketId,
+                        item.ProductId,
+                        createdAt,
+                        requestContext.CancellationToken)
+                    .ConfigureAwait(false);
+            }
+            orderCreatedIds.Add(orderId);
+        }
+        
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
-        return ordersWithId.Select(t => t.OrderId).ToList();
+        return orderCreatedIds;
     }
 
     public async Task ConfirmAsync(
