@@ -22,6 +22,6 @@ public class AllowedExtensionsAttribute : ValidationAttribute
         return extensions.Contains(extension) 
             ? ValidationResult.Success 
             : new ValidationResult($"Wrong extension: {extension}. " +
-                                   $"{string.Join(", ", extension)} is only allowed.");
+                                   $"{string.Join(", ", extensions)} is only allowed.");
     }
 }
