@@ -70,11 +70,13 @@ public class Startup
 
     private void AddServices(IServiceCollection services, string connection)
     {
-        services.AddDbContext<CoreDbContext>(t => t
-            .UseNpgsql(connection)
-            .UseLazyLoadingProxies()
-            .UseSnakeCaseNamingConvention());
-        services.AddScoped<Func<CoreDbContext>>(c => () => c.GetService<CoreDbContext>()!);
+        services.AddDbContext<CoreDbContext>(
+            t => t
+                .UseNpgsql(connection)
+                .UseLazyLoadingProxies()
+                .UseSnakeCaseNamingConvention(), 
+            ServiceLifetime.Transient);
+        services.AddTransient<Func<CoreDbContext>>(c => () => c.GetService<CoreDbContext>()!);
         // services.AddDbContext<CoreDbContext>(t => t
         //     .UseNpgsql(connection)
         //     .UseLazyLoadingProxies()
