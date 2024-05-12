@@ -19,6 +19,7 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(t => t.ProductId).IsRequired();
         builder.Property(t => t.CanceledBySeller).IsRequired();
         builder.Property(t => t.CanceledBySeller).IsRequired();
+        builder.Property(t => t.CreatedAt).IsRequired();
 
         builder
             .HasOne<User>()
