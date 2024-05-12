@@ -1,16 +1,21 @@
 ﻿using Core.Helpers;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Orders;
+using Microsoft.Extensions.Logging;
 
 namespace Core.Services.Orders;
 
 public class OrderService : IOrdersService
 {
     private readonly IUnitOfWorkProvider unitOfWorkProvider;
+    private readonly ILogger<OrderService> logger;
 
-    public OrderService(IUnitOfWorkProvider unitOfWorkProvider)
+    public OrderService(
+        IUnitOfWorkProvider unitOfWorkProvider,
+        ILogger<OrderService> logger)
     {
         this.unitOfWorkProvider = unitOfWorkProvider;
+        this.logger = logger;
     }
 
     public async Task<List<OrderStatus>> GetBuyerOrderIdsAsync(RequestContext requestContext)
@@ -108,12 +113,19 @@ public class OrderService : IOrdersService
         var orders = await unitOfWork.OrdersRepository
             .GetOrder(orderId, requestContext.CancellationToken)
             .ConfigureAwait(false);
-        
+
+        var confirmationOnce = true;
         foreach (var order in orders)
         {
-            await order.ConfirmAsync(requestContext, unitOfWork).ConfigureAwait(false);
+            var isConfirmed = await order.ConfirmAsync(requestContext, unitOfWork).ConfigureAwait(false);
+            confirmationOnce = confirmationOnce && isConfirmed;
         }
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
+
+        if (!confirmationOnce)
+        {
+            logger.LogInformation($"Confirmation for order [{orderId}] was requests several times by user [{requestContext.UserId}]");
+        }
     }
     
     public async Task CancelAsync(
@@ -125,10 +137,17 @@ public class OrderService : IOrdersService
             .GetOrder(orderId, requestContext.CancellationToken)
             .ConfigureAwait(false);
 
+        var cancellationOnce = true;
         foreach (var order in orders)
         {
-            await order.CancelAsync(requestContext, unitOfWork).ConfigureAwait(false);
+            var isCanceled = await order.CancelAsync(requestContext, unitOfWork).ConfigureAwait(false);
+            cancellationOnce = cancellationOnce && isCanceled;
         }
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
+
+        if (!cancellationOnce)
+        {
+            logger.LogInformation($"Cancellation for order [{orderId}] was requests several times by user [{requestContext.UserId}]");
+        }
     }
 }

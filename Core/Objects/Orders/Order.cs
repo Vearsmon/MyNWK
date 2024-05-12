@@ -65,26 +65,38 @@ public class Order
         return order;
     }
 
-    public async Task ConfirmAsync(RequestContext requestContext, IUnitOfWork unitOfWork)
+    public async Task<bool> ConfirmAsync(RequestContext requestContext, IUnitOfWork unitOfWork)
     {
         if (requestContext.UserId != BuyerId)
         {
             throw new InvalidOperationException($"Action not allowed for user: {requestContext.UserId}");
         }
 
+        if (ReceivedByBuyer || CanceledBySeller)
+        {
+            return false;
+        }
+
         await UpdateMarketProductAsync(requestContext, unitOfWork, true).ConfigureAwait(false);
         ReceivedByBuyer = true;
+        return true;
     }
 
-    public async Task CancelAsync(RequestContext requestContext, IUnitOfWork unitOfWork)
+    public async Task<bool> CancelAsync(RequestContext requestContext, IUnitOfWork unitOfWork)
     {
         if (requestContext.UserId != SellerId)
         {
             throw new InvalidOperationException($"Action not allowed for user: {requestContext.UserId}");
         }
 
+        if (ReceivedByBuyer || CanceledBySeller)
+        {
+            return false;
+        }
+        
         await UpdateMarketProductAsync(requestContext, unitOfWork, false).ConfigureAwait(false);
         CanceledBySeller = true;
+        return true;
     }
 
     private async Task UpdateMarketProductAsync(

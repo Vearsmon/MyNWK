@@ -268,7 +268,7 @@ async function openProductInfoUpdateWindow(data) {
         formData.append('description', document.getElementById("info-desc").value);
 
         await fetch('products/save', {
-            method: 'get',
+            method: 'post',
             body: formData
         });
         productInfoUpdateWindow.hidden = true;
