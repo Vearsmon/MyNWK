@@ -22,7 +22,7 @@ public class OrderService : IOrdersService
         var Orders = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.BuyerId == userId)
-                    .DistinctBy(m => m.OrderId)
+                    .Distinct()
                     .OrderBy(m => m.ReceivedByBuyer || m.CanceledBySeller)
                     .ThenByDescending(m => m.CreatedAt)
                     .Select(m => new { m.OrderId, m.CanceledBySeller, m.ReceivedByBuyer }),
@@ -46,7 +46,7 @@ public class OrderService : IOrdersService
         var Orders = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.SellerId == userId)
-                    .DistinctBy(m => m.OrderId)
+                    .Distinct()
                     .OrderBy(m => m.ReceivedByBuyer || m.CanceledBySeller)
                     .ThenByDescending(m => m.CreatedAt)
                     .Select(m => new { m.OrderId, m.CanceledBySeller, m.ReceivedByBuyer }), 
