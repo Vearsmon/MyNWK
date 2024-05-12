@@ -110,7 +110,7 @@ public class ApiController : Controller
             // по идее юзер должен уже находится, раз уж мы на странице пользователя
             
             throw new NotImplementedException();
-        return Json(new { address = user.Address, username = user.TelegramUsername, name = user.Name });
+        return Json(new { address = user.Address, username = user.TelegramUsername, name = user.Name, id = user.Id });
     }
 
     [Authorize(Policy = "UserPolicy")]
