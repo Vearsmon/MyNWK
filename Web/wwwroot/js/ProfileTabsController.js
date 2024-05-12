@@ -97,30 +97,41 @@ function loadProducts() {
         .then((products) => {
             let i = 0;
             for (let product of products) {
-                const productImage = document.createElement('img');
-                productImage.setAttribute('src', product.imageRef);
-                productImage.setAttribute('class', 'profile-product-photo');
-                productImage.setAttribute('id', `profile-product-photo-id-${i}`)
+                const removeButton = document.createElement('button');
+                const image = document.createElement('img');
+                const price = document.createElement('p');
+                const info = document.createElement('div');
+                const slot = document.createElement('div');
 
-                const productPrice = document.createElement('p');
-                productPrice.innerText = `${product['price']} р.`;
+                removeButton.setAttribute('class', `profile-product-remove-button`);
+                removeButton.setAttribute('id', `profile-product-remove-button-id-${i}`)
+                removeButton.textContent = 'x';
+                removeButton.style.zIndex = '3';
+                removeButton.style.position = 'relative';
+                image.setAttribute('src', product.imageRef);
+                image.setAttribute('class', 'profile-product-photo');
+                image.setAttribute('id', `profile-product-photo-id-${i}`)
+                price.innerText = `${product['price']} р.`;
+                info.setAttribute('class', 'profile-product-info');
+                info.textContent = product['title'];
+                info.appendChild(price);
+                slot.setAttribute('class', 'profile-product');
+                slot.appendChild(image);
+                slot.appendChild(info);
+                slot.appendChild(removeButton);
 
-                const productInfo = document.createElement('div');
-                productInfo.setAttribute('class', 'profile-product-info');
-                productInfo.textContent = product['title'];
-                productInfo.appendChild(productPrice);
-
-                const productSlot = document.createElement('div');
-                productSlot.setAttribute('class', 'profile-product');
-                productSlot.appendChild(productImage);
-                productSlot.appendChild(productInfo);
-
-                container.appendChild(productSlot);
+                container.appendChild(slot);
+                
                 document.getElementById(`profile-product-photo-id-${i}`)
-                    .addEventListener('click', async (event) => {
+                    .addEventListener('click', (event) => {
                         const id = event.target.getAttribute('id').split('-').pop();
-                        await openProductInfoUpdateWindow(products[Number(id)]);
+                        openProductInfoUpdateWindow(products[Number(id)]);
                     });
+                document.getElementById(`profile-product-remove-button-id-${i}`)
+                    .addEventListener('click', (event) => {
+                        const id = event.target.getAttribute('id').split('-').pop();
+                        openDeleteConfirmationWindow(products[Number(id)]);
+                })
                 i++;
             }
         });
@@ -220,7 +231,7 @@ function loadOrders() {
         });
 }
 
-async function openProductInfoUpdateWindow(data) {
+function openProductInfoUpdateWindow(data) {
     const title = document.createElement("div");
     const price = document.createElement("div");
     const remained = document.createElement("div");
@@ -253,11 +264,6 @@ async function openProductInfoUpdateWindow(data) {
     price.insertAdjacentHTML('beforeend', `<br><input class="product-info-fields" type="number" name="title" id="info-price"/>`)
     remained.insertAdjacentHTML('beforeend', `<br><input class="product-info-fields" type="number" name="title" id="info-remained"/>`)
     description.insertAdjacentHTML('beforeend', `<br><textarea class="product-info-fields" name="description" id="info-desc"></textarea>`)
-
-    document.getElementById("info-title").value = data['title'];
-    document.getElementById("info-price").value = data['price'];
-    document.getElementById("info-remained").value = data['remained'];
-    document.getElementById("info-desc").value = data['description'];
     
     const info = document.getElementsByClassName('product-info-content');
     const len = info.length;
@@ -273,6 +279,11 @@ async function openProductInfoUpdateWindow(data) {
     form.appendChild(applyButton);
     
     document.getElementsByClassName('profile-market-info-update-window')[0].appendChild(form);
+
+    document.getElementById("info-title").value = data['title'];
+    document.getElementById("info-price").value = data['price'];
+    document.getElementById("info-remained").value = data['remained'];
+    document.getElementById("info-desc").value = data['description'];
 
     applyButton.addEventListener('click', async function () {
         let formData = new FormData();
@@ -291,6 +302,53 @@ async function openProductInfoUpdateWindow(data) {
         productInfoUpdateWindow.hidden = true;
     })
 
+    productInfoUpdateWindow.hidden = false;
+}
+
+function openDeleteConfirmationWindow(data) {
+    const form = document.createElement('form');
+    const question = document.createElement("div");
+    const confirm = document.createElement("button");
+    const deny = document.createElement("button");
+
+    form.setAttribute('class', 'info-update-form-container');
+    form.setAttribute('encType', 'multipart/form-data');
+    question.setAttribute('class', 'product-info-content');
+    question.setAttribute('id', 'product-info-question');
+    confirm.setAttribute('class', 'product-info-content');
+    confirm.setAttribute('id', 'product-info-confirm');
+    confirm.textContent = 'Удалить';
+    deny.setAttribute('class', 'product-info-content');
+    deny.setAttribute('id', 'product-info-deny');
+    deny.textContent = 'Отмена';
+    question.insertAdjacentText('afterbegin', `Вы действительно хотите удалить товар \"${data['title']}\"?`);
+
+    const info = document.getElementsByClassName('product-info-content');
+    const len = info.length;
+    for (let i = 0; i < len; i++) {
+        info[0].remove();
+    }
+
+    form.appendChild(question);
+    form.appendChild(confirm);
+    form.appendChild(deny);
+
+    document.getElementsByClassName('profile-market-info-update-window')[0].appendChild(form);
+
+    confirm.addEventListener('click', async function () {
+        let formData = new FormData();
+        formData.append('productId', JSON.stringify(data['fullId']['productId']));
+
+        await fetch('products/delete', {
+            method: 'post',
+            body: formData
+        });
+        productInfoUpdateWindow.hidden = true;
+    });
+    deny.addEventListener('click', function () {
+        closeProductInfoUpdateWindow()
+    });
+    
     productInfoUpdateWindow.hidden = false;
 }
 

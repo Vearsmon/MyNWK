@@ -175,6 +175,14 @@ public class ProductService : IProductService
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
         return Convert(productToChange, userId, null, productToChange.Remained);
     }
+    
+    public async void DeleteProductByIdAsync(RequestContext requestContext, int productId)
+    {
+        await using var unitOfWork = unitOfWorkProvider.Get();
+        await unitOfWork.ProductRepository.DeleteAsync(p => p.Where(t => t.ProductId == productId),
+            requestContext.CancellationToken).ConfigureAwait(false);
+        // await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
+    }
 
     private async Task<List<(Product product, string? imageRef)>> GetImageRefByMarketAndProductId(
         List<Product> products)

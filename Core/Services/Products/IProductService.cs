@@ -29,4 +29,7 @@ public interface IProductService
     
     public Task<ProductDto?> UpdateProductInfoAsync(
         RequestContext requestContext, Dictionary<string, string> parametersToUpdate);
+    
+    public void DeleteProductByIdAsync(
+        RequestContext requestContext, int productId);
 }
