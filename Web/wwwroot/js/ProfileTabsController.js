@@ -1,14 +1,10 @@
 function loadPurchases() {
     const getProductsByBuyer = new URL('http://127.0.0.1:80/products/get/byBuyer');
-    const params = {pageNumber:0, batchSize:20};
-    getProductsByBuyer.search = new URLSearchParams(params).toString();
     const container = document.getElementsByClassName("profile-purchases-container")[0];
-    //container.innerHTML = '';
 
     fetch(getProductsByBuyer, {method: 'get'})
         .then((response) => response.json())
         .then((orders) => {
-            console.log(orders);
             for (order of orders) {
                 const header = document.createElement('div');
                 header.setAttribute('class', 'profile-purchases-header');
@@ -16,7 +12,6 @@ function loadPurchases() {
                 
                 const purchases = document.createElement('div');
                 purchases.setAttribute('class', 'profile-purchases');
-                console.log(order);
                 for (product of order["products"]) {
                     const productImage = document.createElement('img');
                     productImage.setAttribute('src', product.imageRef);
@@ -38,16 +33,31 @@ function loadPurchases() {
                     purchases.appendChild(productSlot);
                 }
                 
-                const button = document.createElement('button');
-                button.setAttribute('class', 'profile-purchases-accept');
-                button.innerHTML = 'Подтвердить получение';
-
                 const innerContainer = document.createElement('div');
                 innerContainer.setAttribute('class', 'profile-purchases-inner-container');
                 innerContainer.appendChild(header);
                 innerContainer.appendChild(purchases);
-                innerContainer.appendChild(button);
 
+                if (order["CancelledBySeller"]) {
+                    const label = document.createElement('label');
+                    label.innerHTML = "Отменён";
+                    innerContainer.appendChild(label);
+                } else if (order["receivedByBuyer"]) {
+                    const label = document.createElement('label');
+                    label.innerHTML = "Получен";
+                    innerContainer.appendChild(label);
+                } else {
+                    const button = document.createElement('button');
+                    button.setAttribute('class', 'profile-purchases-accept');
+                    button.innerHTML = 'Подтвердить получение';
+                    button.addEventListener('click', async function() {
+                        const confirm = new URL('http://127.0.0.1:80/orders/confirm');
+                        confirm.search = new URLSearchParams({orderId: order["orderId"]}).toString();
+                        fetch(confirm, {method: 'get'});
+                    });
+                    innerContainer.appendChild(button);
+                }
+                
                 container.appendChild(innerContainer);
             }
         });
@@ -55,10 +65,7 @@ function loadPurchases() {
 
 function loadProducts() {
     const getProductsByUser = new URL('http://127.0.0.1:80/products/get/byUser');
-    const params = {pageNumber:0, batchSize:20};
-    getProductsByUser.search = new URLSearchParams(params).toString();
     const container = document.getElementsByClassName("profile-products-inner-container")[0];
-    //container.innerHTML = '';
         
     fetch(getProductsByUser, {method: 'get'})
         .then((response) => response.json())
@@ -96,10 +103,7 @@ function loadProducts() {
 
 function loadOrders() {
     const getProductsBySeller = new URL('http://127.0.0.1:80/products/get/bySeller');
-    const params = {pageNumber:0, batchSize:20};
-    getProductsBySeller.search = new URLSearchParams(params).toString();
     const container = document.getElementsByClassName("profile-orders-container")[0];
-    //container.innerHTML = '';
 
     fetch(getProductsBySeller, {method: 'get'})
         .then((response) => response.json())
@@ -132,15 +136,30 @@ function loadOrders() {
                     orders.appendChild(productSlot);
                 }
                 
-                const button = document.createElement('button');
-                button.setAttribute('class', 'profile-orders-cancel');
-                button.innerHTML = 'Отменить заказ';
-
                 const innerContainer = document.createElement('div');
                 innerContainer.setAttribute('class', 'profile-orders-inner-container');
                 innerContainer.appendChild(header);
                 innerContainer.appendChild(orders);
-                innerContainer.appendChild(button);
+
+                if (order["CancelledBySeller"]) {
+                    const label = document.createElement('label');
+                    label.innerHTML = "Отменён";
+                    innerContainer.appendChild(label);
+                } else if (order["receivedByBuyer"]) {
+                    const label = document.createElement('label');
+                    label.innerHTML = "Получен";
+                    innerContainer.appendChild(label);
+                } else {
+                    const button = document.createElement('button');
+                    button.setAttribute('class', 'profile-orders-cancel');
+                    button.innerHTML = 'Отменить заказ';
+                    button.addEventListener('click', async function() {
+                        const confirm = new URL('http://127.0.0.1:80/orders/cancel');
+                        confirm.search = new URLSearchParams({orderId: order["orderId"]}).toString();
+                        fetch(confirm, {method: 'get'});
+                    });
+                    innerContainer.appendChild(button);
+                }
 
                 container.appendChild(innerContainer);
             }
@@ -217,7 +236,6 @@ async function openProductInfoUpdateWindow(data)
 }
 
 function openPurchases () {
-    //alert("BUTTON1");
     purchasesInnerContainer[0].hidden = false;
     productsInnerContainer[0].hidden = true;
     ordersInnerContainer[0].hidden = true;
@@ -232,7 +250,6 @@ function openPurchases () {
 }
 
 function openProducts () {
-    //alert("BUTTON2");
     purchasesInnerContainer[0].hidden = true;
     productsInnerContainer[0].hidden = false;
     ordersInnerContainer[0].hidden = true;
@@ -247,7 +264,6 @@ function openProducts () {
 }
 
 function openOrders () {
-    //alert("BUTTON3");
     purchasesInnerContainer[0].hidden = true;
     productsInnerContainer[0].hidden = true;
     ordersInnerContainer[0].hidden = false;

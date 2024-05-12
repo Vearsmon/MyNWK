@@ -83,8 +83,13 @@ public class ProductsController : Controller
         var result = new List<FullOrder>();
         foreach (var o in orderIds)
         {
-            var products = await productService.GetOrderProductsAsync(requestContext, o);
-            result.Add(new FullOrder() { OrderId = o, Products = products });
+            var products = await productService.GetOrderProductsAsync(requestContext, o.OrderId);
+            result.Add(new FullOrder {
+                OrderId = o.OrderId,
+                Products = products,
+                CanceledBySeller = o.CanceledBySeller,
+                ReceivedByBuyer = o.ReceivedByBuyer
+            });
         }
         Console.WriteLine(Json(result));
         return Json(result);
@@ -99,8 +104,13 @@ public class ProductsController : Controller
         var result = new List<FullOrder>();
         foreach (var o in orderIds)
         {
-            var products = await productService.GetOrderProductsAsync(requestContext, o);
-            result.Add(new FullOrder { OrderId = o, Products = products });
+            var products = await productService.GetOrderProductsAsync(requestContext, o.OrderId);
+            result.Add(new FullOrder {
+                OrderId = o.OrderId,
+                Products = products,
+                CanceledBySeller = o.CanceledBySeller,
+                ReceivedByBuyer = o.ReceivedByBuyer
+            });
         }
         return Json(result);
     }
