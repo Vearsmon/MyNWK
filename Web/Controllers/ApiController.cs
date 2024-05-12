@@ -4,6 +4,7 @@ using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Users;
 using Core.Services.Categories;
 using Core.Services.Markets;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers;
@@ -27,22 +28,22 @@ public class ApiController : Controller
     
     [HttpGet]
     [Route("isAuthenticated")]
-    public async Task<IActionResult> IsAuthenticated()
+    public Task<IActionResult> IsAuthenticated()
     {
         var identity = HttpContext.User.Identity;
         if (identity is null)
         {
-            return Ok("non");
+            return Task.FromResult<IActionResult>(Ok("non"));
         }
 
         if (!identity.IsAuthenticated)
         {
-            return Ok("non");
+            return Task.FromResult<IActionResult>(Ok("non"));
         }
         
         var expiresAtClaim = HttpContext.User.FindFirst(c => c.Type == ClaimTypes.Expiration);
         var expiresAt = long.Parse(expiresAtClaim?.Value ?? "0");
-        return Ok(DateTime.UtcNow.Ticks < expiresAt ? identity.Name : "non");
+        return Task.FromResult<IActionResult>(Ok(DateTime.UtcNow.Ticks < expiresAt ? identity.Name : "non"));
     }
 
     [HttpGet]
@@ -61,6 +62,7 @@ public class ApiController : Controller
         return Json(await marketsService.GetAllMarkets(requestContext));
     }
 
+    [Authorize(Policy = "UserPolicy")]
     [HttpGet]
     [Route("get/user/info")]
     public async Task<IActionResult> GetUserInfoAsync(CancellationToken cancellationToken)
@@ -80,11 +82,12 @@ public class ApiController : Controller
         return Json(new { address = user.Address, username = user.TelegramUsername, name = user.Name });
     }
 
+    [Authorize(Policy = "UserPolicy")]
     [HttpPost]
     [Route("set/user/info/address")]
     public async Task<IActionResult> SetUserInfoAddressAsync(CancellationToken cancellationToken)
     {
-        var form = await HttpContext.Request.ReadFormAsync();
+        var form = await HttpContext.Request.ReadFormAsync(cancellationToken);
         
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         var unitOfWork = unitOfWorkProvider.Get();
@@ -104,11 +107,12 @@ public class ApiController : Controller
         return Json(user.Address);
     }
     
+    [Authorize(Policy = "UserPolicy")]
     [HttpPost]
     [Route("set/user/info/name")]
     public async Task<IActionResult> SetUserInfoNameAsync(CancellationToken cancellationToken)
     {
-        var form = await HttpContext.Request.ReadFormAsync();
+        var form = await HttpContext.Request.ReadFormAsync(cancellationToken);
         
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         var unitOfWork = unitOfWorkProvider.Get();

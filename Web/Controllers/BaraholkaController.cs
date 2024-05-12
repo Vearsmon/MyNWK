@@ -16,29 +16,6 @@ public class BaraholkaController : Controller
     {
         this.unitOfWorkProvider = unitOfWorkProvider;
     }
-    
-    [HttpPost]
-    public async Task<IActionResult> Index(string id, string username, string name)
-    {
-        if (long.TryParse(id, out var _))
-        {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("http://127.0.0.1");
-            var values = new Dictionary<string, string>
-            {
-                { "id", id },
-                { "username", username },
-                { "name", name }
-            };
-
-            var content = new FormUrlEncodedContent(values);
-            var response = await client.PostAsync($"/Account/Login/", content);
-
-            var responseString = await response.Content.ReadAsStringAsync();
-            return Redirect($"/user/Profile");
-        }
-        return View();
-    }
 
     [HttpGet]
     public async Task<IActionResult> Index()

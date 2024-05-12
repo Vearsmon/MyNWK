@@ -14,7 +14,7 @@ public class ProfileController : Controller
         this.unitOfWorkProvider = unitOfWorkProvider;
     }
     
-    public async Task<IActionResult> Index(string smth)
+    public async Task<IActionResult> Index()
     {
         return View("~/Pages/Profile.cshtml");
     }

@@ -25,17 +25,9 @@ public class AccountController : Controller
         this.tgAuthService = tgAuthService;
     }
     
-    [HttpGet]
-    [AllowAnonymous]
-    public IActionResult Login()
-    {
-        ViewBag.returnUrl = "/";
-        return View(new LoginModel());
-    }
-    
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> Login(string returnUrl)
+    public async Task<IActionResult> Login()
     {
         var form = await HttpContext.Request.ReadFormAsync();
         var userMeta = ITgAuthService.KeysToUseInHash.ToDictionary(key => key, key => form[key].ToString());
