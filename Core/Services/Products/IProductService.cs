@@ -25,7 +25,7 @@ public interface IProductService
         RequestContext requestContext);
 
     public Task<List<ProductDto>> GetOrderProductsAsync(
-        RequestContext requestContext, Guid OrderId);
+        RequestContext requestContext, Guid orderId);
     
     public Task<ProductDto?> UpdateProductInfoAsync(
         RequestContext requestContext, Dictionary<string, string> parametersToUpdate);
