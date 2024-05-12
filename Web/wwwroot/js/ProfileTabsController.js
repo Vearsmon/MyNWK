@@ -20,11 +20,15 @@ function loadPurchases() {
     
                     const productPrice = document.createElement('p');
                     productPrice.innerText = `${product['price']} р.`;
+
+                    const number = document.createElement('p');
+                    number.innerText = `${product['remained']} шт.`;
     
                     const productInfo = document.createElement('div');
                     productInfo.setAttribute('class', 'profile-purchase-info');
                     productInfo.textContent = product['title'];
                     productInfo.appendChild(productPrice);
+                    productInfo.appendChild(number);
     
                     const productSlot = document.createElement('div');
                     productSlot.setAttribute('class', 'profile-purchase');
@@ -133,10 +137,14 @@ function loadOrders() {
                     const productPrice = document.createElement('p');
                     productPrice.innerText = `${product['price']} р.`;
     
+                    const number = document.createElement('p');
+                    number.innerText = `${product['remained']} шт.`;
+
                     const productInfo = document.createElement('div');
                     productInfo.setAttribute('class', 'profile-order-info');
                     productInfo.textContent = product['title'];
                     productInfo.appendChild(productPrice);
+                    productInfo.appendChild(number);
     
                     const productSlot = document.createElement('div');
                     productSlot.setAttribute('class', 'profile-order');
