@@ -26,8 +26,8 @@ public class ProductsController : Controller
     [AllowAnonymous]
     [Route("get/all")]
     public async Task<JsonResult> GetAllAsync(
-        int pageNumber,
-        int batchSize,
+        [Range(0, int.MaxValue)] int pageNumber,
+        [Range(0, 100)] int batchSize,
         int? categoryId,
         int? marketId,
         CancellationToken cancellationToken)
@@ -87,10 +87,10 @@ public class ProductsController : Controller
         CancellationToken cancellationToken)
     {
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
-        await using var productImageStream = HttpContext.Request.Form.Files.FirstOrDefault()?.OpenReadStream();
         string? imageLocation = null;
-        if (productImageStream is not null)
+        if (productAddModel.Image is not null)
         {
+            await using var productImageStream = productAddModel.Image.OpenReadStream();
             var productImage = await productImageStream.ReadToEndAsync(32768, requestContext.CancellationToken);
             imageLocation =  await productService.SaveImageAsync(requestContext, productImage);
         }
