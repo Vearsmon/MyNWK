@@ -21,6 +21,23 @@ public class ProductsController : Controller
         this.productService = productService;
         this.ordersService = ordersService;
     }
+    
+    [HttpGet]
+    [Route("get")]
+    public async Task<JsonResult> GetProductInfoNameAsync(
+        CancellationToken cancellationToken,
+        ProductFullId productFullId)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var product = await productService.GetProductByFullId(requestContext, productFullId);
+        
+        if (product == null)
+        {
+            throw new NotImplementedException();
+        }
+        
+        return Json(product);
+    }
 
     [HttpGet]
     [AllowAnonymous]
@@ -79,7 +96,7 @@ public class ProductsController : Controller
         }
         return Json(result);
     }
-    
+
     [HttpPost]
     [Route("create")]
     public async Task<IActionResult> CreateAsync(
@@ -92,13 +109,15 @@ public class ProductsController : Controller
         {
             await using var productImageStream = productAddModel.Image.OpenReadStream();
             var productImage = await productImageStream.ReadToEndAsync(32768, requestContext.CancellationToken);
-            imageLocation =  await productService.SaveImageAsync(requestContext, productImage);
+            imageLocation = await productService.SaveImageAsync(requestContext, productImage);
         }
+
         var productToCreate = new ProductToCreateDto
         {
             Title = productAddModel.Title,
             Count = productAddModel.Count,
             Price = productAddModel.Price,
+            Description = productAddModel.Description,
             ImageLocation = imageLocation
         };
         await productService.CreateAsync(requestContext, productToCreate);

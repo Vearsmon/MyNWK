@@ -21,4 +21,7 @@ public class ProductAddModel
     [MaxFileSize(1_048_576)]
     [AllowedExtensions(new [] { ".jpg", ".jpeg", ".png", ".gif" })]
     public IFormFile? Image { get; set; }
+    
+    [StringLength(1024)]
+    public string? Description { get; set; }
 }

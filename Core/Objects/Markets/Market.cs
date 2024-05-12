@@ -42,6 +42,7 @@ public class Market
             ImageLocation = productToCreate.ImageLocation,
             Price = productToCreate.Price,
             Remained = productToCreate.Count,
-            Title = productToCreate.Title
+            Title = productToCreate.Title,
+            Description = productToCreate.Description
         };
 }

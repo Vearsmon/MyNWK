@@ -1,14 +1,10 @@
 ﻿const productAddWindow = document.getElementsByClassName("profile-product-info-window");
 
 async function openProductInfoWindow(data) {
-    await fetch('api/get/product/info', {
-        method: 'get',
-        headers: {
-            marketId: data["fullId"]["marketId"],
-            productId: data["fullId"]["productId"],
-            userId: data["fullId"]["userId"]
-        }
-    }).then((response) => response.json())
+    const getProductUrl = new URL('http://127.0.0.1:80/products/get');
+    getProductUrl.search = new URLSearchParams(data).toString();
+    await fetch(getProductUrl, { method: 'get' })
+    .then((response) => response.json())
         .then((infoParams) => {
             const title = document.createElement("div");
             const price = document.createElement("div");
@@ -176,9 +172,7 @@ async function fetchProducts(categoryId, marketId) {
                 slots.appendChild(productSlot);
                 document.getElementById(`baraholka-slot-photo-id-${i}`)
                     .addEventListener('click', () => {
-                        openProductInfoWindow({
-                            fullId: product["fullId"]
-                        })
+                        openProductInfoWindow(product["fullId"])
                     });
                i += 1;
             }
