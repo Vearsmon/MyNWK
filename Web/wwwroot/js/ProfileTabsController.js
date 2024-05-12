@@ -80,13 +80,7 @@ function loadPurchases() {
                     div.setAttribute('class', "profile-purchases-status");
                     div.innerHTML = `Ожидание ответа продавца`;
                     innerContainer.appendChild(div);
-                } else {
-                    const button = document .createElement('button');
-                    button.setAttribute('class', "profile-purchases-accept");
-                    button.setAttribute('id', `accept-${order["orderId"]}`);
-                    button.innerHTML = 'Подтвердить получение';
-                    innerContainer.appendChild(button);
-                }
+                } 
                 getUserInfo = new URL('http://127.0.0.1:80/api/get/user/info');
                 getUserInfo.search = new URLSearchParams({userId: order["products"][0]["fullId"]["userId"]}).toString();
                 console.log(order);
