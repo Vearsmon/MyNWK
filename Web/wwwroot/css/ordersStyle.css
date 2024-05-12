@@ -117,7 +117,7 @@ p {
     width: 200px;
     height: 30px;
 
-    background-color: var(--background-color);
+    background-color: var(--background-card-color);
 
     border-color: var(--border-color);
     border-style: solid;
