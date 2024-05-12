@@ -66,7 +66,7 @@ function loadPurchases() {
                     button.setAttribute('id', `accept-${order["orderId"]}`);
                     button.innerHTML = 'Подтвердить получение';
                     button.addEventListener('click', async (event) => {
-                        const confirm = new URL('/orders/confirm');
+                        const confirm = new URL('http://127.0.0.1:80/orders/confirm');
                         const id = event.target.getAttribute('id');
                         confirm.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
                         fetch(confirm, {method: 'get'})
@@ -194,7 +194,7 @@ function loadOrders() {
                     cancelButton.innerHTML = 'Отменить заказ';
                     cancelButton.addEventListener('click', async (event) => {
                         const id = event.target.getAttribute('id');
-                        const cancel = new URL('/orders/cancel');
+                        const cancel = new URL('http://127.0.0.1:80/orders/cancel');
                         cancel.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
                         fetch(cancel, {method: 'get'})
                             .then(() => loadOrders());
@@ -205,7 +205,7 @@ function loadOrders() {
                     confirmButton.innerHTML = 'Отменить заказ';
                     confirmButton.addEventListener('click', async (event) => {
                         const id = event.target.getAttribute('id');
-                        const cancel = new URL('/orders/confirm');
+                        const cancel = new URL('http://127.0.0.1:80/orders/confirm');
                         cancel.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
                         fetch(cancel, {method: 'get'})
                             .then(() => loadOrders());
