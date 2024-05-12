@@ -59,7 +59,7 @@
     font-weight: 500;
 
     border-width: 0px 2px 0px 0px;
-    border-color:var(--border-colro);
+    border-color:var(--border-color);
     border-style: solid;
         
     cursor: pointer;

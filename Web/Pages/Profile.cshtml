@@ -38,6 +38,10 @@
                 </button>
             </li>
         </ul>
+
+        <button class="modeButton">
+            <img src="~/assets/modeButton.png" alt="modeButton" width="43px" height="61px">
+        </button>
     </div>
 
     <div class="profile-container">
@@ -474,8 +478,7 @@
                 Скрывать товары вне времени работы:
             </div>
 
-            <input id="auto-hide" class="settings-fields" type="checkbox" name="auto-hide">
-            *@
+            <input id="auto-hide" class="settings-fields" type="checkbox" name="auto-hide">*@
                                
             @* <div class="settings-buttons"> *@
             @*     <input class="settings-accept" type="submit" value="Изменить"/> *@
@@ -486,16 +489,16 @@
 
     <div hidden="true" class="profile-market-info-update-window">
         <div id="profile-market-info-update-close" class="product-card-background-shadow"></div>
-
-        <form class="info-update-form-container" method="post" action="" enctype="multipart/form-data">
-            <div class="info-update-header">Информация о товаре</div>
-            
-            @* Информация о товаре *@
-            
-            <div class="info-update-buttons">
-                <input class="info-update-accept" type="submit" value="Применить изменения"/>
-            </div>
-        </form>
+        @* *@
+        @* <form class="info-update-form-container" enctype="multipart/form-data"> *@
+        @*     <div class="info-update-header">Информация о товаре</div> *@
+        @*      *@
+        @*     $1$ Информация о товаре #1# *@
+        @*      *@
+        @*     <div class="info-update-buttons"> *@
+        @*         <input class="info-update-accept" type="button" value="Применить изменения"/> *@
+        @*     </div> *@
+        @* </form> *@
     </div>
 
     <script src="~/js/ProfileMarketButtonsController.js"></script>

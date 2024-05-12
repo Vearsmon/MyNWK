@@ -149,22 +149,19 @@ public class ProductsController : Controller
     {
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         var form = await HttpContext.Request.ReadFormAsync(cancellationToken);
-        var fullId = new ProductFullId(
-            int.Parse(form["userId"].ToString()),
-            int.Parse(form["marketId"].ToString()),
-            int.Parse(form["productId"].ToString()));
 
-        var productToChange = await productService.GetProductByFullId(requestContext, fullId);
-        if (productToChange == null)
-            throw new NotImplementedException();
+        var parametersDict = new Dictionary<string, string>
+        {
+            { "userId", form["userId"].ToString() },
+            { "marketId", form["marketId"].ToString() },
+            { "productId", form["productId"].ToString() },
+            { "description", form["description"].ToString() },
+            { "price", form["price"].ToString() },
+            { "title", form["title"].ToString() },
+            { "remained", form["remained"].ToString() }
+        };
 
-        productToChange.Description = form["description"].ToString();
-        productToChange.Price = int.Parse(form["price"].ToString());
-        productToChange.Title = form["title"].ToString();
-        productToChange.Remained = int.Parse(form["remained"].ToString());
-
-        var unitOfWork = unitOfWorkProvider.Get();
-        await unitOfWork.CommitAsync(requestContext.CancellationToken);
-        return Json(productToChange);
+        await productService.UpdateProductInfoAsync(requestContext, parametersDict);
+        return Redirect("/Profile");
     }
 }

@@ -45,6 +45,12 @@ function openSettingsWindow() {
 
             <input id="time-to" class="settings-fields" type="time" name="worksTo" value="${marketInfo.worksTo}"/>
             
+            <div class="settings-content">
+                Скрывать товары вне времени работы:
+            </div>
+
+            <input id="auto-hide" class="settings-fields" type="checkbox" name="autoHide" ${marketInfo.autoHide ? "checked" : ""}>
+            
             <div class="settings-buttons">
                 <input class="settings-accept" type="submit" value="Изменить"/>
             </div>`;
@@ -59,7 +65,10 @@ function closeSettingsWindow() {
 }
 
 function closeProductInfoUpdateWindow() {
-    productInfoUpdateWindow[0].hidden = true;
+    productInfoUpdateWindow.hidden = true;
+    productInfoUpdateWindow.innerHTML = `<div id="profile-market-info-update-close" class="product-card-background-shadow"></div>`;
+    productInfoUpdateCloseButton = document.getElementById("profile-market-info-update-close");
+    productInfoUpdateCloseButton.addEventListener('click', () => closeProductInfoUpdateWindow());
     alert('CLOSED');
 }
 
@@ -75,7 +84,7 @@ settingsOpenButton.addEventListener('click', () => openSettingsWindow());
 
 const productAddCloseButton = document.getElementById("profile-product-add-close");
 const settingsCloseButton = document.getElementById("profile-market-settings-close");
-const productInfoUpdateCloseButton = document.getElementById("profile-market-info-update-close");
+let productInfoUpdateCloseButton = document.getElementById("profile-market-info-update-close");
 
 productAddCloseButton.addEventListener('click', () => closeProductAddWindow());
 settingsCloseButton.addEventListener('click', () => closeSettingsWindow());
