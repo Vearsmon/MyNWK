@@ -73,15 +73,25 @@ function loadPurchases() {
                             .then(() => loadPurchases());
                     });
                     innerContainer.appendChild(button);
-                }else {
-                    const button = document.createElement('button');
+                } else {
+                    const button = document .createElement('button');
                     button.setAttribute('class', "profile-purchases-accept");
                     button.setAttribute('id', `accept-${order["orderId"]}`);
                     button.innerHTML = 'Подтвердить получение';
                     innerContainer.appendChild(button);
                 }
-                
-                container.appendChild(innerContainer);
+                getUserInfo = new URL('http://127.0.0.1:80/api/get/user/info');
+                getUserInfo.search = new URLSearchParams({userId: order["products"][0]["fullId"]["userId"]}).toString();
+                console.log(order);
+                fetch(getUserInfo, {method: 'get'})
+                    .then((response) => response.json())
+                    .then((userId) => {
+                        console.log(userId);
+                        const userDiv = document.createElement('div');
+                        userDiv.setAttribute('class', "profile-purchases-status");
+                        userDiv.innerHTML = `@${userId["username"]}`;
+                        container.appendChild(innerContainer);
+                    });
             }
         });
 }

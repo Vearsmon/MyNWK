@@ -1,5 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', async function () {
-    fetch('api/get/user/info', {method: 'get'})
+    fetch('api/get/user/myInfo', {method: 'get'})
         .then((response) => response.json())
         .then((data) => {
             if (data["address"] !== 'undefined') {
