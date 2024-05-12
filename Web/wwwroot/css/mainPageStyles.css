@@ -5,7 +5,7 @@ body {
     font-style: normal;
     font-variation-settings: "slnt" 0;
 
-    background-color: #FFFAF3;
+    background-color: var(--background-color);
 }
 
 .wii {
@@ -27,8 +27,8 @@ body {
 
     z-index: 3;
 
-    background: #FFE1BD;
-    border-bottom: 1px solid #FFA25E;
+    background: var(--background-card-color);
+    border-bottom: 2px solid var(--border-color);
 
     display: flex;
     justify-content: space-between;
@@ -77,12 +77,12 @@ body {
     width: 180px;
     height: 32px;
 
-    background-color: #FFE1BD;
-    border: 2px solid #FFA25E;
+    background-color: var(--background-card-color);
+    border: 2px solid var(--content-color);
     border-radius: 7px;
 
     font-size: 20px;
-    color: #FFA25E;
+    color: var(--content-color);
 
     z-index: 4;
 }
@@ -97,12 +97,12 @@ body {
     width: 180px;
     height: 32px;
 
-    background-color: #FFE1BD;
-    border: 2px solid #FFA25E;
+    background-color: var(--background-card-color);
+    border: 2px solid var(--content-color);
     border-radius: 7px;
 
     font-size: 20px;
-    color: #FFA25E;
+    color: var(--content-color);
 
     z-index: 4;
 }
@@ -113,7 +113,7 @@ body {
 .link {
     text-decoration: none;
     font-size: 20px;
-    color:#FFA25E;
+    color:var(--content-color);
     font-weight: 500;
 }
 
@@ -124,7 +124,7 @@ body {
     right: 50px;
     top: 14px;
 
-    background-color: #FFE1BD;
+    background-color: var(--background-card-color);
     border: none;
 
     cursor: pointer;

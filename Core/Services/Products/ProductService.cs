@@ -112,12 +112,15 @@ public class ProductService : IProductService
                 requestContext.CancellationToken)
             .FirstOrDefaultAsync()
             .ConfigureAwait(false);
-        var productWithImageRef = await GetImageRefByMarketAndProductId([product])
+        if (product is null)
+        {
+            return null;
+        }
+        
+        var productWithImageRef = await GetImageRefByMarketAndProductId(new List<Product> { product })
             .ConfigureAwait(false);
         
-        return product == null 
-            ? null 
-            : Convert(product, productFullId.UserId, productWithImageRef.FirstOrDefault().imageRef);
+        return Convert(product, productFullId.UserId, productWithImageRef.FirstOrDefault().imageRef);
     }
 
     public async Task<List<ProductDto>> GetOrderProductsAsync(RequestContext requestContext, Guid OrderId)

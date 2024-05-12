@@ -4,6 +4,6 @@ namespace Core.Services.Orders;
 
 public class FullOrder
 {
-    public Guid OrderId;
-    public List<ProductDto> Products = null!;
+    public Guid OrderId { get; set; }
+    public List<ProductDto> Products { get; set; } = null!;
 }

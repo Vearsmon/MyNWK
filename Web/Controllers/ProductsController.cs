@@ -86,6 +86,7 @@ public class ProductsController : Controller
             var products = await productService.GetOrderProductsAsync(requestContext, o);
             result.Add(new FullOrder() { OrderId = o, Products = products });
         }
+        Console.WriteLine(Json(result));
         return Json(result);
     }
 

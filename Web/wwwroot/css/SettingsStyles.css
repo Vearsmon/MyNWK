@@ -12,8 +12,8 @@
     top: 20vh;
     left: 35vw;
 
-    width: 350px;
-    height: 400px;
+    width: 450px;
+    height: 450px;
 
     background-color: var(--background-color);
     
@@ -32,10 +32,10 @@
     position: relative;
 
     margin-top: 10px;
-    margin-left: 20%;
+    margin-left: 24%;
 
     font-weight: 500;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 
@@ -51,7 +51,7 @@
     position: relative;
 
     margin-top: 50px;
-    margin-left: 12%;
+    margin-left: 23%;
 
     width: 150px;
     height: 25px;

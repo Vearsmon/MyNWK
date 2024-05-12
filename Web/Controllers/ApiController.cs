@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
-using Core;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Users;
 using Core.Services.Categories;
 using Core.Services.Markets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.Models;
 
 namespace Web.Controllers;
 
@@ -60,6 +60,27 @@ public class ApiController : Controller
     {
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         return Json(await marketsService.GetAllMarkets(requestContext));
+    }
+    
+    [Authorize(Policy = "UserPolicy")]
+    [HttpGet]
+    [Route("get/market/info")]
+    public async Task<JsonResult> GetMarketAsync(int marketId, CancellationToken cancellationToken)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        return Json(await marketsService.GetMarketInfo(requestContext, marketId));
+    }
+    
+    [Authorize(Policy = "UserPolicy")]
+    [HttpPost]
+    [Route("market/update")]
+    public async Task<IActionResult> UpdateMarketInfoAsync(
+        MarketToUpdate marketToUpdate,
+        CancellationToken cancellationToken)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        await marketsService.UpdateAsync(requestContext, marketToUpdate);
+        return View("~/Pages/Profile.cshtml");
     }
 
     [Authorize(Policy = "UserPolicy")]
