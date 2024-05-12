@@ -127,4 +127,32 @@ public class ApiController : Controller
         await unitOfWork.CommitAsync(requestContext.CancellationToken);
         return Json(user.Address);
     }
+
+    [HttpGet]
+    [Route("get/product/info")]
+    public async Task<IActionResult> GetProductInfoNameAsync(CancellationToken cancellationToken)
+    {
+        var fullId = new
+        {
+            userId = int.Parse(HttpContext.Request.Headers["userId"].ToString()),
+            marketId = int.Parse(HttpContext.Request.Headers["marketId"].ToString()),
+            productId = int.Parse(HttpContext.Request.Headers["productId"].ToString())
+        };
+        
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var unitOfWork = unitOfWorkProvider.Get();
+        var product = await unitOfWork.ProductRepository
+            .GetAsync(p => p
+                .Where(x => x.ProductId == fullId.productId),
+                requestContext.CancellationToken).FirstOrDefaultAsync();
+        if (product == null)
+            throw new NotImplementedException();
+        var productData = new
+        {
+            title = product.Title,
+            price = product.Price,
+            remained = product.Remained
+        };
+        return Json(productData);
+    }
 }

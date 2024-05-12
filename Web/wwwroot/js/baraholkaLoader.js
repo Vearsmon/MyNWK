@@ -1,13 +1,50 @@
 ﻿const productAddWindow = document.getElementsByClassName("profile-product-info-window");
 
-function openProductInfoWindow() {
+async function openProductInfoWindow(data) {
+    await fetch('api/get/product/info', {
+        method: 'get',
+        headers: {
+            marketId: data["fullId"]["marketId"],
+            productId: data["fullId"]["productId"],
+            userId: data["fullId"]["userId"]
+        }
+    }).then((response) => response.json())
+        .then((infoParams) => {
+            const title = document.createElement("div");
+            const price = document.createElement("div");
+            const remained = document.createElement("div");
+            const description = document.createElement("div");
+
+            title.setAttribute('class', 'product-info-content');
+            title.setAttribute('id', 'product-info-title');
+            price.setAttribute('class', 'product-info-content');
+            price.setAttribute('id', 'product-info-price');
+            remained.setAttribute('class', 'product-info-content');
+            remained.setAttribute('id', 'product-info-remained');
+            description.setAttribute('class', 'product-info-content');
+            description.setAttribute('id', 'product-info-description');
+            
+            const info = document.getElementsByClassName('product-info-content');
+            const len = info.length;
+            for (let i = 0; i < len; i++) {
+                info[0].remove();
+            }
+            
+            title.insertAdjacentText('afterbegin', `Название: ${infoParams['title']}`);
+            price.insertAdjacentText('afterbegin', `Цена: ${infoParams['price']} р.`);
+            remained.insertAdjacentText('afterbegin', `Осталось: ${infoParams['remained']} шт.`);
+            description.insertAdjacentText('afterbegin', `Описание: ${infoParams['description']}`);
+            
+            document.getElementsByClassName("product-info-form-container")[0].appendChild(title);
+            document.getElementsByClassName("product-info-form-container")[0].appendChild(price);
+            document.getElementsByClassName("product-info-form-container")[0].appendChild(remained);
+            document.getElementsByClassName("product-info-form-container")[0].appendChild(description);
+        });
     productAddWindow[0].hidden = false;
-    alert('OPENED');
 }
 
 function closeProductInfoWindow() {
     productAddWindow[0].hidden = true;
-    alert('CLOSED');
 }
 
 const closeButton = document.getElementsByClassName("product-info-background-shadow");
@@ -73,9 +110,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     const resetButton = document.getElementsByClassName("baraholka-filters-reset-button")[0];
     resetButton.addEventListener('click', () => alert('2'));
-
-    
-    
 });
 
 async function onTelegramAuth(user) {
@@ -116,14 +150,11 @@ async function fetchProducts(categoryId, marketId) {
         .then((response) => response.json())
         .then((products) => {
             let i = 0;
-            for (product of products) {
+            for (let product of products) {
                 const productImage = document.createElement('img');
                 productImage.setAttribute('src', product.imageRef);
                 productImage.setAttribute('class', 'baraholka-slot-photo');
                 productImage.setAttribute('id', `baraholka-slot-photo-id-${i}`);
-                productImage.addEventListener("click", function () {
-                    alert('clicked on image')
-                });
 
                 const productPrice = document.createElement('p');
                 productPrice.innerText = `${product['price']} р.`;
@@ -140,7 +171,11 @@ async function fetchProducts(categoryId, marketId) {
 
                 slots.appendChild(productSlot);
                 document.getElementById(`baraholka-slot-photo-id-${i}`)
-                    .addEventListener('click', () => openProductInfoWindow());
+                    .addEventListener('click', () => {
+                        openProductInfoWindow({
+                            fullId: product["fullId"]
+                        })
+                    });
                i += 1;
             }
         });
