@@ -34,6 +34,6 @@ function switchMode(href) {
 
 
 const modeButton = document.getElementsByClassName("modeButton");
-modeButton[0].addEventListener('click', () => switchMode("~/css/ColorsInversia.css"));
+modeButton[0].addEventListener('click', () => switchMode("/css/ColorsInversia.css"));
 
 let mode = false;
