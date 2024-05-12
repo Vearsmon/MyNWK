@@ -8,6 +8,7 @@ function loadPurchases() {
     fetch(getProductsByBuyer, {method: 'get'})
         .then((response) => response.json())
         .then((orders) => {
+            console.log(orders);
             for (order of orders) {
                 const header = document.createElement('div');
                 header.setAttribute('class', 'profile-purchases-header');
@@ -15,6 +16,7 @@ function loadPurchases() {
                 
                 const purchases = document.createElement('div');
                 purchases.setAttribute('class', 'profile-purchases');
+                console.log(order);
                 for (product of order["products"]) {
                     const productImage = document.createElement('img');
                     productImage.setAttribute('src', product.imageRef);
@@ -85,7 +87,7 @@ function loadProducts() {
 }
 
 function loadOrders() {
-    const getProductsBySeller = new URL('http://127.0.0.1:80/products/get/byBuyer');
+    const getProductsBySeller = new URL('http://127.0.0.1:80/products/get/bySeller');
     const params = {pageNumber:0, batchSize:20};
     getProductsBySeller.search = new URLSearchParams(params).toString();
     const container = document.getElementsByClassName("profile-orders-container")[0];
@@ -203,5 +205,5 @@ const orders = document.getElementsByClassName("profile-orders-inner-container")
 
 loadPurchases();
 loadProducts();
-loadPurchases();
+loadOrders();
 openProducts();
