@@ -41,22 +41,14 @@ function loadPurchases() {
                 if (order["canceledBySeller"]) {
                     const div = document.createElement('div');
                     div.setAttribute('class', "profile-purchases-status");
-                    div.innerHTML = "Отменён";
-                    const img = document.createElement('img');
-                    img.setAttribute('src', "/images/otmeneno.png");
-                    img.setAttribute('width', '15px');
-                    img.setAttribute('height', '15px');
-                    div.appendChild(img);
+                    div.innerHTML = `Отменён
+                    <img src="/assets/otmeneno.png" width="15px" height="15px">`;
                     innerContainer.appendChild(div);
                 } else if (order["receivedByBuyer"]) {
                     const div = document.createElement('div');
                     div.setAttribute('class', "profile-purchases-status");
-                    div.innerHTML = "Получен";
-                    const img = document.createElement('img');
-                    img.setAttribute('src', "/images/poluchen.png");
-                    img.setAttribute('width', '15px');
-                    img.setAttribute('height', '15px');
-                    div.appendChild(img);
+                    div.innerHTML = `Получен
+                    <img src="/assets/poluchen.png" width="15px" height="15px">`;
                     innerContainer.appendChild(div);
                 } else {
                     const button = document.createElement('button');
@@ -158,22 +150,14 @@ function loadOrders() {
                 if (order["canceledBySeller"]) {
                     const div = document.createElement('div');
                     div.setAttribute('class', "profile-orders-status");
-                    div.innerHTML = "Отменён";
-                    const img = document.createElement('img');
-                    img.setAttribute('src', "/images/otmeneno.png");
-                    img.setAttribute('width', '15px');
-                    img.setAttribute('height', '15px');
-                    div.appendChild(img);
+                    div.innerHTML = `Отменён
+                    <img src="/assets/otmeneno.png" width="15px" height="15px">`;
                     innerContainer.appendChild(div);
                 } else if (order["receivedByBuyer"]) {
                     const div = document.createElement('div');
                     div.setAttribute('class', "profile-orders-status");
-                    div.innerHTML = "Получен";
-                    const img = document.createElement('img');
-                    img.setAttribute('src', "/images/poluchen.png");
-                    img.setAttribute('width', '15px');
-                    img.setAttribute('height', '15px');
-                    div.appendChild(img);
+                    div.innerHTML = `Получен
+                    <img src="/assets/poluchen.png" width="15px" height="15px">`;
                     innerContainer.appendChild(div);
                 } else {
                     const button = document.createElement('button');
