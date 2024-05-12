@@ -43,19 +43,20 @@ function loadPurchases() {
                 innerContainer.appendChild(header);
                 innerContainer.appendChild(purchases);
 
-                if (order["workflowState"] === 'Cancelled') {
+                console.log(order);
+                if (order["workflowState"] === 4) {
                     const div = document.createElement('div');
                     div.setAttribute('class', "profile-purchases-status");
                     div.innerHTML = `Отменён
                     <img src="/assets/otmeneno.png" width="15px" height="15px">`;
                     innerContainer.appendChild(div);
-                } else if (order["workflowState"] === 'ConfirmedByBuyer') {
+                } else if (order["workflowState"] === 3) {
                     const div = document.createElement('div');
                     div.setAttribute('class', "profile-purchases-status");
                     div.innerHTML = `Получен
                     <img src="/assets/poluchen.png" width="15px" height="15px">`;
                     innerContainer.appendChild(div);
-                } else if (order["workflowState"] === 'ConfirmedBySeller') {
+                } else if (order["workflowState"] === 2) {
                     const div = document.createElement('div');
                     div.setAttribute('class', "profile-purchases-status");
                     div.innerHTML = `Принят в работу`;
@@ -73,7 +74,7 @@ function loadPurchases() {
                             .then(() => loadPurchases());
                     });
                     innerContainer.appendChild(button);
-                }else {
+                }else if (order["workflowState"] === 1){
                     const button = document.createElement('button');
                     button.setAttribute('class', "profile-purchases-accept");
                     button.setAttribute('id', `accept-${order["orderId"]}`);
@@ -170,24 +171,24 @@ function loadOrders() {
                 innerContainer.appendChild(header);
                 innerContainer.appendChild(orders);
 
-                if (order["workflowState"] === 'Cancelled') {
+                if (order["workflowState"] === 4) {
                     const div = document.createElement('div');
                     div.setAttribute('class', "profile-orders-status");
                     div.innerHTML = `Отменён
                     <img src="/assets/otmeneno.png" width="15px" height="15px">`;
                     innerContainer.appendChild(div);
-                } else if (order["workflowState"] === 'ConfirmedByBuyer') {
+                } else if (order["workflowState"] === 3) {
                     const div = document.createElement('div');
                     div.setAttribute('class', "profile-orders-status");
                     div.innerHTML = `Получен
                     <img src="/assets/poluchen.png" width="15px" height="15px">`;
                     innerContainer.appendChild(div);
-                } else if (order["workflowState"] === 'ConfirmedBySeller') {
+                } else if (order["workflowState"] === 2) {
                     const div = document.createElement('div');
                     div.setAttribute('class', "profile-orders-status");
                     div.innerHTML = `Принят в работу`;
                     innerContainer.appendChild(div);
-                } else {
+                } else if (order['workflowState'] === 1) {
                     const cancelButton = document.createElement('button');
                     cancelButton.setAttribute('class', "profile-orders-cancel");
                     cancelButton.setAttribute('id', `cancel-${order["orderId"]}`);
@@ -202,7 +203,7 @@ function loadOrders() {
                     const confirmButton = document.createElement('button');
                     confirmButton.setAttribute('class', "profile-orders-accept");
                     confirmButton.setAttribute('id', `cancel-${order["orderId"]}`);
-                    confirmButton.innerHTML = 'Отменить заказ';
+                    confirmButton.innerHTML = 'Взять в работу';
                     confirmButton.addEventListener('click', async (event) => {
                         const id = event.target.getAttribute('id');
                         const cancel = new URL('http://127.0.0.1:80/orders/confirm');
