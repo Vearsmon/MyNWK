@@ -1,11 +1,9 @@
 function openProductAddWindow() {
     productAddWindow.hidden = false;
-    alert('OPENED');
 }
 
 function closeProductAddWindow() {
     productAddWindow.hidden = true;
-    alert('CLOSED');
 }
 
 
@@ -61,7 +59,6 @@ function openSettingsWindow() {
 
 function closeSettingsWindow() {
     settingsWindow.hidden = true;
-    alert('CLOSED');
 }
 
 function closeProductInfoUpdateWindow() {
@@ -69,7 +66,6 @@ function closeProductInfoUpdateWindow() {
     productInfoUpdateWindow.innerHTML = `<div id="profile-market-info-update-close" class="product-card-background-shadow"></div>`;
     productInfoUpdateCloseButton = document.getElementById("profile-market-info-update-close");
     productInfoUpdateCloseButton.addEventListener('click', () => closeProductInfoUpdateWindow());
-    alert('CLOSED');
 }
 
 const productAddWindow = document.getElementsByClassName("profile-product-add-window")[0];

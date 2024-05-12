@@ -1,6 +1,7 @@
 function loadPurchases() {
     const getProductsByBuyer = new URL('http://127.0.0.1:80/products/get/byBuyer');
     const container = document.getElementsByClassName("profile-purchases-container")[0];
+    container.innerHTML = '';
 
     fetch(getProductsByBuyer, {method: 'get'})
         .then((response) => response.json())
@@ -59,7 +60,8 @@ function loadPurchases() {
                         const confirm = new URL('http://127.0.0.1:80/orders/confirm');
                         const id = event.target.getAttribute('id');
                         confirm.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
-                        fetch(confirm, {method: 'get'});
+                        fetch(confirm, {method: 'get'})
+                            .then(() => loadPurchases());
                     });
                     innerContainer.appendChild(button);
                 }
@@ -72,6 +74,7 @@ function loadPurchases() {
 function loadProducts() {
     const getProductsByUser = new URL('http://127.0.0.1:80/products/get/byUser');
     const container = document.getElementsByClassName("profile-products-inner-container")[0];
+    container.innerHTML = '';
         
     fetch(getProductsByUser, {method: 'get'})
         .then((response) => response.json())
@@ -110,6 +113,7 @@ function loadProducts() {
 function loadOrders() {
     const getProductsBySeller = new URL('http://127.0.0.1:80/products/get/bySeller');
     const container = document.getElementsByClassName("profile-orders-container")[0];
+    container.innerHTML = '';
 
     fetch(getProductsBySeller, {method: 'get'})
         .then((response) => response.json())
@@ -168,7 +172,8 @@ function loadOrders() {
                         const id = event.target.getAttribute('id');
                         const cancel = new URL('http://127.0.0.1:80/orders/cancel');
                         cancel.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
-                        fetch(cancel, {method: 'get'});
+                        fetch(cancel, {method: 'get'})
+                            .then(() => loadOrders());
                     });
                     innerContainer.appendChild(button);
                 }

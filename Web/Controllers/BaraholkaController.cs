@@ -20,12 +20,6 @@ public class BaraholkaController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        await using var unitOfWork = unitOfWorkProvider.Get();
-        var products = await unitOfWork.ProductRepository
-            .GetAsync(
-                _ => _,
-                CancellationToken.None)
-            .ConfigureAwait(false);
-        return View("~/Views/Baraholka/Index.cshtml");
+        return View("~/Pages/Baraholka.cshtml");
     }
 }

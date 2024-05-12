@@ -1,4 +1,6 @@
-﻿const productAddWindow = document.getElementsByClassName("profile-product-info-window");
+﻿let CATEGORY = -1;
+let SELLER = -1;
+const productAddWindow = document.getElementsByClassName("profile-product-info-window");
 const increaseCountForCart = document.getElementById('product-count-inc');
 increaseCountForCart.addEventListener("click", function () {
     const count = Number(document.getElementById('product-curr-count').innerText);
@@ -86,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 li.setAttribute('class', 'li');
                 li.setAttribute('id', 'profileli');
                 document.getElementsByClassName("tgli")[0].remove();
-                li.insertAdjacentHTML("afterbegin", `<button class="profileButton"><a class="link" href="Profile">Профиль</a></button>`);
+                li.insertAdjacentHTML("afterbegin", `<button class="profileButton"><a class="link" href="profile">Профиль</a></button>`);
                 document.getElementsByClassName("ul")[0].appendChild(li)
             }
             else {
@@ -94,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 tgli.hidden = false;
             }
         });
-        
+
     fetchProducts(null, null);    
     
     const categoriesList = document.getElementsByClassName("baraholka-filters category")[0];
@@ -139,7 +141,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
     
     const resetButton = document.getElementsByClassName("baraholka-filters-reset-button")[0];
-    resetButton.addEventListener('click', () => alert('2'));
+    resetButton.addEventListener('click', () => alert('2')); // TODO: доделыч!!!!
 });
 
 async function onTelegramAuth(user) {
@@ -165,6 +167,9 @@ async function onTelegramAuth(user) {
 }
 
 async function fetchProducts(categoryId, marketId) {
+    if (CATEGORY === categoryId && SELLER === marketId) {
+        return;
+    }
     const getAllProductsUrl = new URL('http://127.0.0.1:80/products/get/all');
     const params = {pageNumber:0, batchSize:20};
     if (categoryId) {
@@ -173,6 +178,8 @@ async function fetchProducts(categoryId, marketId) {
     if (marketId) {
         params.marketId = marketId;
     }
+    CATEGORY = categoryId;
+    SELLER = marketId;
     getAllProductsUrl.search = new URLSearchParams(params).toString();
     const slots = document.getElementsByClassName("baraholka-slots-container")[0];
     slots.innerHTML = '';

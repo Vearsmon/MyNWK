@@ -134,7 +134,6 @@ public class ProductService : IProductService
                     .Where(m => m.OrderId == OrderId)
                     .Select(m => m.ProductId), 
                 requestContext.CancellationToken)
-            .ContinueWith(t => t.Result.ToArray())
             .ConfigureAwait(false);
 
         var products = await unitOfWork.ProductRepository.GetAsync(
