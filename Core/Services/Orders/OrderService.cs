@@ -22,6 +22,7 @@ public class OrderService : IOrdersService
         var OrderIds = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.BuyerId == userId)
+                    .OrderByDescending(m => m.CreatedAt)
                     .Select(m => m.OrderId)
                     .Distinct(),
                 requestContext.CancellationToken)
@@ -38,6 +39,7 @@ public class OrderService : IOrdersService
         var OrderIds = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.SellerId == userId)
+                    .OrderByDescending(m => m.CreatedAt)
                     .Select(m => m.OrderId)
                     .Distinct(), 
                 requestContext.CancellationToken)
@@ -60,16 +62,21 @@ public class OrderService : IOrdersService
             .Select(g => (Group: g, OrderId: Guid.NewGuid()))
             .ToList();
         await ordersWithId
-            .SelectMany(orderWithId => orderWithId.Group
-                .Select(item =>
-                    Order.Create(
-                        unitOfWork,
-                        orderWithId.OrderId,
-                        cart.BuyerId,
-                        item.SellerId,
-                        item.MarketId,
-                        item.ProductId,
-                        requestContext.CancellationToken)))
+            .SelectMany(orderWithId =>
+            {
+                var createdAt = PreciseTimestampGenerator.Generate();
+                return orderWithId.Group
+                    .Select(item =>
+                        Order.Create(
+                            unitOfWork,
+                            orderWithId.OrderId,
+                            cart.BuyerId,
+                            item.SellerId,
+                            item.MarketId,
+                            item.ProductId,
+                            createdAt,
+                            requestContext.CancellationToken));
+            })
             .ForEachAsync(unitOfWork.OrdersRepository.Create)
             .ConfigureAwait(false);
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);

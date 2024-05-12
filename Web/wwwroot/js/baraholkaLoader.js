@@ -28,14 +28,10 @@ addToCartButton.addEventListener("click", async function () {
 })
 
 async function openProductInfoWindow(data) {
-    await fetch('api/get/product/info', {
-        method: 'get',
-        headers: {
-            marketId: data["fullId"]["marketId"],
-            productId: data["fullId"]["productId"],
-            userId: data["fullId"]["userId"]
-        }
-    }).then((response) => response.json())
+    const getProductUrl = new URL('http://127.0.0.1:80/products/get');
+    getProductUrl.search = new URLSearchParams(data).toString();
+    await fetch(getProductUrl, { method: 'get' })
+    .then((response) => response.json())
         .then((infoParams) => {
             const title = document.createElement("div");
             const price = document.createElement("div");
@@ -92,6 +88,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 document.getElementsByClassName("tgli")[0].remove();
                 li.insertAdjacentHTML("afterbegin", `<button class="profileButton"><a class="link" href="Profile">Профиль</a></button>`);
                 document.getElementsByClassName("ul")[0].appendChild(li)
+            }
+            else {
+                const tgli = document.getElementsByClassName('tgli')[0];
+                tgli.hidden = false;
             }
         });
         
@@ -202,9 +202,7 @@ async function fetchProducts(categoryId, marketId) {
                 slots.appendChild(productSlot);
                 document.getElementById(`baraholka-slot-photo-id-${i}`)
                     .addEventListener('click', () => {
-                        openProductInfoWindow({
-                            fullId: product["fullId"]
-                        })
+                        openProductInfoWindow(product["fullId"])
                     });
                i += 1;
             }

@@ -25,6 +25,9 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
             .HasColumnType("varchar(128)")
             .IsRequired();
         builder
+            .Property(t => t.Description)
+            .HasColumnType("text");
+        builder
             .Property(t => t.ImageLocation)
             .HasColumnType("varchar(255)");
         

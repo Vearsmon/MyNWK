@@ -103,18 +103,21 @@ public class ProductService : IProductService
             .ToList();
     }
     
-    public async Task<ProductDto> GetProductByFullId(RequestContext requestContext, ProductFullId productFullId)
+    public async Task<ProductDto?> GetProductByFullId(RequestContext requestContext, ProductFullId productFullId)
     {
         var unitOfWork = unitOfWorkProvider.Get();
         var product = await unitOfWork.ProductRepository
             .GetAsync(p => p
-                    .Where(x => x.ProductId == productFullId.ProductId),
-                requestContext.CancellationToken).FirstOrDefaultAsync().ConfigureAwait(false);
+                    .Where(x => x.MarketId == productFullId.MarketId && x.ProductId == productFullId.ProductId), 
+                requestContext.CancellationToken)
+            .FirstOrDefaultAsync()
+            .ConfigureAwait(false);
         var productWithImageRef = await GetImageRefByMarketAndProductId([product])
             .ConfigureAwait(false);
-        if (product != null)
-            return Convert(product, productFullId.UserId, productWithImageRef.FirstOrDefault().imageRef);
-        return null;
+        
+        return product == null 
+            ? null 
+            : Convert(product, productFullId.UserId, productWithImageRef.FirstOrDefault().imageRef);
     }
 
     public async Task<List<ProductDto>> GetOrderProductsAsync(RequestContext requestContext, Guid OrderId)
@@ -173,7 +176,8 @@ public class ProductService : IProductService
             ImageRef = imageRef,
             Price = product.Price,
             Remained = product.Remained,
-            Title = product.Title
+            Title = product.Title,
+            Description = product.Description ?? ""
         };
     
     

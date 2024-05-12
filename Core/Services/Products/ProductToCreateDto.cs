@@ -7,4 +7,5 @@ public class ProductToCreateDto
     public double Price { get; init; }
     public int Count { get; init; }
     public string? ImageLocation { get; init; }
+    public string? Description { get; init; }
 }

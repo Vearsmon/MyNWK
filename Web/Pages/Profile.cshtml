@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="~/css/productsStyles.css">
     <link rel="stylesheet" href="~/css/ProductCardStyles.css">
     <link rel="stylesheet" href="~/css/productAddingStyles.css">
+    <link rel="stylesheet" href="~/css/SettingsStyles.css">
     <script src="~/js/profileLoader.js" defer></script>
 </head>
 <body>
@@ -58,7 +59,7 @@
         </div>
 
         <div hidden="true" class="profile-purchases-container">
-            <div hidden="false" class="profile-purchases-inner-container">
+            @* <div hidden="false" class="profile-purchases-inner-container">
                 <div class="profile-purchases-header">Номер заказа: {}</div>
 
                 <div class="profile-purchases">
@@ -252,58 +253,24 @@
                 </div>
 
                 <button class="profile-purchases-accept">Подтвердить получение</button>
-            </div>
+            </div> *@
         </div>
 
         <div hidden="true" class="profile-products-container">
             <div class="profile-products-buttons">
                 <button class="profile-products-buttons add" id="profile-product-add">Добавить товар</button>
 
-                <button class="profile-products-buttons settings" id="profile-product-settings">Настройки магазина</button>
+                <button class="profile-products-buttons settings" id="profile-market-settings">Настройки магазина</button>
             </div>
 
             <div class="profile-products-inner-container">
-                @* <div class="profile-product">
-                    <div class="profile-product-photo"></div>
-                    
-                    <div class="profile-product-info">
-                        Чипсы Lay's краб
-                        <p>150 руб</p>
-                    </div>
-                </div> *@
-
-                @* <div class="profile-product">
-                    <div class="profile-product-photo"></div>
-                    
-                    <div class="profile-product-info">
-                        Чипсы Lay's краб
-                        <p>150 руб</p>
-                    </div>
-                </div> *@
-
-                @* <div class="profile-product">
-                    <div class="profile-product-photo"></div>
-                    
-                    <div class="profile-product-info">
-                        Чипсы Lay's краб
-                        <p>150 руб</p>
-                    </div>
-                </div> *@
-
-                @* <div class="profile-product">
-                    <div class="profile-product-photo"></div>
-                    
-                    <div class="profile-product-info">
-                        Чипсы Lay's краб
-                        <p>150 руб</p>
-                    </div>
-                </div> *@
+                
             </div>
             
         </div>
 
         <div hidden="true" class="profile-orders-container">
-            <div hidden="true" class="profile-orders-inner-container">
+            @* <div hidden="true" class="profile-orders-inner-container">
                 <div class="profile-orders-header">Номер заказа: {}</div>
 
                 <div class="profile-orders">
@@ -399,7 +366,7 @@
                 </div>
 
                 <button class="profile-orders-cancel">Отменить заказ</button>
-            </div>
+            </div> *@
         </div>
 
         <div class="profile-user-info-container">
@@ -425,7 +392,7 @@
     </div>
 
     <div hidden="true" class="profile-product-add-window">
-        <div class="product-card-background-shadow"></div>
+        <div id="profile-product-add-close" class="product-card-background-shadow"></div>
 
         <form class="product-add-form-container" method="post" action="/products/create" enctype="multipart/form-data">
             <div class="product-add-header">Выберите характеристики</div>
@@ -449,6 +416,12 @@
             <input class="product-add-fields" type="number" name="count"/>
 
             <div class="product-add-content">
+                Описание
+            </div>
+            
+            <textarea class="product-add-fields" name="description"></textarea>
+            
+            <div class="product-add-content">
                 Изображение
             </div>
 
@@ -460,7 +433,43 @@
         </form>
     </div>
 
-    <script src="~/js/ProfileProductAddController.js"></script>
+    <div hidden="true" class="profile-market-settings-window">
+        <div id="profile-market-settings-close" class="product-card-background-shadow"></div>
+
+        <form class="settings-form-container" method="post" action="/products/create" enctype="multipart/form-data">
+            <div class="settings-header">Настройте свой магазин</div>
+            
+            <div class="settings-content">
+                Название магазина
+            </div>
+
+            <input class="settings-fields" type="text" name="title"/>
+
+            <div class="settings-content">
+                Описание магазина
+            </div>
+
+            <input class="settings-fields" type="text" name="description" />
+
+            <div class="settings-content">
+                Время работы от:
+            </div>
+
+            <input id="time-from" class="settings-fields" type="time" name="appt-time" value="12:00"/>
+
+            <div class="settings-content">
+                Время работы до:
+            </div>
+
+            <input id="time-to" class="settings-fields" type="time" name="appt-time" value="20:00"/>
+            
+            <div class="settings-buttons">
+                <input class="settings-accept" type="submit" value="Добавить"/>
+            </div>
+        </form>
+    </div>
+
+    <script src="~/js/ProfileMarketButtonsController.js"></script>
     <script src="~/js/ProfileTabsController.js"></script>
 </body>
 </html>

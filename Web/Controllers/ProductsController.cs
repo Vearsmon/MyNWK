@@ -21,13 +21,30 @@ public class ProductsController : Controller
         this.productService = productService;
         this.ordersService = ordersService;
     }
+    
+    [HttpGet]
+    [Route("get")]
+    public async Task<JsonResult> GetProductInfoNameAsync(
+        CancellationToken cancellationToken,
+        ProductFullId productFullId)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var product = await productService.GetProductByFullId(requestContext, productFullId);
+        
+        if (product == null)
+        {
+            throw new NotImplementedException();
+        }
+        
+        return Json(product);
+    }
 
     [HttpGet]
     [AllowAnonymous]
     [Route("get/all")]
     public async Task<JsonResult> GetAllAsync(
-        int pageNumber,
-        int batchSize,
+        [Range(0, int.MaxValue)] int pageNumber,
+        [Range(0, 100)] int batchSize,
         int? categoryId,
         int? marketId,
         CancellationToken cancellationToken)
@@ -79,7 +96,7 @@ public class ProductsController : Controller
         }
         return Json(result);
     }
-    
+
     [HttpPost]
     [Route("create")]
     public async Task<IActionResult> CreateAsync(
@@ -87,18 +104,20 @@ public class ProductsController : Controller
         CancellationToken cancellationToken)
     {
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
-        await using var productImageStream = HttpContext.Request.Form.Files.FirstOrDefault()?.OpenReadStream();
         string? imageLocation = null;
-        if (productImageStream is not null)
+        if (productAddModel.Image is not null)
         {
+            await using var productImageStream = productAddModel.Image.OpenReadStream();
             var productImage = await productImageStream.ReadToEndAsync(32768, requestContext.CancellationToken);
-            imageLocation =  await productService.SaveImageAsync(requestContext, productImage);
+            imageLocation = await productService.SaveImageAsync(requestContext, productImage);
         }
+
         var productToCreate = new ProductToCreateDto
         {
             Title = productAddModel.Title,
             Count = productAddModel.Count,
             Price = productAddModel.Price,
+            Description = productAddModel.Description,
             ImageLocation = imageLocation
         };
         await productService.CreateAsync(requestContext, productToCreate);

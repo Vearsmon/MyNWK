@@ -1,4 +1,5 @@
-﻿using Core.Objects.MyNwkUnitOfWork;
+﻿using Core.Helpers;
+using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,19 +15,22 @@ public class Order
     public int ProductId { get; }
     public bool ReceivedByBuyer { get; private set; }
     public bool CanceledBySeller { get; private set; }
+    public DateTime CreatedAt { get; }
 
     private Order(
         Guid orderId,
         int buyerId,
         int sellerId,
         int marketId,
-        int productId)
+        int productId,
+        DateTime createdAt)
     {
         OrderId = orderId;
         BuyerId = buyerId;
         SellerId = sellerId;
         MarketId = marketId;
         ProductId = productId;
+        CreatedAt = createdAt;
     }
 
     public static async Task<Order> Create(
@@ -36,6 +40,7 @@ public class Order
         int sellerId,
         int marketId,
         int productId,
+        DateTime createdAt,
         CancellationToken cancellationToken)
     {
         var product = await unitOfWork.ProductRepository
@@ -49,7 +54,7 @@ public class Order
             throw new InvalidOperationException("Could not crate order cause not products remained");
         }
         product.Reserved += 1;
-        return new Order(orderId, buyerId, sellerId, marketId, productId);;
+        return new Order(orderId, buyerId, sellerId, marketId, productId, createdAt);
     }
 
     public async Task ConfirmAsync(RequestContext requestContext, IUnitOfWork unitOfWork)

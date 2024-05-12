@@ -11,7 +11,7 @@ public class InputValidationActionFilter : IActionFilter
         {
             return;
         }
-
+        
         context.Result = new BadRequestObjectResult(context.ModelState);
     }
 

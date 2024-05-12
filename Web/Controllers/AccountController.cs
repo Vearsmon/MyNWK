@@ -47,20 +47,20 @@ public class AccountController : Controller
         var user = users.FirstOrDefault();
         if (user == null)
         {
-            var name = "";
+            var nameChunks = new List<string>(2);
             if (form["first_name"] != "undefined")
             {
-                name += form["first_name"];
+                nameChunks.Add(form["first_name"]!);
             }
             if (form["last_name"] != "undefined")
             {
-                name += form["last_name"];
+                nameChunks.Add(form["last_name"]!);
             }
             user = new User 
             { 
                 TelegramId = id,
                 TelegramUsername = form["username"].ToString(),
-                Name = name
+                Name = string.Join(' ', nameChunks)
             };
             unitOfWork.UsersRepository.Create(user);
             await unitOfWork.CommitAsync(CancellationToken.None);

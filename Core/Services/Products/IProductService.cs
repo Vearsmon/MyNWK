@@ -17,7 +17,7 @@ public interface IProductService
         int? categoryId = null,
         int? marketId = null);
 
-    public Task<ProductDto> GetProductByFullId(
+    public Task<ProductDto?> GetProductByFullId(
         RequestContext requestContext, 
         ProductFullId productFullId);
 
