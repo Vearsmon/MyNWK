@@ -100,7 +100,7 @@ public class CartController : Controller
             Items = cartProducts.Select(p => new OrderItemToCreateDto(p.SellerId, p.MarketId, p.ProductId)).ToList()
         };
 
-        Serialize([]);
+        Serialize(new List<OrderDto>());
         var result = await orderService.CreateOrdersAsync(requestContext, cart);
         return Json(result);
     }
