@@ -30,14 +30,14 @@ public class OrdersController : Controller
         return Redirect("/Profile");
     }
 
-    [HttpPost]
+    [HttpGet]
     [Route("cancel")]
     public async Task<IActionResult> CancelAsync(
         Guid orderId,
         CancellationToken cancellationToken)
     {
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
-        await ordersService.ConfirmAsync(requestContext, orderId);
+        await ordersService.CancelAsync(requestContext, orderId);
         return Redirect("/Profile");
     }
 }

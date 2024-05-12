@@ -38,21 +38,35 @@ function loadPurchases() {
                 innerContainer.appendChild(header);
                 innerContainer.appendChild(purchases);
 
-                if (order["CancelledBySeller"]) {
-                    const label = document.createElement('label');
-                    label.innerHTML = "Отменён";
-                    innerContainer.appendChild(label);
+                if (order["canceledBySeller"]) {
+                    const div = document.createElement('div');
+                    div.setAttribute('class', "profile-purchases-status");
+                    div.innerHTML = "Отменён";
+                    const img = document.createElement('img');
+                    img.setAttribute('src', "/images/otmeneno.png");
+                    img.setAttribute('width', '15px');
+                    img.setAttribute('height', '15px');
+                    div.appendChild(img);
+                    innerContainer.appendChild(div);
                 } else if (order["receivedByBuyer"]) {
-                    const label = document.createElement('label');
-                    label.innerHTML = "Получен";
-                    innerContainer.appendChild(label);
+                    const div = document.createElement('div');
+                    div.setAttribute('class', "profile-purchases-status");
+                    div.innerHTML = "Получен";
+                    const img = document.createElement('img');
+                    img.setAttribute('src', "/images/poluchen.png");
+                    img.setAttribute('width', '15px');
+                    img.setAttribute('height', '15px');
+                    div.appendChild(img);
+                    innerContainer.appendChild(div);
                 } else {
                     const button = document.createElement('button');
-                    button.setAttribute('class', 'profile-purchases-accept');
+                    button.setAttribute('class', "profile-purchases-accept");
+                    button.setAttribute('id', `accept-${order["orderId"]}`);
                     button.innerHTML = 'Подтвердить получение';
-                    button.addEventListener('click', async function() {
+                    button.addEventListener('click', async (event) => {
                         const confirm = new URL('http://127.0.0.1:80/orders/confirm');
-                        confirm.search = new URLSearchParams({orderId: order["orderId"]}).toString();
+                        const id = event.target.getAttribute('id');
+                        confirm.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
                         fetch(confirm, {method: 'get'});
                     });
                     innerContainer.appendChild(button);
@@ -141,22 +155,36 @@ function loadOrders() {
                 innerContainer.appendChild(header);
                 innerContainer.appendChild(orders);
 
-                if (order["CancelledBySeller"]) {
-                    const label = document.createElement('label');
-                    label.innerHTML = "Отменён";
-                    innerContainer.appendChild(label);
+                if (order["canceledBySeller"]) {
+                    const div = document.createElement('div');
+                    div.setAttribute('class', "profile-orders-status");
+                    div.innerHTML = "Отменён";
+                    const img = document.createElement('img');
+                    img.setAttribute('src', "/images/otmeneno.png");
+                    img.setAttribute('width', '15px');
+                    img.setAttribute('height', '15px');
+                    div.appendChild(img);
+                    innerContainer.appendChild(div);
                 } else if (order["receivedByBuyer"]) {
-                    const label = document.createElement('label');
-                    label.innerHTML = "Получен";
-                    innerContainer.appendChild(label);
+                    const div = document.createElement('div');
+                    div.setAttribute('class', "profile-orders-status");
+                    div.innerHTML = "Получен";
+                    const img = document.createElement('img');
+                    img.setAttribute('src', "/images/poluchen.png");
+                    img.setAttribute('width', '15px');
+                    img.setAttribute('height', '15px');
+                    div.appendChild(img);
+                    innerContainer.appendChild(div);
                 } else {
                     const button = document.createElement('button');
-                    button.setAttribute('class', 'profile-orders-cancel');
+                    button.setAttribute('class', "profile-orders-cancel");
+                    button.setAttribute('id', `cancel-${order["orderId"]}`);
                     button.innerHTML = 'Отменить заказ';
-                    button.addEventListener('click', async function() {
-                        const confirm = new URL('http://127.0.0.1:80/orders/cancel');
-                        confirm.search = new URLSearchParams({orderId: order["orderId"]}).toString();
-                        fetch(confirm, {method: 'get'});
+                    button.addEventListener('click', async (event) => {
+                        const id = event.target.getAttribute('id');
+                        const cancel = new URL('http://127.0.0.1:80/orders/cancel');
+                        cancel.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
+                        fetch(cancel, {method: 'get'});
                     });
                     innerContainer.appendChild(button);
                 }
@@ -226,7 +254,7 @@ async function openProductInfoUpdateWindow(data)
         formData.append('description', data['description']);
         
         await fetch('products/save', {
-            method: 'post',
+            method: 'get',
             body: formData
         });
         productInfoUpdateWindow[0].hidden = true;
