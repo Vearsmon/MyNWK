@@ -40,6 +40,7 @@ public class Order
         int sellerId,
         int marketId,
         int productId,
+        DateTime createdAt,
         CancellationToken cancellationToken)
     {
         var product = await unitOfWork.ProductRepository
@@ -53,7 +54,7 @@ public class Order
             throw new InvalidOperationException("Could not crate order cause not products remained");
         }
         product.Reserved += 1;
-        return new Order(orderId, buyerId, sellerId, marketId, productId, PreciseTimestampGenerator.Generate());
+        return new Order(orderId, buyerId, sellerId, marketId, productId, createdAt);
     }
 
     public async Task ConfirmAsync(RequestContext requestContext, IUnitOfWork unitOfWork)
