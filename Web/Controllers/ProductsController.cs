@@ -87,7 +87,9 @@ public class ProductsController : Controller
             result.Add(new FullOrder {
                 OrderId = o.OrderId,
                 Products = products,
-                WorkflowState = o.WorkflowState
+                WorkflowState = o.WorkflowState,
+                BuyerId = o.BuyerId,
+                SellerId = o.SellerId
             });
         }
         return Json(result);
@@ -106,8 +108,9 @@ public class ProductsController : Controller
             result.Add(new FullOrder {
                 OrderId = o.OrderId,
                 Products = products,
-                WorkflowState = o.WorkflowState
-
+                WorkflowState = o.WorkflowState,
+                BuyerId = o.BuyerId,
+                SellerId = o.SellerId
             });
         }
         return Json(result);

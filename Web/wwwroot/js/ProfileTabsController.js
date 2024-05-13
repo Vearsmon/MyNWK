@@ -1,16 +1,12 @@
-function loadPurchases() {
+async function loadPurchases() {
     const getProductsByBuyer = new URL('http://127.0.0.1:80/products/get/byBuyer');
     const container = document.getElementsByClassName("profile-purchases-container")[0];
     container.innerHTML = '';
 
-    fetch(getProductsByBuyer, {method: 'get'})
+    await fetch(getProductsByBuyer, {method: 'get'})
         .then((response) => response.json())
-        .then((orders) => {
+        .then(async (orders) => {
             for (order of orders) {
-                const header = document.createElement('div');
-                header.setAttribute('class', 'profile-purchases-header');
-                header.innerHTML = `Номер заказа: ${order["orderId"]}`;
-                
                 const purchases = document.createElement('div');
                 purchases.setAttribute('class', 'profile-purchases');
                 for (product of order["products"]) {
@@ -37,60 +33,57 @@ function loadPurchases() {
 
                     purchases.appendChild(productSlot);
                 }
-                
-                const innerContainer = document.createElement('div');
-                innerContainer.setAttribute('class', 'profile-purchases-inner-container');
-                innerContainer.appendChild(header);
-                innerContainer.appendChild(purchases);
 
-                console.log(order);
-                if (order["workflowState"] === 4) {
-                    const div = document.createElement('div');
-                    div.setAttribute('class', "profile-purchases-status");
-                    div.innerHTML = `Отменён
-                    <img src="/assets/otmeneno.png" width="15px" height="15px">`;
-                    innerContainer.appendChild(div);
-                } else if (order["workflowState"] === 3) {
-                    const div = document.createElement('div');
-                    div.setAttribute('class', "profile-purchases-status");
-                    div.innerHTML = `Получен
-                    <img src="/assets/poluchen.png" width="15px" height="15px">`;
-                    innerContainer.appendChild(div);
-                } else if (order["workflowState"] === 2) {
-                    const div = document.createElement('div');
-                    div.setAttribute('class', "profile-purchases-status");
-                    div.innerHTML = `Принят в работу
-                    <img src="/assets/prinyato.png" width="15px" height="15px">`;
-                    innerContainer.appendChild(div);
-                    
-                    const button = document.createElement('button');
-                    button.setAttribute('class', "profile-purchases-accept");
-                    button.setAttribute('id', `accept-${order["orderId"]}`);
-                    button.innerHTML = 'Подтвердить получение';
-                    button.addEventListener('click', async (event) => {
-                        const confirm = new URL('http://127.0.0.1:80/orders/confirm');
-                        const id = event.target.getAttribute('id');
-                        confirm.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
-                        fetch(confirm, {method: 'get'})
-                            .then(() => loadPurchases());
-                    });
-                    innerContainer.appendChild(button);
-                } else if (order["workflowState"] === 1) {
-                    const div = document.createElement('div');
-                    div.setAttribute('class', "profile-purchases-status");
-                    div.innerHTML = `Ожидание ответа продавца`;
-                    innerContainer.appendChild(div);
-                } 
                 getUserInfo = new URL('http://127.0.0.1:80/api/get/user/info');
-                getUserInfo.search = new URLSearchParams({userId: order["products"][0]["fullId"]["userId"]}).toString();
-                console.log(order);
-                fetch(getUserInfo, {method: 'get'})
+                getUserInfo.search = new URLSearchParams({userId: order["sellerId"]}).toString();
+                await fetch(getUserInfo, {method: 'get'})
                     .then((response) => response.json())
                     .then((userId) => {
-                        console.log(userId);
-                        const userDiv = document.createElement('div');
-                        userDiv.setAttribute('class', "profile-purchases-status");
-                        userDiv.innerHTML = `@${userId["username"]}`;
+                        const header = document.createElement('div');
+                        header.setAttribute('class', 'profile-purchases-header');
+                        header.innerHTML = `Телеграм продавца @${userId["username"]}`;
+
+                        const innerContainer = document.createElement('div');
+                        innerContainer.setAttribute('class', 'profile-purchases-inner-container');
+                        innerContainer.appendChild(header);
+                        innerContainer.appendChild(purchases);
+                        if (order["workflowState"] === 4) {
+                            const div = document.createElement('div');
+                            div.setAttribute('class', "profile-purchases-status");
+                            div.innerHTML = `Отменён
+                            <img src="/assets/otmeneno.png" width="15px" height="15px">`;
+                            innerContainer.appendChild(div);
+                        } else if (order["workflowState"] === 3) {
+                            const div = document.createElement('div');
+                            div.setAttribute('class', "profile-purchases-status");
+                            div.innerHTML = `Получен
+                            <img src="/assets/poluchen.png" width="15px" height="15px">`;
+                            innerContainer.appendChild(div);
+                        } else if (order["workflowState"] === 2) {
+                            const div = document.createElement('div');
+                            div.setAttribute('class', "profile-purchases-status");
+                            div.innerHTML = `Принят в работу
+                            <img src="/assets/prinyato.png" width="15px" height="15px">`;
+                            innerContainer.appendChild(div);
+                            
+                            const button = document.createElement('button');
+                            button.setAttribute('class', "profile-purchases-accept");
+                            button.setAttribute('id', `accept-${order["orderId"]}`);
+                            button.innerHTML = 'Подтвердить получение';
+                            button.addEventListener('click', async (event) => {
+                                const confirm = new URL('http://127.0.0.1:80/orders/confirm');
+                                const id = event.target.getAttribute('id');
+                                confirm.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
+                                fetch(confirm, {method: 'get'})
+                                    .then(() => loadPurchases());
+                            });
+                            innerContainer.appendChild(button);
+                        } else if (order["workflowState"] === 1) {
+                            const div = document.createElement('div');
+                            div.setAttribute('class', "profile-purchases-status");
+                            div.innerHTML = `Ожидание ответа продавца`;
+                            innerContainer.appendChild(div);
+                        } 
                         container.appendChild(innerContainer);
                     });
             }
@@ -148,19 +141,15 @@ function loadProducts() {
         });
 }
 
-function loadOrders() {
+async function loadOrders() {
     const getProductsBySeller = new URL('http://127.0.0.1:80/products/get/bySeller');
     const container = document.getElementsByClassName("profile-orders-container")[0];
     container.innerHTML = '';
 
-    fetch(getProductsBySeller, {method: 'get'})
+    await fetch(getProductsBySeller, {method: 'get'})
         .then((response) => response.json())
-        .then((orders) => {
+        .then(async (orders) => {
             for (order of orders) {
-                const header = document.createElement('div');
-                header.setAttribute('class', 'profile-orders-header');
-                header.innerHTML = `Номер заказа: ${order["orderId"]}`;
-                
                 const orders = document.createElement('div');
                 orders.setAttribute('class', 'profile-orders');
                 for (product of order["products"]) {
@@ -188,71 +177,80 @@ function loadOrders() {
                     orders.appendChild(productSlot);
                 }
                 
-                const innerContainer = document.createElement('div');
-                innerContainer.setAttribute('class', 'profile-orders-inner-container');
-                innerContainer.appendChild(header);
-                innerContainer.appendChild(orders);
+                getUserInfo = new URL('http://127.0.0.1:80/api/get/user/info');
+                getUserInfo.search = new URLSearchParams({userId: order["buyerId"]}).toString();
+                await fetch(getUserInfo, {method: 'get'})
+                    .then((response) => response.json())
+                    .then((userId) => {
+                        const header = document.createElement('div');
+                        header.setAttribute('class', 'profile-orders-header');
+                        header.innerHTML = `Телеграм покупателя @${userId["username"]}`;
 
-                if (order["workflowState"] === 4) {
-                    const div = document.createElement('div');
-                    div.setAttribute('class', "profile-orders-status");
-                    div.innerHTML = `Отменён
-                    <img src="/assets/otmeneno.png" width="15px" height="15px">`;
-                    innerContainer.appendChild(div);
-                } else if (order["workflowState"] === 3) {
-                    const div = document.createElement('div');
-                    div.setAttribute('class', "profile-orders-status");
-                    div.innerHTML = `Получен
-                    <img src="/assets/poluchen.png" width="15px" height="15px">`;
-                    innerContainer.appendChild(div);
-                } else if (order["workflowState"] === 2) {
-                    const div = document.createElement('div');
-                    div.setAttribute('class', "profile-orders-status");
-                    div.innerHTML = `Принят в работу
-                    <img src="/assets/prinyato.png" width="15px" height="15px">`;
-                    innerContainer.appendChild(div);
+                        const innerContainer = document.createElement('div');
+                        innerContainer.setAttribute('class', 'profile-orders-inner-container');
+                        innerContainer.appendChild(header);
+                        innerContainer.appendChild(orders);
 
-                    const cancelButton = document.createElement('button');
-                    cancelButton.setAttribute('class', "profile-orders-cancel");
-                    cancelButton.setAttribute('id', `cancel-${order["orderId"]}`);
-                    cancelButton.innerHTML = 'Отменить заказ';
-                    cancelButton.addEventListener('click', async (event) => {
-                        const id = event.target.getAttribute('id');
-                        const cancel = new URL('http://127.0.0.1:80/orders/cancel');
-                        cancel.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
-                        fetch(cancel, {method: 'get'})
-                            .then(() => loadOrders());
+                        if (order["workflowState"] === 4) {
+                            const div = document.createElement('div');
+                            div.setAttribute('class', "profile-orders-status");
+                            div.innerHTML = `Отменён
+                            <img src="/assets/otmeneno.png" width="15px" height="15px">`;
+                            innerContainer.appendChild(div);
+                        } else if (order["workflowState"] === 3) {
+                            const div = document.createElement('div');
+                            div.setAttribute('class', "profile-orders-status");
+                            div.innerHTML = `Получен
+                            <img src="/assets/poluchen.png" width="15px" height="15px">`;
+                            innerContainer.appendChild(div);
+                        } else if (order["workflowState"] === 2) {
+                            const div = document.createElement('div');
+                            div.setAttribute('class', "profile-orders-status");
+                            div.innerHTML = `Принят в работу
+                            <img src="/assets/prinyato.png" width="15px" height="15px">`;
+                            innerContainer.appendChild(div);
+        
+                            const cancelButton = document.createElement('button');
+                            cancelButton.setAttribute('class', "profile-orders-cancel");
+                            cancelButton.setAttribute('id', `cancel-${order["orderId"]}`);
+                            cancelButton.innerHTML = 'Отменить заказ';
+                            cancelButton.addEventListener('click', async (event) => {
+                                const id = event.target.getAttribute('id');
+                                const cancel = new URL('http://127.0.0.1:80/orders/cancel');
+                                cancel.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
+                                fetch(cancel, {method: 'get'})
+                                    .then(() => loadOrders());
+                            });
+                            innerContainer.appendChild(cancelButton);
+                        } else if (order['workflowState'] === 1) {
+                            const cancelButton = document.createElement('button');
+                            cancelButton.setAttribute('class', "profile-orders-cancel");
+                            cancelButton.setAttribute('id', `cancel-${order["orderId"]}`);
+                            cancelButton.innerHTML = 'Отменить заказ';
+                            cancelButton.addEventListener('click', async (event) => {
+                                const id = event.target.getAttribute('id');
+                                const cancel = new URL('http://127.0.0.1:80/orders/cancel');
+                                cancel.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
+                                fetch(cancel, {method: 'get'})
+                                    .then(() => loadOrders());
+                            });
+                            innerContainer.appendChild(cancelButton);
+                            
+                            const confirmButton = document.createElement('button');
+                            confirmButton.setAttribute('class', "profile-orders-accept");
+                            confirmButton.setAttribute('id', `cancel-${order["orderId"]}`);
+                            confirmButton.innerHTML = 'Взять в работу';
+                            confirmButton.addEventListener('click', async (event) => {
+                                const id = event.target.getAttribute('id');
+                                const cancel = new URL('http://127.0.0.1:80/orders/confirm');
+                                cancel.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
+                                fetch(cancel, {method: 'get'})
+                                    .then(() => loadOrders());
+                            });
+                            innerContainer.appendChild(confirmButton);
+                        }
+                        container.appendChild(innerContainer);
                     });
-                    innerContainer.appendChild(cancelButton);
-                } else if (order['workflowState'] === 1) {
-                    const cancelButton = document.createElement('button');
-                    cancelButton.setAttribute('class', "profile-orders-cancel");
-                    cancelButton.setAttribute('id', `cancel-${order["orderId"]}`);
-                    cancelButton.innerHTML = 'Отменить заказ';
-                    cancelButton.addEventListener('click', async (event) => {
-                        const id = event.target.getAttribute('id');
-                        const cancel = new URL('http://127.0.0.1:80/orders/cancel');
-                        cancel.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
-                        fetch(cancel, {method: 'get'})
-                            .then(() => loadOrders());
-                    });
-                    innerContainer.appendChild(cancelButton);
-                    
-                    const confirmButton = document.createElement('button');
-                    confirmButton.setAttribute('class', "profile-orders-accept");
-                    confirmButton.setAttribute('id', `cancel-${order["orderId"]}`);
-                    confirmButton.innerHTML = 'Взять в работу';
-                    confirmButton.addEventListener('click', async (event) => {
-                        const id = event.target.getAttribute('id');
-                        const cancel = new URL('http://127.0.0.1:80/orders/confirm');
-                        cancel.search = new URLSearchParams({orderId: id.substring(id.indexOf('-') + 1)}).toString();
-                        fetch(cancel, {method: 'get'})
-                            .then(() => loadOrders());
-                    });
-                    innerContainer.appendChild(confirmButton);
-                }
-
-                container.appendChild(innerContainer);
             }
         });
 }
@@ -443,7 +441,6 @@ const purchases = document.getElementsByClassName("profile-purchases-inner-conta
 const products = document.getElementsByClassName("profile-products-inner-container")
 const orders = document.getElementsByClassName("profile-orders-inner-container")
 
-loadPurchases();
+loadPurchases().then(loadOrders);
 loadProducts();
-loadOrders();
 openProducts();

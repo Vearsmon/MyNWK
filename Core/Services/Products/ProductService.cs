@@ -147,10 +147,19 @@ public class ProductService : IProductService
                     requestContext.CancellationToken)
             .ConfigureAwait(false);
 
+        var marketIds = products.Select(t => t.MarketId).ToArray();
+        var userIdsByMarketId = await unitOfWork.MarketsRepository
+            .GetAsync(
+                r => r
+                    .Where(t => marketIds.Any(id => id == t.Id)),
+                requestContext.CancellationToken)
+            .ToDictionaryAsync(t => t.Id, t => t.OwnerId)
+            .ConfigureAwait(false);    
+
         var productWithImageRef = await GetImageRefByMarketAndProductId(products)
             .ConfigureAwait(false);
         return productWithImageRef
-            .Select(p => Convert(p.product, userId, p.imageRef, countDict[p.product.ProductId]))
+            .Select(p => Convert(p.product, userIdsByMarketId[p.product.MarketId], p.imageRef, countDict[p.product.ProductId]))
             .ToList();
     }
 
