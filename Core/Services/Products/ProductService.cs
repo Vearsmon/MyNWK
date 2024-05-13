@@ -74,7 +74,7 @@ public class ProductService : IProductService
                                  && currentTime < (pm.MarketInfo.WorksTo ?? TimeOnly.MaxValue))
                     .Select(t => t.Product),
                 batchNum,
-                batchSize,
+                1000,
                 requestContext.CancellationToken)
             .ConfigureAwait(false);
 
