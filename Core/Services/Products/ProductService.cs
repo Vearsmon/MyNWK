@@ -176,7 +176,7 @@ public class ProductService : IProductService
         return Convert(productToChange, userId, null, productToChange.Remained);
     }
     
-    public async void DeleteProductByIdAsync(RequestContext requestContext, int productId)
+    public async Task DeleteProductByIdAsync(RequestContext requestContext, int productId)
     {
         await using var unitOfWork = unitOfWorkProvider.Get();
         await unitOfWork.ProductRepository.DeleteAsync(p => p.Where(t => t.ProductId == productId),

@@ -170,7 +170,7 @@ public class ProductsController : Controller
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         var form = await HttpContext.Request.ReadFormAsync(cancellationToken);
 
-        productService.DeleteProductByIdAsync(requestContext, int.Parse(form["productId"].ToString()));
+        await productService.DeleteProductByIdAsync(requestContext, int.Parse(form["productId"].ToString()));
         return Redirect("/Profile");
     }
 }
