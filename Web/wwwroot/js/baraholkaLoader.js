@@ -10,7 +10,7 @@ async function openProductInfoWindow(data) {
         .then((infoParams) => {
             const productImage = document.createElement('img');
             productImage.setAttribute('src', infoParams['imageRef']);
-            productImage.setAttribute('class', 'baraholka-slot-photo');
+            productImage.setAttribute('class', 'product-info-photo');
             
             const header = document.createElement('div');
             const productId = document.createElement('div');
