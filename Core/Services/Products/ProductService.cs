@@ -58,7 +58,7 @@ public class ProductService : IProductService
     {
         await using var unitOfWork = unitOfWorkProvider.Get();
 
-        var currentTime = new TimeOnly(PreciseTimestampGenerator.Generate().TimeOfDay.Ticks);
+        var currentTime = new TimeOnly(DateTime.Now.TimeOfDay.Ticks);
         var products = await unitOfWork.ProductRepository.GetPageAsync(
                 r => r.ProductOrderer(),
                 p => p
