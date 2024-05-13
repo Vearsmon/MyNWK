@@ -81,6 +81,18 @@
                     nameInput.after(nameButtonApply);
                 });
             });
+
+            const categoriesList = document.getElementsByClassName("product-add-select")[0];
+            fetch('api/get/all/categories', {method: 'get'})
+                .then((response) => response.json())
+                .then((categories) => {
+                    for (category of categories) {
+                        const option = document.createElement("option");
+                        option.setAttribute('value', category.id);
+                        option.textContent = category.title;
+                        categoriesList.appendChild(option);
+                    }
+                })
         });
 
     function waitForElm(selector) {

@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using Core.BlobStorage;
+using Core.Helpers;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
 
@@ -57,11 +58,21 @@ public class ProductService : IProductService
     {
         await using var unitOfWork = unitOfWorkProvider.Get();
 
+        var currentTime = new TimeOnly(DateTime.Now.TimeOfDay.Ticks);
         var products = await unitOfWork.ProductRepository.GetPageAsync(
                 r => r.ProductOrderer(),
                 p => p
                     .Where(t => marketId == null || t.MarketId == marketId)
-                    .Where(t => categoryId == null || t.CategoryId == categoryId),
+                    .Where(t => categoryId == null || t.CategoryId == categoryId)
+                    .Where(t => t.Remained - t.Reserved > 0)
+                    .Join(
+                        unitOfWork.MarketInfosRepository.Queryable, 
+                        p => p.MarketId,
+                        m => m.MarketId,
+                        (p, m) => new {Product=p, MarketInfo=m})
+                    .Where(pm => (pm.MarketInfo.WorksFrom ?? TimeOnly.MinValue) <= currentTime 
+                                 && currentTime < (pm.MarketInfo.WorksTo ?? TimeOnly.MaxValue))
+                    .Select(t => t.Product),
                 batchNum,
                 batchSize,
                 requestContext.CancellationToken)
@@ -73,7 +84,7 @@ public class ProductService : IProductService
                 r => r
                     .Where(t => marketIds.Any(id => id == t.Id)),
                 requestContext.CancellationToken)
-            .ToDictionaryAsync(t => t.Id, t => t.OwnerId)
+            .ToDictionaryAsync(t => t.Id, t => t.Id)
             .ConfigureAwait(false);
         
         var productWithImageRef = await GetImageRefByMarketAndProductId(products)
@@ -180,6 +191,11 @@ public class ProductService : IProductService
         productToChange.Price = int.Parse(parametersToUpdate["price"]);
         productToChange.Title = parametersToUpdate["title"];
         productToChange.Remained = int.Parse(parametersToUpdate["remained"]);
+        if (parametersToUpdate["category"] == "defaultCategory")
+            productToChange.CategoryId = null;
+        else if (parametersToUpdate["category"] != "")
+            productToChange.CategoryId = int.Parse(parametersToUpdate["category"]);
+        
         
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
         return Convert(productToChange, userId, null, productToChange.Remained);

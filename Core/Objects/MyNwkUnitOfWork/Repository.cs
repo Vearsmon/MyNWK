@@ -17,6 +17,8 @@ public class Repository<TEntity> : IRepository<TEntity>
         Entities = dbContext.Set<TEntity>();
     }
 
+    public IQueryable<TEntity> Queryable => Entities;
+
     public void Create(TEntity entity)
     {
         Entities.Add(entity);

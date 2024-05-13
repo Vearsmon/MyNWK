@@ -2,6 +2,8 @@
 
 public interface IRepository<TEntity>
 {
+    public IQueryable<TEntity> Queryable { get; }
+
     void Create(TEntity entity);
 
     void Update(TEntity entity);
