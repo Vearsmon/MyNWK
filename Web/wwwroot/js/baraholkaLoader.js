@@ -173,7 +173,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
     
     const resetButton = document.getElementsByClassName("baraholka-filters-reset-button")[0];
-    resetButton.addEventListener('click', () => alert('2')); // TODO: доделыч!!!!
+    resetButton.addEventListener('click', () => {
+        location.reload();
+    });
 });
 
 async function onTelegramAuth(user) {
