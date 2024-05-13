@@ -100,3 +100,41 @@
 
     z-index: 2;
 }
+
+
+.edit-apply-button {
+    height: 25px;
+    width: 150px;
+    
+    background-color: var(--background-color);
+    
+    border-color: var(--border-color);
+    border-radius: 3px;
+    border-width: 2px;
+    border-style: solid;
+    
+    font-family: "Inter", sans-serif;
+    color: var(--content-color);
+}
+
+
+.nameInput {
+    height: 20px;
+    width: 200px;
+
+    border-color: var(--border-color);
+    border-style: solid;
+    border-radius: 2px;
+    border-width: 2px;
+}
+
+
+.roomInput {
+    height: 20px;
+    width: 200px;
+
+    border-color: var(--border-color);
+    border-style: solid;
+    border-radius: 2px;
+    border-width: 2px;
+}
