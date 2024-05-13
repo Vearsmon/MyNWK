@@ -36,6 +36,7 @@
                     
                     const roomButtonApply = document.createElement('button');
                     roomButtonApply.textContent = 'Применить';
+                    roomButtonApply.className = 'edit-apply-button';
                     roomButtonApply.addEventListener('click', function(){
                         let formData = new FormData();
                         formData.append('address', document.getElementById('roomInputId').value);
@@ -63,6 +64,7 @@
 
                     const nameButtonApply = document.createElement('button');
                     nameButtonApply.textContent = 'Применить';
+                    nameButtonApply.className = 'edit-apply-button';
                     nameButtonApply.addEventListener('click', function(){
                         let formData = new FormData();
                         formData.append('name', document.getElementById('nameInputId').value);
