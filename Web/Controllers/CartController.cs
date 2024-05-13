@@ -78,11 +78,16 @@ public class CartController : Controller
                      ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
         var orderRecords = Deserialize();
         var result = new List<ProductDto>();
+        var countDict = orderRecords.Select(x => x.ProductId)
+            .GroupBy(p => p)
+            .ToDictionary(x => x.Key, x => x.Count());
         foreach (var orderRecord in orderRecords)
         {
-            result.Add(await productService.GetProductByFullId(
+            var dto = await productService.GetProductByFullId(
                 requestContext, 
-                new ProductFullId(orderRecord.SellerId, orderRecord.MarketId, orderRecord.ProductId)));
+                new ProductFullId(orderRecord.SellerId, orderRecord.MarketId, orderRecord.ProductId));
+                dto.Remained = countDict[dto.FullId.ProductId];
+            result.Add(dto);
         }
         
         return Json(result);

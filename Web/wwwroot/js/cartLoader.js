@@ -33,6 +33,7 @@
                 slotInfo.setAttribute('class', 'cart-slot-info');
                 slotInfo.innerText = product['title'];
                 slotInfo.insertAdjacentHTML('beforeend', `<p>${product['price']} руб</p>`)
+                slotInfo.insertAdjacentHTML('beforeend', `${product['remained']} шт.`);
                 
                 const cartSlot = document.createElement('div');
                 cartSlot.setAttribute('class', 'cart-slot');
