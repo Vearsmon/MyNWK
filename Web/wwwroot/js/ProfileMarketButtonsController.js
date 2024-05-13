@@ -85,4 +85,3 @@ let productInfoUpdateCloseButton = document.getElementById("profile-market-info-
 productAddCloseButton.addEventListener('click', () => closeProductAddWindow());
 settingsCloseButton.addEventListener('click', () => closeSettingsWindow());
 productInfoUpdateCloseButton.addEventListener('click', () => closeProductInfoUpdateWindow());
-

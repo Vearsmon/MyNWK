@@ -249,7 +249,3 @@ async function fetchProducts(categoryId, marketId) {
             }
         });
 }
-
-
-
-
