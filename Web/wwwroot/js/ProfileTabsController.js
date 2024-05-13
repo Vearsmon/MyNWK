@@ -327,6 +327,7 @@ function openProductInfoUpdateWindow(data) {
 
     const text = document.createElement('text');
     text.innerText = 'Категория:';
+    text.className = "product-category-text"
     text.insertAdjacentHTML('beforeend', `<br>`);
 
     form.appendChild(windowTitle);
@@ -375,13 +376,13 @@ function openDeleteConfirmationWindow(data, id) {
 
     form.setAttribute('class', 'info-update-form-container');
     form.setAttribute('encType', 'multipart/form-data');
-    question.setAttribute('class', 'product-info-content');
+    question.setAttribute('class', 'product-delete-content');
     question.setAttribute('id', 'product-info-question');
-    confirm.setAttribute('class', 'product-info-content');
+    confirm.setAttribute('class', 'product-delete-accept');
     confirm.setAttribute('id', 'product-info-confirm');
     confirm.setAttribute('type', 'button');
     confirm.textContent = 'Удалить';
-    deny.setAttribute('class', 'product-info-content');
+    deny.setAttribute('class', 'product-cancel-button');
     deny.setAttribute('id', 'product-info-deny');
     deny.setAttribute('type', 'button');
     deny.textContent = 'Отмена';

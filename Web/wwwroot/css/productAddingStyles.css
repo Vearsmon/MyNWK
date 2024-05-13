@@ -6,11 +6,11 @@
 .product-add-form-container {
     position: fixed;
 
-    top: 20vh;
-    left: 35vw;
+    top: 10vh;
+    left: 40vw;
 
     width: 400px;
-    height: 400px;
+    height: 500px;
 
     background-color: var(--background-card-color);
     
@@ -47,7 +47,7 @@
 .product-add-accept {
     position: relative;
 
-    margin-top: 50px;
+    margin-top: 30px;
     margin-left: 15%;
 
     width: 150px;
@@ -81,4 +81,23 @@
     position: relative;
 
     margin-left: var(--margin);
+}
+
+
+
+.product-add-select {
+    position: relative;
+
+    margin-left: var(--margin);
+    border-color: var(--border-color);
+    border-style: solid;
+    border-radius: 2px;
+    border-width: 2px;
+
+    width: 200px;
+    height: 25px;
+    
+    font-size: 16px;
+    
+    color: var(--content-color-2);
 }
