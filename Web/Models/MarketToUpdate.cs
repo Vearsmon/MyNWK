@@ -24,5 +24,5 @@ public class MarketToUpdate
     [DataType(DataType.Time)]
     public TimeOnly? WorksTo { get; set; }
     
-    public string AutoHide { get; set; }
+    public string? AutoHide { get; set; }
 }
