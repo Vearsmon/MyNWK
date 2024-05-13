@@ -8,6 +8,10 @@ async function openProductInfoWindow(data) {
     await fetch(getProductUrl, { method: 'get' })
     .then((response) => response.json())
         .then((infoParams) => {
+            const productImage = document.createElement('img');
+            productImage.setAttribute('src', infoParams['imageRef']);
+            productImage.setAttribute('class', 'baraholka-slot-photo');
+            
             const header = document.createElement('div');
             const productId = document.createElement('div');
             const title = document.createElement("div");
@@ -54,6 +58,7 @@ async function openProductInfoWindow(data) {
 
             const container = document.getElementsByClassName("product-info-form-container")[0];
             container.innerHTML = '';
+            container.appendChild(productImage);
             container.appendChild(header);
             container.appendChild(productId);
             container.appendChild(title);
