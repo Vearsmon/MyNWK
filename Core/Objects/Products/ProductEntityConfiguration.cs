@@ -43,7 +43,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
 
         builder
             .HasOne<Category>(t => t.Category)
-            .WithOne()
-            .HasForeignKey<Product>(t => t.CategoryId);
+            .WithMany()
+            .HasForeignKey(t => t.CategoryId);
     }
 }
