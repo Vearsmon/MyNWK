@@ -58,7 +58,7 @@ public class ProductService : IProductService
     {
         await using var unitOfWork = unitOfWorkProvider.Get();
 
-        var currentTime = new TimeOnly(PreciseTimestampGenerator.Generate().TimeOfDay.Ticks);
+        var currentTime = new TimeOnly(DateTime.Now.TimeOfDay.Ticks);
         var products = await unitOfWork.ProductRepository.GetPageAsync(
                 r => r.ProductOrderer(),
                 p => p
@@ -182,6 +182,11 @@ public class ProductService : IProductService
         productToChange.Price = int.Parse(parametersToUpdate["price"]);
         productToChange.Title = parametersToUpdate["title"];
         productToChange.Remained = int.Parse(parametersToUpdate["remained"]);
+        if (parametersToUpdate["category"] == "defaultCategory")
+            productToChange.CategoryId = null;
+        else if (parametersToUpdate["category"] != "")
+            productToChange.CategoryId = int.Parse(parametersToUpdate["category"]);
+        
         
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
         return Convert(productToChange, userId, null, productToChange.Remained);

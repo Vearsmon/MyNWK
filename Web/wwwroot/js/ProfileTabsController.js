@@ -262,6 +262,7 @@ function openProductInfoUpdateWindow(data) {
     const price = document.createElement("div");
     const remained = document.createElement("div");
     const description = document.createElement("div");
+    const category = document.createElement("select")
     const form = document.createElement('form');
     const windowTitle = document.createElement('div');
     const applyButton = document.createElement("div");
@@ -274,6 +275,10 @@ function openProductInfoUpdateWindow(data) {
     remained.setAttribute('id', 'product-info-remained');
     description.setAttribute('class', 'product-info-content');
     description.setAttribute('id', 'product-info-description');
+    category.setAttribute('class', 'product-info-content');
+    category.setAttribute('id', 'product-info-category');
+    category.setAttribute('type', "number");
+    category.setAttribute('name', "category");
     form.setAttribute('class', 'info-update-form-container');
     form.setAttribute('encType', 'multipart/form-data');
     windowTitle.setAttribute('class', 'info-update-header');
@@ -290,26 +295,58 @@ function openProductInfoUpdateWindow(data) {
     price.insertAdjacentHTML('beforeend', `<br><input class="product-info-fields" type="number" name="title" id="info-price"/>`)
     remained.insertAdjacentHTML('beforeend', `<br><input class="product-info-fields" type="number" name="title" id="info-remained"/>`)
     description.insertAdjacentHTML('beforeend', `<br><textarea class="product-info-fields" name="description" id="info-desc"></textarea>`)
-    
+
     const info = document.getElementsByClassName('product-info-content');
     const len = info.length;
     for (let i = 0; i < len; i++) {
         info[0].remove();
     }
     
+    fetch('api/get/all/categories', {method: 'get'})
+        .then((response) => response.json())
+        .then((categories) => {
+            let currCatTitle = "Выберите категорию";
+            let currCatId = 0;
+            for (cat of categories) {
+                if (cat.id === Number(data['categoryId'])) {
+                    category.insertAdjacentHTML('afterbegin',
+                        `<option value="${Number(data['categoryId'])}">${cat.title}</option>`);
+                    currCatTitle = cat.title;
+                    currCatId = Number(data['categoryId']);
+                } else {
+                    const option = document.createElement("option");
+                    option.setAttribute('value', cat.id);
+                    option.textContent = cat.title;
+                    category.appendChild(option);
+                }
+            }
+            category.insertAdjacentHTML('afterbegin',
+                `<option selected value="defaultCategory" class="default-content">Выбрать категорию</option>`);
+            if (currCatId !== 0) {
+                category.value = currCatId;
+            }
+        })
+
+    const text = document.createElement('text');
+    text.innerText = 'Категория:';
+    text.insertAdjacentHTML('beforeend', `<br>`);
+
     form.appendChild(windowTitle);
     form.appendChild(title);
     form.appendChild(price);
     form.appendChild(remained);
     form.appendChild(description);
+    form.appendChild(text);
+    form.appendChild(category);
     form.appendChild(applyButton);
-    
+
     document.getElementsByClassName('profile-market-info-update-window')[0].appendChild(form);
 
     document.getElementById("info-title").value = data['title'];
     document.getElementById("info-price").value = data['price'];
     document.getElementById("info-remained").value = data['remained'];
     document.getElementById("info-desc").value = data['description'];
+    category.value = data['categoryId'];
 
     applyButton.addEventListener('click', async function () {
         let formData = new FormData();
@@ -320,6 +357,7 @@ function openProductInfoUpdateWindow(data) {
         formData.append('price', document.getElementById("info-price").value);
         formData.append('remained', document.getElementById("info-remained").value);
         formData.append('description', document.getElementById("info-desc").value);
+        formData.append('category', document.getElementById("product-info-category").value);
 
         await fetch('products/save', {
             method: 'post',
