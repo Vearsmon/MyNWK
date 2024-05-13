@@ -22,7 +22,7 @@ public class OrderService : IOrdersService
         var orders = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.BuyerId == userId)
-                    .Select(m => new { m.OrderId, m.WorkflowState, m.CreatedAt })
+                    .Select(m => new { m.OrderId, m.WorkflowState, m.CreatedAt, m.BuyerId, m.SellerId })
                     .Distinct()
                     .OrderBy(m => m.WorkflowState == OrderWorkflowState.Cancelled 
                                   || m.WorkflowState == OrderWorkflowState.ConfirmedByBuyer)
@@ -34,7 +34,9 @@ public class OrderService : IOrdersService
             .Select(o => new OrderStatus
             {
                 OrderId = o.OrderId, 
-                WorkflowState = o.WorkflowState
+                WorkflowState = o.WorkflowState,
+                BuyerId = o.BuyerId,
+                SellerId = o.SellerId
             })
             .ToList();
     }
@@ -48,7 +50,7 @@ public class OrderService : IOrdersService
         var orders = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.SellerId == userId)
-                    .Select(m => new { m.OrderId, m.WorkflowState, m.CreatedAt })
+                    .Select(m => new { m.OrderId, m.WorkflowState, m.CreatedAt, m.BuyerId, m.SellerId })
                     .Distinct()
                     .OrderBy(m => m.WorkflowState == OrderWorkflowState.Cancelled 
                                   || m.WorkflowState == OrderWorkflowState.ConfirmedByBuyer)
@@ -60,7 +62,9 @@ public class OrderService : IOrdersService
             .Select(o => new OrderStatus() 
             {
                 OrderId = o.OrderId,
-                WorkflowState = o.WorkflowState
+                WorkflowState = o.WorkflowState,
+                BuyerId = o.BuyerId,
+                SellerId = o.SellerId
             })
             .ToList();
     }
