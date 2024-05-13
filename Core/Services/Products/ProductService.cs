@@ -129,9 +129,20 @@ public class ProductService : IProductService
             return null;
         }
         
-        var productWithImageRef = await GetImageRefByMarketAndProductId(new List<Product> { product })
-            .ConfigureAwait(false);
+        unitOfWork.ClickOnProductMetricRepository.Create(new ClickOnProductMetric
+        {
+            MarketId = product.MarketId,
+            ProductId = product.ProductId,
+            UserId = requestContext.UserId ?? -1,
+            CreatedAt = PreciseTimestampGenerator.Generate()
+        });
+        await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
         
+        var productWithImageRef = await GetImageRefByMarketAndProductId(new List<Product>
+            {
+                product
+            })
+            .ConfigureAwait(false);
         return Convert(product, productFullId.UserId, productWithImageRef.FirstOrDefault().imageRef, product.Remained);
     }
 

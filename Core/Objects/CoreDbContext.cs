@@ -3,6 +3,7 @@ using Core.Objects.Markets;
 using Core.Objects.Orders;
 using Core.Objects.Products;
 using Core.Objects.Users;
+using Core.Services.Products;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +28,9 @@ public class CoreDbContext : DbContext
 
     [UsedImplicitly] 
     public DbSet<Order> Orders { get; set; } = null!;
+    
+    [UsedImplicitly] 
+    public DbSet<ClickOnProductMetric> ClickOnProductMetrics { get; set; } = null!;
 
     public CoreDbContext(DbContextOptions options)
         : base(options)

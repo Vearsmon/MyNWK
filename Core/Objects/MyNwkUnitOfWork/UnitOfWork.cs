@@ -3,6 +3,7 @@ using Core.Objects.Markets;
 using Core.Objects.Orders;
 using Core.Objects.Products;
 using Core.Objects.Users;
+using Core.Services.Products;
 
 namespace Core.Objects.MyNwkUnitOfWork;
 
@@ -16,6 +17,7 @@ public sealed class UnitOfWork : IUnitOfWork
     private readonly Lazy<IRepository<MarketInfo>> marketInfosRepository;
     private readonly Lazy<IRepository<Category>> categoriesInfosRepository;
     private readonly Lazy<IRepository<Order>> ordersRepository;
+    private readonly Lazy<IRepository<ClickOnProductMetric>> clickOnProductMetricRepository;
 
     public IRepository<User> UsersRepository => usersRepository.Value;
     public IRepository<Product> ProductRepository => productRepository.Value;
@@ -23,6 +25,7 @@ public sealed class UnitOfWork : IUnitOfWork
     public IRepository<MarketInfo> MarketInfosRepository => marketInfosRepository.Value;
     public IRepository<Category> CategoriesRepository => categoriesInfosRepository.Value;
     public IRepository<Order> OrdersRepository => ordersRepository.Value;
+    public IRepository<ClickOnProductMetric> ClickOnProductMetricRepository => clickOnProductMetricRepository.Value;
 
     public UnitOfWork(CoreDbContext coreDbContext)
     {
@@ -33,6 +36,8 @@ public sealed class UnitOfWork : IUnitOfWork
         marketsRepository = new Lazy<IRepository<Market>>(() => new Repository<Market>(coreDbContext));
         marketInfosRepository = new Lazy<IRepository<MarketInfo>>(() => new Repository<MarketInfo>(coreDbContext));
         categoriesInfosRepository = new Lazy<IRepository<Category>>(() => new Repository<Category>(coreDbContext));
+        clickOnProductMetricRepository =
+            new Lazy<IRepository<ClickOnProductMetric>>(() => new Repository<ClickOnProductMetric>(coreDbContext));
     }
 
     public Task CommitAsync(CancellationToken cancellationToken) => coreDbContext.SaveChangesAsync(cancellationToken); 
