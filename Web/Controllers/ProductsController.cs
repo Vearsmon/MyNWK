@@ -17,16 +17,13 @@ public class ProductsController : Controller
 {
     private readonly IProductService productService;
     private readonly IOrdersService ordersService;
-    private readonly IUnitOfWorkProvider unitOfWorkProvider;
 
     public ProductsController(
         IProductService productService, 
-        IOrdersService ordersService,
-        IUnitOfWorkProvider unitOfWorkProvider)
+        IOrdersService ordersService)
     {
         this.productService = productService;
         this.ordersService = ordersService;
-        this.unitOfWorkProvider = unitOfWorkProvider;
     }
     
     [HttpGet]

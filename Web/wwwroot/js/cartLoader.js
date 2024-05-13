@@ -33,6 +33,7 @@
                 slotInfo.setAttribute('class', 'cart-slot-info');
                 slotInfo.innerText = product['title'];
                 slotInfo.insertAdjacentHTML('beforeend', `<p>${product['price']} руб</p>`)
+                slotInfo.insertAdjacentHTML('beforeend', `${product['remained']} шт.`);
                 
                 const cartSlot = document.createElement('div');
                 cartSlot.setAttribute('class', 'cart-slot');
@@ -50,19 +51,8 @@
                     await fetch('/cart/accept', {method: 'post'})
                         .then(() => window.location.reload());
                 })
+            } else {
+                document.getElementsByClassName('cart-accept')[0].innerHTML = "Корзина пуста";
             }
         });
 });
-
-// <div className="cart-slot">
-//     <div className="cart-slot-delete-button">
-//         <img src="~/assets/closeButton.png" width="30px" height="30px"/>
-//     </div>
-//
-//     <div className="cart-slot-photo"></div>
-//
-//     <div className="cart-slot-info">
-//         @* Чипсы Lay's краб *@
-//         @* <p>150 руб</p> *@
-//     </div>
-// </div>

@@ -3,6 +3,7 @@ using Core.Objects.Markets;
 using Core.Objects.Orders;
 using Core.Objects.Products;
 using Core.Objects.Users;
+using Core.Services.Products;
 
 namespace Core.Objects.MyNwkUnitOfWork;
 
@@ -14,6 +15,7 @@ public interface IUnitOfWork : IAsyncDisposable
     public IRepository<MarketInfo> MarketInfosRepository { get; }
     public IRepository<Category> CategoriesRepository { get; }
     public IRepository<Order> OrdersRepository { get; }
+    public IRepository<ClickOnProductMetric> ClickOnProductMetricRepository { get; }
 
     public Task CommitAsync(CancellationToken cancellationToken);
 }
