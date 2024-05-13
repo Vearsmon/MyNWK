@@ -135,7 +135,7 @@ public class ProductsController : Controller
             Price = productAddModel.Price,
             Description = productAddModel.Description,
             ImageLocation = imageLocation,
-            CategoryId = productAddModel.Category
+            CategoryId = productAddModel.Category == 0 ? null : productAddModel.Category
         };
         await productService.CreateAsync(requestContext, productToCreate);
 

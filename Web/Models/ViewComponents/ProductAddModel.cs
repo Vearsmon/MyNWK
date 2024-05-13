@@ -26,5 +26,5 @@ public class ProductAddModel
     public string? Description { get; set; }
     
     [Range(0, int.MaxValue)]
-    public int Category { get; set; }
+    public int? Category { get; set; }
 }
