@@ -18,24 +18,31 @@
     <link rel="stylesheet" href="~/css/ProductCardStyles.css">
     <link rel="stylesheet" href="~/css/productAddingStyles.css">
     <link rel="stylesheet" href="~/css/SettingsStyles.css">
+    <link rel="stylesheet" href="~/css/Colors.css">
+    <link rel="stylesheet" href="~/css/productInfoUpdateStyles.css">
+    <link rel="stylesheet" href="~/css/productDeleteStyles.css">
     <script src="~/js/profileLoader.js" defer></script>
 </head>
 <body>
     <div class="header">
-        <a class="logo" href="#">
+        <a class="logo" href="/baraholka">
             <img src="~/assets/logo.png" alt="logo" width="121px" height="79px">
         </a>
 
         <ul class="ul">
             <li class="li">
-                <a class="link" href="Baraholka">Барахолка</a>
+                <a class="link" href="/baraholka">Барахолка</a>
             </li>
             <li class="li">
                 <button class="button">
-                    <a class="link" href="#">Профиль</a>
+                    <a class="link" href="/profile">Профиль</a>
                 </button>
             </li>
         </ul>
+
+        <button class="modeButton">
+            <img src="~/assets/modeButton.png" alt="modeButton" width="43px" height="61px">
+        </button>
     </div>
 
     <div class="profile-container">
@@ -59,201 +66,7 @@
         </div>
 
         <div hidden="true" class="profile-purchases-container">
-            @* <div hidden="false" class="profile-purchases-inner-container">
-                <div class="profile-purchases-header">Номер заказа: {}</div>
-
-                <div class="profile-purchases">
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-    
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-    
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-    
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="profile-purchases-accept">Подтвердить получение</button>
-            </div>
-
-            <div hidden="true" class="profile-purchases-inner-container">
-                <div class="profile-purchases-header">Номер заказа: {}</div>
-
-                <div class="profile-purchases">
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-    
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-    
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-    
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-purchase">
-                        <div class="profile-purchase-photo"></div>
-                        
-                        <div class="profile-purchase-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="profile-purchases-accept">Подтвердить получение</button>
-            </div> *@
+            
         </div>
 
         <div hidden="true" class="profile-products-container">
@@ -278,88 +91,9 @@
             @* <div hidden="true" class="profile-orders-inner-container">
                 <div class="profile-orders-header">Номер заказа: {}</div>
 
+                <button class="profile-orders-accept">Принять заказ</button>
+
                 <div class="profile-orders">
-                    <div class="profile-order">
-                        <div class="profile-order-photo"></div>
-                        
-                        <div class="profile-order-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-    
-                    <div class="profile-order">
-                        <div class="profile-order-photo"></div>
-                        
-                        <div class="profile-order-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-    
-                    <div class="profile-order">
-                        <div class="profile-order-photo"></div>
-                        
-                        <div class="profile-order-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-    
-                    <div class="profile-order">
-                        <div class="profile-order-photo"></div>
-                        
-                        <div class="profile-order-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-order">
-                        <div class="profile-order-photo"></div>
-                        
-                        <div class="profile-order-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-order">
-                        <div class="profile-order-photo"></div>
-                        
-                        <div class="profile-order-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-order">
-                        <div class="profile-order-photo"></div>
-                        
-                        <div class="profile-order-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-order">
-                        <div class="profile-order-photo"></div>
-                        
-                        <div class="profile-order-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
-                    <div class="profile-order">
-                        <div class="profile-order-photo"></div>
-                        
-                        <div class="profile-order-info">
-                            Чипсы Lay's краб
-                            <p>150 руб</p>
-                        </div>
-                    </div>
-
                     <div class="profile-order">
                         <div class="profile-order-photo"></div>
                         
@@ -441,40 +175,17 @@
     <div hidden="true" class="profile-market-settings-window">
         <div id="profile-market-settings-close" class="product-card-background-shadow"></div>
 
-        <form class="settings-form-container" method="post" action="/products/create" enctype="multipart/form-data">
-            <div class="settings-header">Настройте свой магазин</div>
+        <form class="settings-form-container" method="post" action="/api/market/update" enctype="multipart/form-data">
             
-            <div class="settings-content">
-                Название магазина
-            </div>
-
-            <input class="settings-fields" type="text" name="title"/>
-
-            <div class="settings-content">
-                Описание магазина
-            </div>
-
-            <input class="settings-fields" type="text" name="description" />
-
-            <div class="settings-content">
-                Время работы от:
-            </div>
-
-            <input id="time-from" class="settings-fields" type="time" name="appt-time" value="12:00"/>
-
-            <div class="settings-content">
-                Время работы до:
-            </div>
-
-            <input id="time-to" class="settings-fields" type="time" name="appt-time" value="20:00"/>
-            
-            <div class="settings-buttons">
-                <input class="settings-accept" type="submit" value="Добавить"/>
-            </div>
         </form>
+    </div>
+
+    <div hidden="true" class="profile-market-info-update-window">
+        <div id="profile-market-info-update-close" class="product-card-background-shadow"></div>
     </div>
 
     <script src="~/js/ProfileMarketButtonsController.js"></script>
     <script src="~/js/ProfileTabsController.js"></script>
+    <script src="~/js/InversiaController.js"></script>
 </body>
 </html>

@@ -28,7 +28,7 @@ public class CartController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        return View();
+        return View("~/Pages/Cart.cshtml");
     }
     
     [HttpPost]

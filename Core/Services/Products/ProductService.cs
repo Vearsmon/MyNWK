@@ -1,4 +1,6 @@
-﻿using Core.BlobStorage;
+﻿using System.Security.Cryptography.X509Certificates;
+using Core.BlobStorage;
+using Core.Helpers;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Products;
 
@@ -56,11 +58,21 @@ public class ProductService : IProductService
     {
         await using var unitOfWork = unitOfWorkProvider.Get();
 
+        var currentTime = new TimeOnly(PreciseTimestampGenerator.Generate().TimeOfDay.Ticks);
         var products = await unitOfWork.ProductRepository.GetPageAsync(
                 r => r.ProductOrderer(),
                 p => p
                     .Where(t => marketId == null || t.MarketId == marketId)
-                    .Where(t => categoryId == null || t.CategoryId == categoryId),
+                    .Where(t => categoryId == null || t.CategoryId == categoryId)
+                    .Where(t => t.Remained - t.Reserved > 0)
+                    .Join(
+                        unitOfWork.MarketInfosRepository.Queryable, 
+                        p => p.MarketId,
+                        m => m.MarketId,
+                        (p, m) => new {Product=p, MarketInfo=m})
+                    .Where(pm => (pm.MarketInfo.WorksFrom ?? TimeOnly.MinValue) <= currentTime 
+                                 && currentTime < (pm.MarketInfo.WorksTo ?? TimeOnly.MaxValue))
+                    .Select(t => t.Product),
                 batchNum,
                 batchSize,
                 requestContext.CancellationToken)
@@ -72,14 +84,14 @@ public class ProductService : IProductService
                 r => r
                     .Where(t => marketIds.Any(id => id == t.Id)),
                 requestContext.CancellationToken)
-            .ToDictionaryAsync(t => t.Id, t => t.OwnerId)
+            .ToDictionaryAsync(t => t.Id, t => t.Id)
             .ConfigureAwait(false);
         
         var productWithImageRef = await GetImageRefByMarketAndProductId(products)
             .ConfigureAwait(false);
         return productWithImageRef
             .Where(p => userIdsByMarketId.ContainsKey(p.product.MarketId))
-            .Select(p => Convert(p.product, userIdsByMarketId[p.product.MarketId], p.imageRef))
+            .Select(p => Convert(p.product, userIdsByMarketId[p.product.MarketId], p.imageRef, p.product.Remained))
             .ToList();
     }
 
@@ -99,13 +111,13 @@ public class ProductService : IProductService
         var productWithImageRef = await GetImageRefByMarketAndProductId(products)
             .ConfigureAwait(false);
         return productWithImageRef
-            .Select(p => Convert(p.product, userId, p.imageRef))
+            .Select(p => Convert(p.product, userId, p.imageRef, p.product.Remained))
             .ToList();
     }
     
     public async Task<ProductDto?> GetProductByFullId(RequestContext requestContext, ProductFullId productFullId)
     {
-        var unitOfWork = unitOfWorkProvider.Get();
+        await using var unitOfWork = unitOfWorkProvider.Get();
         var product = await unitOfWork.ProductRepository
             .GetAsync(p => p
                     .Where(x => x.MarketId == productFullId.MarketId && x.ProductId == productFullId.ProductId), 
@@ -120,10 +132,10 @@ public class ProductService : IProductService
         var productWithImageRef = await GetImageRefByMarketAndProductId(new List<Product> { product })
             .ConfigureAwait(false);
         
-        return Convert(product, productFullId.UserId, productWithImageRef.FirstOrDefault().imageRef);
+        return Convert(product, productFullId.UserId, productWithImageRef.FirstOrDefault().imageRef, product.Remained);
     }
 
-    public async Task<List<ProductDto>> GetOrderProductsAsync(RequestContext requestContext, Guid OrderId)
+    public async Task<List<ProductDto>> GetOrderProductsAsync(RequestContext requestContext, Guid orderId)
     {
         var userId = requestContext.UserId 
                      ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
@@ -131,11 +143,14 @@ public class ProductService : IProductService
         
         var productIds = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
-                    .Where(m => m.OrderId == OrderId)
+                    .Where(m => m.OrderId == orderId)
                     .Select(m => m.ProductId), 
                 requestContext.CancellationToken)
-            .ContinueWith(t => t.Result.ToArray())
             .ConfigureAwait(false);
+
+        var countDict = productIds
+            .GroupBy(p => p)
+            .ToDictionary(x => x.Key, x => x.Count());
 
         var products = await unitOfWork.ProductRepository.GetAsync(
                 r => r
@@ -146,8 +161,38 @@ public class ProductService : IProductService
         var productWithImageRef = await GetImageRefByMarketAndProductId(products)
             .ConfigureAwait(false);
         return productWithImageRef
-            .Select(p => Convert(p.product, userId, p.imageRef))
+            .Select(p => Convert(p.product, userId, p.imageRef, countDict[p.product.ProductId]))
             .ToList();
+    }
+
+    public async Task<ProductDto?> UpdateProductInfoAsync(RequestContext requestContext, Dictionary<string, string> parametersToUpdate)
+    {
+        var userId = requestContext.UserId 
+                     ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
+        await using var unitOfWork = unitOfWorkProvider.Get();
+        var productToChange = await unitOfWork.ProductRepository
+            .GetAsync(p => p
+                    .Where(t => t.ProductId == int.Parse(parametersToUpdate["productId"])),
+                requestContext.CancellationToken).FirstOrDefaultAsync().ConfigureAwait(false);
+        
+        if (productToChange == null)
+            throw new NotImplementedException();
+
+        productToChange.Description = parametersToUpdate["description"];
+        productToChange.Price = int.Parse(parametersToUpdate["price"]);
+        productToChange.Title = parametersToUpdate["title"];
+        productToChange.Remained = int.Parse(parametersToUpdate["remained"]);
+        
+        await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
+        return Convert(productToChange, userId, null, productToChange.Remained);
+    }
+    
+    public async Task DeleteProductByIdAsync(RequestContext requestContext, int productId)
+    {
+        await using var unitOfWork = unitOfWorkProvider.Get();
+        await unitOfWork.ProductRepository.DeleteAsync(p => p.Where(t => t.ProductId == productId),
+            requestContext.CancellationToken).ConfigureAwait(false);
+        // await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
     }
 
     private async Task<List<(Product product, string? imageRef)>> GetImageRefByMarketAndProductId(
@@ -171,14 +216,14 @@ public class ProductService : IProductService
         return result;
     }
     
-    private ProductDto Convert(Product product, int userId, string? imageRef) =>
+    private ProductDto Convert(Product product, int userId, string? imageRef, int number) =>
         new()
         {
             CategoryId = product.CategoryId,
             FullId = new ProductFullId(userId, product.MarketId, product.ProductId),
             ImageRef = imageRef,
             Price = product.Price,
-            Remained = product.Remained,
+            Remained = number,
             Title = product.Title,
             Description = product.Description ?? ""
         };

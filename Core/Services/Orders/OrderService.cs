@@ -13,38 +13,56 @@ public class OrderService : IOrdersService
         this.unitOfWorkProvider = unitOfWorkProvider;
     }
 
-    public async Task<List<Guid>> GetBuyerOrderIdsAsync(RequestContext requestContext)
+    public async Task<List<OrderStatus>> GetBuyerOrderIdsAsync(RequestContext requestContext)
     {
         var userId = requestContext.UserId 
                      ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
         await using var unitOfWork = unitOfWorkProvider.Get();
         
-        var OrderIds = await unitOfWork.OrdersRepository.GetAsync(
+        var orders = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.BuyerId == userId)
-                    .OrderByDescending(m => m.CreatedAt)
-                    .Select(m => m.OrderId)
-                    .Distinct(),
+                    .Select(m => new { m.OrderId, m.WorkflowState, m.CreatedAt })
+                    .Distinct()
+                    .OrderBy(m => m.WorkflowState == OrderWorkflowState.Cancelled 
+                                  || m.WorkflowState == OrderWorkflowState.ConfirmedByBuyer)
+                    .ThenByDescending(m => m.CreatedAt), 
                 requestContext.CancellationToken)
             .ConfigureAwait(false);
-        return OrderIds;
+        
+        return orders
+            .Select(o => new OrderStatus
+            {
+                OrderId = o.OrderId, 
+                WorkflowState = o.WorkflowState
+            })
+            .ToList();
     }
 
-    public async Task<List<Guid>> GetSellerOrderIdsAsync(RequestContext requestContext)
+    public async Task<List<OrderStatus>> GetSellerOrderIdsAsync(RequestContext requestContext)
     {
         var userId = requestContext.UserId 
                      ?? throw new ArgumentException("UserId should not be null. User might not be authenticated");
         await using var unitOfWork = unitOfWorkProvider.Get();
         
-        var OrderIds = await unitOfWork.OrdersRepository.GetAsync(
+        var orders = await unitOfWork.OrdersRepository.GetAsync(
                 r => r
                     .Where(m => m.SellerId == userId)
-                    .OrderByDescending(m => m.CreatedAt)
-                    .Select(m => m.OrderId)
-                    .Distinct(), 
+                    .Select(m => new { m.OrderId, m.WorkflowState, m.CreatedAt })
+                    .Distinct()
+                    .OrderBy(m => m.WorkflowState == OrderWorkflowState.Cancelled 
+                                  || m.WorkflowState == OrderWorkflowState.ConfirmedByBuyer)
+                    .ThenByDescending(m => m.CreatedAt), 
                 requestContext.CancellationToken)
             .ConfigureAwait(false);
-        return OrderIds;
+        
+        return orders
+            .Select(o => new OrderStatus() 
+            {
+                OrderId = o.OrderId,
+                WorkflowState = o.WorkflowState
+            })
+            .ToList();
     }
     
     public async Task<List<Guid>> CreateOrdersAsync(RequestContext requestContext, CartDto cart)
@@ -94,13 +112,14 @@ public class OrderService : IOrdersService
         var orders = await unitOfWork.OrdersRepository
             .GetOrder(orderId, requestContext.CancellationToken)
             .ConfigureAwait(false);
-        
-        await orders
-            .ForEachAsync(t => t.ConfirmAsync(requestContext, unitOfWork))
-            .ConfigureAwait(false);
+
+        foreach (var order in orders)
+        {
+            await order.ConfirmAsync(requestContext, unitOfWork).ConfigureAwait(false);
+        }
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
     }
-    
+
     public async Task CancelAsync(
         RequestContext requestContext, 
         Guid orderId)
@@ -110,9 +129,10 @@ public class OrderService : IOrdersService
             .GetOrder(orderId, requestContext.CancellationToken)
             .ConfigureAwait(false);
 
-        await orders
-            .ForEachAsync(t => t.CancelAsync(requestContext, unitOfWork))
-            .ConfigureAwait(false);
+        foreach (var order in orders)
+        {
+            await order.CancelAsync(requestContext, unitOfWork).ConfigureAwait(false);
+        }
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
     }
 }

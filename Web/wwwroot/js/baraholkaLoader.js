@@ -1,31 +1,6 @@
-﻿const productAddWindow = document.getElementsByClassName("profile-product-info-window");
-const increaseCountForCart = document.getElementById('product-count-inc');
-increaseCountForCart.addEventListener("click", function () {
-    const count = Number(document.getElementById('product-curr-count').innerText);
-    document.getElementById('product-curr-count').innerText = `${count + 1}`;
-});
-const decreaseCountForCart = document.getElementById('product-count-dec');
-decreaseCountForCart.addEventListener("click", function () {
-    const count = Number(document.getElementById('product-curr-count').innerText);
-    document.getElementById('product-curr-count').innerText = `${count - 1}`;
-});
-const addToCartButton = document.getElementById('product-add-to-cart');
-addToCartButton.addEventListener("click", async function () {
-    const count = document.getElementById('product-curr-count').innerText;
-    const productInfo = JSON.parse(document.getElementsByClassName('product-id')[0].textContent);
-    let formData = new FormData();
-    formData.append('count', count);
-    formData.append('marketId', productInfo['marketId']);
-    formData.append('productId', productInfo['productId']);
-    formData.append('sellerId', productInfo['userId']);
-    
-    await fetch('cart/add', {
-        method: 'post',
-        body: formData
-    });
+﻿let CATEGORY = -1;
+let SELLER = -1;
 
-    closeProductInfoWindow();
-})
 
 async function openProductInfoWindow(data) {
     const getProductUrl = new URL('http://127.0.0.1:80/products/get');
@@ -33,11 +8,20 @@ async function openProductInfoWindow(data) {
     await fetch(getProductUrl, { method: 'get' })
     .then((response) => response.json())
         .then((infoParams) => {
+            const header = document.createElement('div');
+            const productId = document.createElement('div');
             const title = document.createElement("div");
             const price = document.createElement("div");
             const remained = document.createElement("div");
             const description = document.createElement("div");
+            const productCount = document.createElement('div');
+            const increaseButton = document.createElement('button');
+            const decreaseButton = document.createElement('button');
+            const addToCartButton = document.createElement('button');
 
+            header.setAttribute('class', 'product-info-header');
+            productId.setAttribute('hidden', 'hidden');
+            productId.setAttribute('class', 'product-id')
             title.setAttribute('class', 'product-info-content');
             title.setAttribute('id', 'product-info-title');
             price.setAttribute('class', 'product-info-content');
@@ -46,38 +30,88 @@ async function openProductInfoWindow(data) {
             remained.setAttribute('id', 'product-info-remained');
             description.setAttribute('class', 'product-info-content');
             description.setAttribute('id', 'product-info-description');
-            
-            const info = document.getElementsByClassName('product-info-content');
-            const len = info.length;
-            for (let i = 0; i < len; i++) {
-                info[0].remove();
-            }
-            
+            increaseButton.setAttribute('type', 'button');
+            increaseButton.setAttribute('class', 'product-count-increase-button');
+            increaseButton.setAttribute('id', 'product-count-inc');
+            increaseButton.textContent = '+';
+            decreaseButton.setAttribute('type', 'button');
+            decreaseButton.setAttribute('class', 'product-count-decrease-button');
+            decreaseButton.setAttribute('id', 'product-count-dec');
+            decreaseButton.textContent = '-';
+            addToCartButton.setAttribute('type', 'button');
+            addToCartButton.setAttribute('class', 'product-add-to-cart-button');
+            addToCartButton.setAttribute('id', 'product-add-to-cart');
+            addToCartButton.textContent = 'В корзину';
+            productCount.setAttribute('class', 'product-info-current-count-for-order');
+            productCount.setAttribute('id', 'product-curr-count');
+            productCount.textContent = '1';
+            productId.textContent = JSON.stringify(data);
+
             title.insertAdjacentText('afterbegin', `Название: ${infoParams['title']}`);
             price.insertAdjacentText('afterbegin', `Цена: ${infoParams['price']} р.`);
             remained.insertAdjacentText('afterbegin', `Осталось: ${infoParams['remained']} шт.`);
             description.insertAdjacentText('afterbegin', `Описание: ${infoParams['description']}`);
+
+            const container = document.getElementsByClassName("product-info-form-container")[0];
+            container.innerHTML = '';
+            container.appendChild(header);
+            container.appendChild(productId);
+            container.appendChild(title);
+            container.appendChild(price);
+            container.appendChild(remained);
+            container.appendChild(description);
             
-            document.getElementsByClassName("product-info-form-container")[0].appendChild(title);
-            document.getElementsByClassName("product-info-form-container")[0].appendChild(price);
-            document.getElementsByClassName("product-info-form-container")[0].appendChild(remained);
-            document.getElementsByClassName("product-info-form-container")[0].appendChild(description);
+            fetch('api/get/user/myInfo', {method: 'get'})
+                .then((response) => response.json())
+                .then((json) => {
+                    if (json['id'] !== Number(data["userId"])) {
+                        container.appendChild(decreaseButton);
+                        container.appendChild(productCount);
+                        container.appendChild(increaseButton);
+                        container.appendChild(addToCartButton);
+                    } else {
+                        const text = document.createElement('div');
+                        text.setAttribute('class', 'your-product-text');
+                        text.innerText = 'Вы продаете этот продукт';
+                        container.appendChild(text);
+                    }
+                });
+            
+            increaseButton.addEventListener("click", function () {
+                document.getElementById('product-curr-count').innerText = 
+                    `${Number(document.getElementById('product-curr-count').innerText) + 1}`;
+            });
+            decreaseButton.addEventListener("click", function () {
+                document.getElementById('product-curr-count').innerText = 
+                    `${Number(document.getElementById('product-curr-count').innerText) - 1}`;
+            });
+            addToCartButton.addEventListener("click", async function () {
+                const count = document.getElementById('product-curr-count').innerText;
+                const productInfo = JSON.parse(document.getElementsByClassName('product-id')[0].textContent);
+                let formData = new FormData();
+                formData.append('count', count);
+                formData.append('marketId', productInfo['marketId']);
+                formData.append('productId', productInfo['productId']);
+                formData.append('sellerId', productInfo['userId']);
 
-            document.getElementsByClassName('product-id')[0].textContent = JSON.stringify(data);
-            document.getElementById('product-curr-count').innerText = '1';
+                await fetch('cart/add', {
+                    method: 'post',
+                    body: formData
+                });
+
+                document.getElementsByClassName("profile-product-info-window")[0].hidden = true;
+            })
         });
-    productAddWindow[0].hidden = false;
+    document.getElementsByClassName("profile-product-info-window")[0].hidden = false;
 }
 
-function closeProductInfoWindow() {
-    productAddWindow[0].hidden = true;
-}
 
-const closeButton = document.getElementsByClassName("product-info-background-shadow");
-closeButton[0].addEventListener('click', () => closeProductInfoWindow());
+document.getElementsByClassName("product-info-background-shadow")[0].addEventListener('click', () => {
+    document.getElementsByClassName("profile-product-info-window")[0].hidden = true;
+});
 
 
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     fetch('api/isAuthenticated', {method: 'get'})
         .then((response) => response.text())
         .then((userId) => {
@@ -86,7 +120,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 li.setAttribute('class', 'li');
                 li.setAttribute('id', 'profileli');
                 document.getElementsByClassName("tgli")[0].remove();
-                li.insertAdjacentHTML("afterbegin", `<button class="profileButton"><a class="link" href="Profile">Профиль</a></button>`);
+                li.insertAdjacentHTML("afterbegin", `<button class="profileButton"><a class="link" href="profile">Профиль</a></button>`);
                 document.getElementsByClassName("ul")[0].appendChild(li)
             }
             else {
@@ -94,7 +128,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 tgli.hidden = false;
             }
         });
-        
+
     fetchProducts(null, null);    
     
     const categoriesList = document.getElementsByClassName("baraholka-filters category")[0];
@@ -139,7 +173,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
     
     const resetButton = document.getElementsByClassName("baraholka-filters-reset-button")[0];
-    resetButton.addEventListener('click', () => alert('2'));
+    resetButton.addEventListener('click', () => alert('2')); // TODO: доделыч!!!!
 });
 
 async function onTelegramAuth(user) {
@@ -165,6 +199,9 @@ async function onTelegramAuth(user) {
 }
 
 async function fetchProducts(categoryId, marketId) {
+    if (CATEGORY === categoryId && SELLER === marketId) {
+        return;
+    }
     const getAllProductsUrl = new URL('http://127.0.0.1:80/products/get/all');
     const params = {pageNumber:0, batchSize:20};
     if (categoryId) {
@@ -173,6 +210,8 @@ async function fetchProducts(categoryId, marketId) {
     if (marketId) {
         params.marketId = marketId;
     }
+    CATEGORY = categoryId;
+    SELLER = marketId;
     getAllProductsUrl.search = new URLSearchParams(params).toString();
     const slots = document.getElementsByClassName("baraholka-slots-container")[0];
     slots.innerHTML = '';

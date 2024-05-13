@@ -18,14 +18,14 @@
     font-size: 60px;
     line-height: 60px;
 
-    color: #FFA25E;
+    color: var(--content-color);
 }
 
 
 .cart-design-lines {
     position: absolute;
 
-    background-color: #FFA25E;
+    background-color: var(--content-color);
     border-radius: 3px;
 }
 
@@ -54,14 +54,14 @@
     width: 1082px;
     height: 50px;
 
-    background-color:#FFE1BD;
+    background-color:var(--background-card-color);
 
-    border-color: #FFA25E;
+    border-color: var(--content-color);
     border-style: solid;
     border-width: 3px;
 
     font-size: 30px;
-    color:#FFA25E;
+    color:var(--content-color);
     font-style: italic;
 
     cursor: pointer;
@@ -120,7 +120,7 @@
     font-style: italic;
     font-weight: 500;
     font-size: 30px;
-    color:#FFA25E;
+    color:var(--content-color);
 }
 
 
@@ -133,7 +133,7 @@
     width: 30px;
     height: 30px;
 
-    background-color: #FFE1BD;
+    background-color: var(--background-card-color);
 
     z-index: 2;
 

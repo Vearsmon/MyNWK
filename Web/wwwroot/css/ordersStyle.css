@@ -6,7 +6,7 @@
     min-height: 400px;
     max-height: max-content;
 
-    border-color: #FFA25E;
+    border-color: var(--border-color);
     border-width: 2px;
     border-style: solid;
     border-radius: 5px;
@@ -29,12 +29,12 @@
 
     margin: 15px 20px;
 
-    border-color: #FFA25E;
+    border-color: var(--border-color);
     border-width: 2px;
     border-style: solid;
     border-radius: 5px;
 
-    background-color:#FFEFD8
+    background-color: var(--background-card-color);
 }
 
 
@@ -43,7 +43,7 @@
 
     left: 10px;
 
-    color:#FFA25E;
+    color:var(--content-color);
     font-size: 18px;
     line-height: 40px;
 }
@@ -99,32 +99,65 @@
     font-style: italic;
     font-weight: 500;
     font-size: 15px;
-    color:#FFA25E;
+    color:var(--content-color);
 }
 
 p {
     margin: 0px;
 }
 
-
-
 .profile-orders-cancel {
     position: absolute;
 
-    top: 7px;
-    right: 10px;
+    top: 40px;
+    right: 27px;
 
     width: 200px;
     height: 30px;
 
-    background-color: #FFEFD8;
+    background-color: var(--background-card-color);
 
-    border-color: #FFA25E;
+    border-color: var(--border-color);
     border-style: solid;
     border-width: 2px;
     border-radius: 5px;
 
-    color: #FFA25E;
+    color: var(--content-color);
+    font-size: 15px;
+
+    cursor: pointer;
+
+    z-index: 2;
+}
+
+.profile-orders-status {
+    position: absolute;
+
+    top: 10px;
+    right: 50px;
+
+    color: var(--content-color);
+}
+
+
+.profile-orders-accept {
+    position: relative;
+
+    left: 27px;
+
+    margin-bottom: 10px;
+
+    width: 200px;
+    height: 30px;
+
+    background-color: var(--background-card-color);
+
+    border-color: var(--border-color);
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 5px;
+
+    color: var(--content-color);
     font-size: 15px;
 
     cursor: pointer;

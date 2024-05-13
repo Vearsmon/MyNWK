@@ -5,7 +5,7 @@ public interface IOrdersService
     public Task<List<Guid>> CreateOrdersAsync(
         RequestContext requestContext,
         CartDto cart);
-    
+
     public Task ConfirmAsync(
         RequestContext requestContext,
         Guid orderId);
@@ -14,9 +14,9 @@ public interface IOrdersService
         RequestContext requestContext,
         Guid orderId);
 
-    public Task<List<Guid>> GetBuyerOrderIdsAsync(
+    public Task<List<OrderStatus>> GetBuyerOrderIdsAsync(
         RequestContext requestContext);
 
-    public Task<List<Guid>> GetSellerOrderIdsAsync(
+    public Task<List<OrderStatus>> GetSellerOrderIdsAsync(
         RequestContext requestContext);  
 }

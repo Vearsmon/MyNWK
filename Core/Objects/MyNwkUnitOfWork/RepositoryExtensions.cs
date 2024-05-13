@@ -28,7 +28,7 @@ public static class RepositoryExtensions
 
     public static IQueryable<Product> ProductOrderer(this IQueryable<Product> queryable) =>
         queryable
-            .OrderBy(t => t.CreatedAt)
+            .OrderByDescending(t => t.CreatedAt)
             .ThenBy(t => t.MarketId)
             .ThenBy(t => t.ProductId);
     

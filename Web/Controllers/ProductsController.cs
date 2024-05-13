@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Core;
 using Core.Helpers;
+using Core.Objects.MyNwkUnitOfWork;
 using Core.Services.Orders;
 using Core.Services.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Web.Models.ViewComponents;
 
 namespace Web.Controllers;
@@ -15,11 +17,16 @@ public class ProductsController : Controller
 {
     private readonly IProductService productService;
     private readonly IOrdersService ordersService;
+    private readonly IUnitOfWorkProvider unitOfWorkProvider;
 
-    public ProductsController(IProductService productService, IOrdersService ordersService)
+    public ProductsController(
+        IProductService productService, 
+        IOrdersService ordersService,
+        IUnitOfWorkProvider unitOfWorkProvider)
     {
         this.productService = productService;
         this.ordersService = ordersService;
+        this.unitOfWorkProvider = unitOfWorkProvider;
     }
     
     [HttpGet]
@@ -76,10 +83,13 @@ public class ProductsController : Controller
         var result = new List<FullOrder>();
         foreach (var o in orderIds)
         {
-            var products = await productService.GetOrderProductsAsync(requestContext, o);
-            result.Add(new FullOrder() { OrderId = o, Products = products });
+            var products = await productService.GetOrderProductsAsync(requestContext, o.OrderId);
+            result.Add(new FullOrder {
+                OrderId = o.OrderId,
+                Products = products,
+                WorkflowState = o.WorkflowState
+            });
         }
-        Console.WriteLine(Json(result));
         return Json(result);
     }
 
@@ -92,8 +102,13 @@ public class ProductsController : Controller
         var result = new List<FullOrder>();
         foreach (var o in orderIds)
         {
-            var products = await productService.GetOrderProductsAsync(requestContext, o);
-            result.Add(new FullOrder { OrderId = o, Products = products });
+            var products = await productService.GetOrderProductsAsync(requestContext, o.OrderId);
+            result.Add(new FullOrder {
+                OrderId = o.OrderId,
+                Products = products,
+                WorkflowState = o.WorkflowState
+
+            });
         }
         return Json(result);
     }
@@ -123,6 +138,39 @@ public class ProductsController : Controller
         };
         await productService.CreateAsync(requestContext, productToCreate);
 
+        return Redirect("/Profile");
+    }
+
+    [HttpPost]
+    [Route("save")]
+    public async Task<IActionResult> SaveInfoChanges(CancellationToken cancellationToken)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var form = await HttpContext.Request.ReadFormAsync(cancellationToken);
+
+        var parametersDict = new Dictionary<string, string>
+        {
+            { "userId", form["userId"].ToString() },
+            { "marketId", form["marketId"].ToString() },
+            { "productId", form["productId"].ToString() },
+            { "description", form["description"].ToString() },
+            { "price", form["price"].ToString() },
+            { "title", form["title"].ToString() },
+            { "remained", form["remained"].ToString() }
+        };
+
+        await productService.UpdateProductInfoAsync(requestContext, parametersDict);
+        return Redirect("/Profile");
+    }
+    
+    [HttpPost]
+    [Route("delete")]
+    public async Task<IActionResult> DeleteProductAsync(CancellationToken cancellationToken)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var form = await HttpContext.Request.ReadFormAsync(cancellationToken);
+
+        await productService.DeleteProductByIdAsync(requestContext, int.Parse(form["productId"].ToString()));
         return Redirect("/Profile");
     }
 }

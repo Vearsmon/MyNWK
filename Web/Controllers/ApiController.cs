@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
-using Core;
 using Core.Objects.MyNwkUnitOfWork;
 using Core.Objects.Users;
 using Core.Services.Categories;
 using Core.Services.Markets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.Models;
 
 namespace Web.Controllers;
 
@@ -61,10 +61,61 @@ public class ApiController : Controller
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
         return Json(await marketsService.GetAllMarkets(requestContext));
     }
+    
+    [Authorize(Policy = "UserPolicy")]
+    [HttpGet]
+    [Route("get/market/info")]
+    public async Task<JsonResult> GetMarketAsync(int marketId, CancellationToken cancellationToken)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        return Json(await marketsService.GetMarketInfo(requestContext, marketId));
+    }
+    
+    [Authorize(Policy = "UserPolicy")]
+    [HttpPost]
+    [Route("market/update")]
+    public async Task<IActionResult> UpdateMarketInfoAsync(
+        MarketToUpdate marketToUpdate,
+        CancellationToken cancellationToken)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var marketToUpdateDto = new MarketToUpdateDto
+        {
+            AutoHide = marketToUpdate.AutoHide == "on",
+            Closed = marketToUpdate.Closed,
+            Description = marketToUpdate.Description,
+            Id = marketToUpdate.Id,
+            Name = marketToUpdate.Name,
+            WorksFrom = marketToUpdate.WorksFrom,
+            WorksTo = marketToUpdate.WorksTo
+        };
+        await marketsService.UpdateAsync(requestContext, marketToUpdateDto);
+        return Redirect("/Profile");
+    }
 
     [Authorize(Policy = "UserPolicy")]
     [HttpGet]
     [Route("get/user/info")]
+    public async Task<IActionResult> GetUserMyInfoAsync(CancellationToken cancellationToken, int userId)
+    {
+        var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
+        var unitOfWork = unitOfWorkProvider.Get();
+        
+        var user = await unitOfWork.UsersRepository
+            .GetAsync<User>(u => u.Where(t => t.Id == userId),
+                requestContext.CancellationToken)
+            .FirstOrDefaultAsync();
+        if (user == null)
+            
+            // по идее юзер должен уже находится, раз уж мы на странице пользователя
+            
+            throw new NotImplementedException();
+        return Json(new { address = user.Address, username = user.TelegramUsername, name = user.Name, id = user.Id });
+    }
+
+    [Authorize(Policy = "UserPolicy")]
+    [HttpGet]
+    [Route("get/user/myInfo")]
     public async Task<IActionResult> GetUserInfoAsync(CancellationToken cancellationToken)
     {
         var requestContext = RequestContextBuilder.Build(HttpContext, cancellationToken);
@@ -79,7 +130,7 @@ public class ApiController : Controller
             // по идее юзер должен уже находится, раз уж мы на странице пользователя
             
             throw new NotImplementedException();
-        return Json(new { address = user.Address, username = user.TelegramUsername, name = user.Name });
+        return Json(new { address = user.Address, username = user.TelegramUsername, name = user.Name, id = user.Id });
     }
 
     [Authorize(Policy = "UserPolicy")]

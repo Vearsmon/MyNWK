@@ -3,9 +3,8 @@ using Core.Services.Products;
 
 namespace Core.Services.Orders;
 
-public class FullOrder
+public class OrderStatus
 {
     public Guid OrderId { get; set; }
-    public List<ProductDto> Products { get; set; } = null!;
     public OrderWorkflowState WorkflowState { get; set; }
 }

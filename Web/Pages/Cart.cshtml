@@ -6,24 +6,25 @@
     <title>Document</title>
     <link rel="stylesheet" href="~/css/mainPageStyles.css">
     <link rel="stylesheet" href="~/css/CartStyle.css">
+    <link rel="stylesheet" href="~/css/Colors.css">
     <script src="~/js/cartLoader.js" defer></script>
 </head>
 <body>
     <div class="header">
-        <a class="logo" href="http://127.0.0.1:5500/Pages/mainPage.html">
+        <a class="logo" href="/baraholka">
             <img src="~/assets/logo.png" alt="logo" width="121px" height="79px">
         </a>
 
         <ul class="ul">
             <li class="li">
-                <a class="link" href="#">Барахолка</a>
-                <a class="link" href="http://127.0.0.1:5500/Pages/SignInPage.html">Вход</a>
+                <a class="link" href="/baraholka">Барахолка</a>
+            </li>
+            <li class="li">
+                <button class="button">
+                    <a class="link" href="/profile">Профиль</a>
+                </button>
             </li>
         </ul>
-        
-        <button class="button">
-            <a class="link" href="http://127.0.0.1:5500/Pages/SignUpPage.html">Профиль</a>
-        </button>
 
         <button class="modeButton">
             <img src="~/assets/modeButton.png" alt="modeButton" width="43px" height="61px">
@@ -87,5 +88,7 @@
             Подтвердить заказ
         </button>
     </div>
+
+    <script src="~/js/InversiaController.js"></script>
 </body>
 </html>

@@ -48,8 +48,8 @@
         });
     
     document.getElementsByClassName('cart-accept')[0].addEventListener('click', async function () {
-        await fetch('/cart/accept', {method: 'post'});
-        
+        await fetch('/cart/accept', {method: 'post'})
+            .then(() => window.location.reload());
     })
 });
 
