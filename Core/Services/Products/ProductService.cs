@@ -171,6 +171,11 @@ public class ProductService : IProductService
         productToChange.Price = int.Parse(parametersToUpdate["price"]);
         productToChange.Title = parametersToUpdate["title"];
         productToChange.Remained = int.Parse(parametersToUpdate["remained"]);
+        if (parametersToUpdate["category"] == "defaultCategory")
+            productToChange.CategoryId = null;
+        else if (parametersToUpdate["category"] != "")
+            productToChange.CategoryId = int.Parse(parametersToUpdate["category"]);
+        
         
         await unitOfWork.CommitAsync(requestContext.CancellationToken).ConfigureAwait(false);
         return Convert(productToChange, userId, null, productToChange.Remained);

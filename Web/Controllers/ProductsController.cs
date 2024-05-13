@@ -134,7 +134,8 @@ public class ProductsController : Controller
             Count = productAddModel.Count,
             Price = productAddModel.Price,
             Description = productAddModel.Description,
-            ImageLocation = imageLocation
+            ImageLocation = imageLocation,
+            CategoryId = productAddModel.Category
         };
         await productService.CreateAsync(requestContext, productToCreate);
 
@@ -156,7 +157,8 @@ public class ProductsController : Controller
             { "description", form["description"].ToString() },
             { "price", form["price"].ToString() },
             { "title", form["title"].ToString() },
-            { "remained", form["remained"].ToString() }
+            { "remained", form["remained"].ToString() },
+            { "category",  form["category"].ToString() }
         };
 
         await productService.UpdateProductInfoAsync(requestContext, parametersDict);
