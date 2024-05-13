@@ -45,12 +45,13 @@
                 container.appendChild(cartSlot);
                 i++;
             }
+            if (i !== 0) {
+                document.getElementsByClassName('cart-accept')[0].addEventListener('click', async function () {
+                    await fetch('/cart/accept', {method: 'post'})
+                        .then(() => window.location.reload());
+                })
+            }
         });
-    
-    document.getElementsByClassName('cart-accept')[0].addEventListener('click', async function () {
-        await fetch('/cart/accept', {method: 'post'})
-            .then(() => window.location.reload());
-    })
 });
 
 // <div className="cart-slot">
