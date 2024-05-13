@@ -126,6 +126,7 @@ function loadProducts() {
                 info.textContent = product['title'];
                 info.appendChild(price);
                 slot.setAttribute('class', 'profile-product');
+                slot.setAttribute('id', `profile-product-${i}`);
                 slot.appendChild(image);
                 slot.appendChild(info);
                 slot.appendChild(removeButton);
@@ -140,7 +141,7 @@ function loadProducts() {
                 document.getElementById(`profile-product-remove-button-id-${i}`)
                     .addEventListener('click', (event) => {
                         const id = event.target.getAttribute('id').split('-').pop();
-                        openDeleteConfirmationWindow(products[Number(id)]);
+                        openDeleteConfirmationWindow(products[Number(id)], id);
                 })
                 i++;
             }
@@ -330,7 +331,7 @@ function openProductInfoUpdateWindow(data) {
     productInfoUpdateWindow.hidden = false;
 }
 
-function openDeleteConfirmationWindow(data) {
+function openDeleteConfirmationWindow(data, id) {
     const form = document.createElement('form');
     const question = document.createElement("div");
     const confirm = document.createElement("button");
@@ -342,9 +343,11 @@ function openDeleteConfirmationWindow(data) {
     question.setAttribute('id', 'product-info-question');
     confirm.setAttribute('class', 'product-info-content');
     confirm.setAttribute('id', 'product-info-confirm');
+    confirm.setAttribute('type', 'button');
     confirm.textContent = 'Удалить';
     deny.setAttribute('class', 'product-info-content');
     deny.setAttribute('id', 'product-info-deny');
+    deny.setAttribute('type', 'button');
     deny.textContent = 'Отмена';
     question.insertAdjacentText('afterbegin', `Вы действительно хотите удалить товар \"${data['title']}\"?`);
 
@@ -364,11 +367,13 @@ function openDeleteConfirmationWindow(data) {
         let formData = new FormData();
         formData.append('productId', JSON.stringify(data['fullId']['productId']));
 
-        await fetch('products/delete', {
+        fetch('products/delete', {
             method: 'post',
             body: formData
+        }).then((response) => {
+            document.getElementById(`profile-product-${id}`).remove();
+            closeProductInfoUpdateWindow();
         });
-        productInfoUpdateWindow.hidden = true;
     });
     deny.addEventListener('click', function () {
         closeProductInfoUpdateWindow()
