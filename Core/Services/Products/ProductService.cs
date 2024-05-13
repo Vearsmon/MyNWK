@@ -64,6 +64,7 @@ public class ProductService : IProductService
                 p => p
                     .Where(t => marketId == null || t.MarketId == marketId)
                     .Where(t => categoryId == null || t.CategoryId == categoryId)
+                    .Where(t => t.Remained - t.Reserved > 0)
                     .Join(
                         unitOfWork.MarketInfosRepository.Queryable, 
                         p => p.MarketId,

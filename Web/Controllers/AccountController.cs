@@ -71,7 +71,7 @@ public class AccountController : Controller
             {
                 OwnerId = user.Id,
                 Closed = false,
-                Name = "хуизин",
+                Name = "shop" + user.Id,
                 MarketInfo = new MarketInfo()
             };
             unitOfWork.MarketsRepository.Create(market);
