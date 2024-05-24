@@ -20,7 +20,7 @@ public class Tools
     [Test]
     public void EvaluateHash()
     {
-        var hash = SHA256.Create().ComputeHash("7010493041:AAHm5A2XG0nNY9GAv4lKGa9Oc9aQQ3-FbqA"u8.ToArray());
+        var hash = SHA256.Create().ComputeHash(""u8.ToArray());
         Console.WriteLine(Convert.ToHexString(hash).ToLower());
     }
 
@@ -38,13 +38,7 @@ public class Tools
     {
         var optionsBuilder = new DbContextOptionsBuilder();
         optionsBuilder
-            .UseNpgsql("Host=rc1d-fzm7z4p51iz3qylc.mdb.yandexcloud.net;" +
-                       "Port=6432;" +
-                       "Database=core;" +
-                       "Username=mynwk-connection;" +
-                       "Password=kn8i6S9WHAqycEH;" +
-                       "Ssl Mode=Require;" +
-                       "Trust Server Certificate=true;")
+            .UseNpgsql("")
             .UseLazyLoadingProxies()
             .UseSnakeCaseNamingConvention()
             .LogTo(Console.WriteLine);

@@ -7,7 +7,7 @@ public class TgAuthService : ITgAuthService
 {
     public bool IsUserMetaValid(string expectedHash, Dictionary<string, string> data)
     {
-        var key = Convert.FromHexString("8b190b55c68d919b918b7ac976cf00db4504965c818a12ea35f6ec93d09a21e8");
+        var key = Convert.FromHexString("");
         return ValidateData(key, expectedHash, data);
     }
 

@@ -21,13 +21,7 @@ public class UnitOfWork_Test
     {
         var optionsBuilder = new DbContextOptionsBuilder();
         optionsBuilder
-            .UseNpgsql("Host=rc1d-fzm7z4p51iz3qylc.mdb.yandexcloud.net;" +
-                       "Port=6432;" +
-                       "Database=core;" +
-                       "Username=mynwk-connection;" +
-                       "Password=kn8i6S9WHAqycEH;" +
-                       "Ssl Mode=Require;" +
-                       "Trust Server Certificate=true;")
+            .UseNpgsql("")
             .UseLazyLoadingProxies()
             .UseSnakeCaseNamingConvention()
             .LogTo(Console.WriteLine);
@@ -48,7 +42,7 @@ public class UnitOfWork_Test
         unitOfWork.UsersRepository.Create(user);
         Console.WriteLine(user.Id);
         await unitOfWork.CommitAsync(CancellationToken.None);
-        user.Name = "хуй";
+        user.Name = "";
         await unitOfWork.CommitAsync(CancellationToken.None);
         Console.WriteLine(user.Id);
         await unitOfWork.CommitAsync(CancellationToken.None);
@@ -61,7 +55,7 @@ public class UnitOfWork_Test
             {
                 new()
                 {
-                    Title = "хуй",
+                    Title = "",
                     CreatedAt = DateTime.UtcNow,
                     Price = 1,
                     Remained = 2
